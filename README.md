@@ -12,6 +12,7 @@ Vores system er en **moderne webapp** bygget med:
 - ⚡ **Spring Boot**
 - 🎨 **Thymeleaf** (Template Engine)
 - ✨ Lidt **JavaScript** til frontend-interaktivitet
+- 🍃 **Tailwind CSS** til styling
 
 Målet er at give **Alpha Solutions** et smart, hurtigt og brugervenligt værktøj til **at planlægge, estimere og styre projekter** effektivt. ✅
 
@@ -46,6 +47,7 @@ Alt vores dokumentation (arkitektur, designbeslutninger, tekniske beskrivelser o
 - 🎨 **JavaScript**
 - ⚙️ **GitHub Actions** til CI/CD
 - ☁️ **Microsoft Azure** til hosting og deployment
+- ✨ **Tailwind CSS** til styling
 
 ---
 
