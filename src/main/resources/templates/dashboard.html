@@ -7,11 +7,21 @@
   <title>Alpha Solutions Project Management Dashboard</title>
 </head>
 <body>
-<main>
+<main th:if="${profile.getAuthCode()==0}">
+ du er admin
 
 
-du er logget ind
+</main>
 
+<main th:if="${profile.getAuthCode()==1}">
+du er projektejer
+
+
+</main>
+
+
+<main th:if="${profile.getAuthCode()==2}">
+du er medarbejder
 </main>
 
 </body>

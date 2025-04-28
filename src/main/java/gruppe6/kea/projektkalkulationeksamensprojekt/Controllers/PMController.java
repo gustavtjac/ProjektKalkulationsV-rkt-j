@@ -39,6 +39,7 @@ public class PMController {
        Profile loggedInProfile = profileService.AuthenticateLogin(username,password);
        if(loggedInProfile!=null){
 session.setAttribute("profile",loggedInProfile);
+session.setMaxInactiveInterval(1800);
            return "redirect:/dashboard";
        }else {
            //Hvis man prøver at logge ind men skriver forkert tilføjer vi her en fejlmeddelelse
@@ -54,7 +55,12 @@ session.setAttribute("profile",loggedInProfile);
 
 
     @GetMapping("/dashboard")
-    public String showDashBoard(){
+    public String showDashBoard(HttpSession session,Model model){
+        if (session.getAttribute("profile")==null){
+            return "redirect:/";
+        }
+
+model.addAttribute("profile", ((Profile) session.getAttribute("profile")));
         return "dashboard";
     }
 
