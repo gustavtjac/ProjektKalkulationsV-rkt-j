@@ -1,7 +1,13 @@
 package gruppe6.kea.projektkalkulationeksamensprojekt.Models;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.util.List;
 
+
+@Getter
+@Setter
 public class Profile {
     private String username;
     private String password;

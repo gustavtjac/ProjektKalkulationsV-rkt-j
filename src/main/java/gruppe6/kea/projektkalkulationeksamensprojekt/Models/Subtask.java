@@ -6,9 +6,22 @@ public class Subtask {
     private String name;
     private String description;
     private double time;
+    private int status;
 
     public Subtask(){
 
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public int getId() {
