@@ -3,13 +3,13 @@ package gruppe6.kea.projektkalkulationeksamensprojekt.Models;
 import java.util.List;
 
 public class Task {
-    public int id;
-    public int projectID;
-    public String name;
-    public String description;
-    public double maxTime;
-    public double maxPrice;
-    public List<Subtask> subtasks;
+    private int id;
+    private int projectID;
+    private String name;
+    private String description;
+    private double maxTime;
+    private double maxPrice;
+    private List<Subtask> subtasks;
 
     public Task(){
 
