@@ -11,6 +11,7 @@ import java.util.List;
 public class Profile {
     private String username;
     private String password;
+    private double salary;
     private String name;
     private int authCode;
     private List<Skill> skills;
