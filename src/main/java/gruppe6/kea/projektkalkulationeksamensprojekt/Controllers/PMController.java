@@ -4,6 +4,7 @@ package gruppe6.kea.projektkalkulationeksamensprojekt.Controllers;
 import gruppe6.kea.projektkalkulationeksamensprojekt.Models.Profile;
 import gruppe6.kea.projektkalkulationeksamensprojekt.Repositories.ProfileRepository;
 import gruppe6.kea.projektkalkulationeksamensprojekt.Services.ProfileService;
+import gruppe6.kea.projektkalkulationeksamensprojekt.Services.ProjectService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,10 +16,12 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class PMController {
 
     //Vi dependency injecter serviceklasser der skal benyttes i controlleren
-    ProfileService profileService;
+    private final ProfileService profileService;
+    private final ProjectService projectService;
 
-    public PMController(ProfileService profileService) {
+    public PMController(ProfileService profileService, ProjectService projectService) {
         this.profileService = profileService;
+        this.projectService = projectService;
     }
 
     //Denne metoder sender en client til login siden hvis de ikke er logget ind i forvejen
@@ -56,11 +59,15 @@ session.setMaxInactiveInterval(1800);
 
     @GetMapping("/dashboard")
     public String showDashBoard(HttpSession session,Model model){
-        if (session.getAttribute("profile")==null){
+        Profile loggedInProfile = ((Profile) session.getAttribute("profile"));
+        if (loggedInProfile==null){
             return "redirect:/";
         }
+        if (loggedInProfile.getAuthCode()==2){
 
-model.addAttribute("profile", ((Profile) session.getAttribute("profile")));
+        }
+        model.addAttribute("projects",projectService.getAllProjectsFromProfile(loggedInProfile));
+model.addAttribute("profile",loggedInProfile);
         return "dashboard";
     }
 
