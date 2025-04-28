@@ -8,12 +8,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class PMController {
 
 
-
     @GetMapping("/")
     public String showLoginPage(){
-
-        return "loginPage";
+        return "loginpage";
     }
+
 
 
 }
