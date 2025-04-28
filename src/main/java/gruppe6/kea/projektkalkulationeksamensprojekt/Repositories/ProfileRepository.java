@@ -3,6 +3,7 @@ package gruppe6.kea.projektkalkulationeksamensprojekt.Repositories;
 
 import gruppe6.kea.projektkalkulationeksamensprojekt.Models.Profile;
 import gruppe6.kea.projektkalkulationeksamensprojekt.Rowmappers.ProfileRowMapper;
+import gruppe6.kea.projektkalkulationeksamensprojekt.Rowmappers.SkillRowmapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -35,6 +36,16 @@ private final ProfileRowMapper profileRowMapper;
         }
 
 
+    }
+
+    public List<Profile> getAllMembersOfProjectFromProjectID(String projectID){
+        String sql = """
+        SELECT s.*
+        FROM profile_project ps
+        JOIN profile s ON ps.PROFILE_USERNAME = s.PROFILE_USERNAME
+        WHERE ps.PROJECT_ID = ?
+        """;
+        return jdbcTemplate.query(sql,profileRowMapper, projectID);
     }
 
 

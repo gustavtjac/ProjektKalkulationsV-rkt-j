@@ -14,14 +14,23 @@
 </main>
 
 <main th:if="${profile.getAuthCode()==1}">
-du er projektejer
-
+<h1 th:text="'Manage your projects here '+${profile.name} + '!'"></h1>
+    <div th:each="project : ${projects}">
+        <p th:text="${project.getName()}"></p>
+        <p th:text="${project.getEndDate()}"></p>
+    </div>
 
 </main>
 
 
 <main th:if="${profile.getAuthCode()==2}">
-du er medarbejder
+    <h1 th:text="'Your assgined projects '+${profile.name} + '!'"></h1>
+    <div th:each="project : ${projects}">
+        <p th:text="${project.getName()}"></p>
+        <p th:text="${project.getEndDate()}"></p>
+    </div>
+    <h1>Your assgined tasks</h1>
+
 </main>
 
 </body>
