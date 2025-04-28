@@ -51,7 +51,14 @@ public class Subtask {
         this.time = time;
     }
 
-    public String toString(){
-        return "Subtask {id=" + id + ", name=" + name + ", description=" + description + ", taskId=" + taskId + "}";
+    @Override
+    public String toString() {
+        return "Subtask{" +
+                "id=" + id +
+                ", taskId=" + taskId +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", time=" + time +
+                '}';
     }
 }

@@ -71,6 +71,7 @@ public class Task {
         this.subtasks = subtasks;
     }
 
+    @Override
     public String toString(){
         return "Task {id=" + id +
                 "name=" + name +
