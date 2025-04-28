@@ -7,7 +7,27 @@
     <title>Alpha Solutions Project Management</title>
 </head>
 <body>
-<h1>hej</h1>
+<main>
+
+
+
+    <div>
+        <h1 th:text="${wrongLogin}"></h1>
+        <form th:action="@{/loginrequest}" th:method="post">
+
+            <label for="username">Username</label>
+            <input type="text" name="username" id="username">
+            <label for="password">Password</label>
+            <input type="text" name="password" id="password">
+            <button type="submit">Login</button>
+
+        </form>
+    </div>
+
+
+
+
+</main>
 
 </body>
 </html>

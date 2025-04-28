@@ -13,9 +13,6 @@ public class ProfileService {
     ProfileRepository profileRepository;
 
     public Profile AuthenticateLogin(String username,String password){
-
-
-
       return profileRepository.AuthenticateLogin(username,password);
     }
 

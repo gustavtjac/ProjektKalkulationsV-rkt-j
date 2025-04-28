@@ -1,27 +1,41 @@
 package gruppe6.kea.projektkalkulationeksamensprojekt.Rowmappers;
 
 import gruppe6.kea.projektkalkulationeksamensprojekt.Models.Profile;
+import gruppe6.kea.projektkalkulationeksamensprojekt.Models.Skill;
 import gruppe6.kea.projektkalkulationeksamensprojekt.Repositories.SkillRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.stereotype.Component;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
+@Component
 public class ProfileRowMapper implements RowMapper<Profile> {
 
-    SkillRepository skillRepository = new SkillRepository(new JdbcTemplate());
+    private final SkillRepository skillRepository;
 
+    // Inject the SkillRepository using constructor injection
+    public ProfileRowMapper(SkillRepository skillRepository) {
+        this.skillRepository = skillRepository;
+    }
 
-    //for at kunne rowmappe en profil bliver vi nødt til at benytte os af flere forskellige repositories da en profil indeholder elementer både fra PROFIL skemaet men også SKill skemaet
     @Override
     public Profile mapRow(ResultSet rs, int rowNum) throws SQLException {
         Profile profile = new Profile();
         profile.setUsername(rs.getString("PROFILE_USERNAME"));
-        profile.setName("PROFILE_NAME");
+        profile.setName(rs.getString("PROFILE_NAME")); // careful, you had "PROFILE_NAME" hardcoded
         profile.setAuthCode(rs.getInt("PROFILE_AUTH_CODE"));
-        profile.setSkills(skillRepository.getAllSkillsFromUsername(profile.getUsername()));
+        List<Skill> skillList = skillRepository.getAllAssignedSkillsFromUsername(profile.getUsername());
+        if (skillList.isEmpty()){
+            profile.setSkills(new ArrayList<>());
+        }
+        else {
+            profile.setSkills(skillList);
+        }
+
+
         return profile;
     }
 }

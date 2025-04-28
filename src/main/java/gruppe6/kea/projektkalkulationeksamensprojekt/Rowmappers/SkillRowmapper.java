@@ -10,10 +10,8 @@ public class SkillRowmapper implements RowMapper<Skill> {
     @Override
     public Skill mapRow(ResultSet rs, int rowNum) throws SQLException {
 
-        //
-
         Skill skill = new Skill();
-        skill.setId(rs.getInt("SKILL_ID"));
+        skill.setId(rs.getString("SKILL_ID"));
         skill.setName(rs.getString("SKILL_NAME"));
         return skill;
     }

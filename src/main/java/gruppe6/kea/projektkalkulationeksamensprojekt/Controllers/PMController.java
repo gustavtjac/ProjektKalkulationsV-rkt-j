@@ -7,6 +7,7 @@ import gruppe6.kea.projektkalkulationeksamensprojekt.Services.ProfileService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -22,10 +23,11 @@ public class PMController {
 
     //Denne metoder sender en client til login siden hvis de ikke er logget ind i forvejen
     @GetMapping("/")
-    public String showLoginPage(HttpSession session, @RequestParam(required = false) String wrongLogin){
+    public String showLoginPage(HttpSession session, @RequestParam(required = false) String wrongLogin, Model model){
         if (session.getAttribute("profile")!=null){
             return "redirect:/dashboard";
         }
+        model.addAttribute("wrongLogin",wrongLogin);
         return "loginpage";
     }
 
@@ -40,7 +42,7 @@ session.setAttribute("profile",loggedInProfile);
            return "redirect:/dashboard";
        }else {
            //Hvis man prøver at logge ind men skriver forkert tilføjer vi her en fejlmeddelelse
-           redirectAttributes.addFlashAttribute("wrongLogin","Invalid Username or Password");
+           redirectAttributes.addAttribute("wrongLogin","Invalid Username or Password");
            return "redirect:/";
        }
 
@@ -51,8 +53,8 @@ session.setAttribute("profile",loggedInProfile);
 
 
 
-    @GetMapping("/{username}")
-    public String showDashBoard(@PathVariable String username){
+    @GetMapping("/dashboard")
+    public String showDashBoard(){
         return "dashboard";
     }
 

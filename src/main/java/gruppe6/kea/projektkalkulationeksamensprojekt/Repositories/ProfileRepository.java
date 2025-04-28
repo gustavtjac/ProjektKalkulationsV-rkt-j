@@ -6,12 +6,19 @@ import gruppe6.kea.projektkalkulationeksamensprojekt.Rowmappers.ProfileRowMapper
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public class ProfileRepository {
-    JdbcTemplate jdbcTemplate;
 
-    public ProfileRepository(JdbcTemplate jdbcTemplate) {
+
+
+
+    private final JdbcTemplate jdbcTemplate;
+private final ProfileRowMapper profileRowMapper;
+    public ProfileRepository(JdbcTemplate jdbcTemplate, ProfileRowMapper profileRowMapper) {
         this.jdbcTemplate = jdbcTemplate;
+        this.profileRowMapper = profileRowMapper;
     }
 
 
@@ -19,7 +26,15 @@ public class ProfileRepository {
     //denne metoder indsamler alle de rækker hvor username og password er = med input
     public Profile AuthenticateLogin(String username, String password){
         String sqlString = "Select * from PROFILE where PROFILE_USERNAME = ? and PROFILE_PASSWORD = ?";
-        return jdbcTemplate.queryForObject(sqlString,new ProfileRowMapper());
+        List<Profile> matchedProfile = jdbcTemplate.query(sqlString,profileRowMapper,username,password);
+        if (matchedProfile.isEmpty()){
+            return null;
+        }
+        else {
+            return matchedProfile.getFirst();
+        }
+
+
     }
 
 
