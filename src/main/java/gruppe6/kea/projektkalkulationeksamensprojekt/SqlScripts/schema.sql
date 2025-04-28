@@ -2,74 +2,76 @@ DROP DATABASE IF EXISTS ProjectManagementDB;
 CREATE DATABASE ProjectManagementDB;
 USE ProjectManagementDB;
 
--- Opretter Profile Tabellen
-CREATE TABLE Profile
-(
-PROFILE_USERNAME varchar(25) PRIMARY KEY unique,
- PROFILE_NAME varchar(30),
- PROFILE_PASSWORD varchar(60) not NULL,
- PROFILE_AUTH_CODE integer(1) not Null
-);
--- Opretter Project tabellen
-CREATE TABLE Project
-(
-PROJECT_ID CHAR(36) unique PRIMARY KEY DEFAULT (UUID()),
-PROJECT_OWNER_PROFILE_USERNAME varchar(25) not null,
-PROJECT_NAME varchar(50) not null,
-PROJECT_DESC varchar(500),
-PROJECT_MAX_TIME double(30,2) not null,
-PROJECT_MAX_PRICE double(30,2) not null,
-FOREIGN KEY (PROJECT_OWNER_PROFILE_USERNAME) references PROFILE (PROFILE_USERNAME)
-);
-CREATE TABLE Task
-(
-TASK_ID char(36) unique PRIMARY KEY DEFAULT (UUID()),
-TASK_PROJECT_ID char(36) not null,
-TASK_NAME varchar(50) not null,
-TASK_DESC varchar (500),
-TASK_MAX_TIME double(30,2) not null,
-TASK_MAX_PRICE double(30,2) not null,
-FOREIGN KEY (TASK_PROJECT_ID) REFERENCES PROJECT (PROJECT_ID)
-);
-CREATE TABLE SUBTASK
-(
-SUBTASK_ID char(36) unique PRIMARY KEY DEFAULT (UUID()),
-SUBTASK_TASK_ID char(36) not null,
-SUBTASK_NAME varchar(50) not null,
-SUBTASK_DESC varchar(500),
-SUBTASK_TIME double(30,2) not null,
-foreign key (SUBTASK_TASK_ID) references TASK (TASK_ID)
-);
-CREATE TABLE SKILL
-(
-   SKILL_ID char(36) unique PRIMARY KEY DEFAULT (UUID()),
-    SKILL_NAME varchar(30) unique not null
+-- Opretter Profile tabel
+CREATE TABLE Profile (
+                         PROFILE_USERNAME VARCHAR(25) PRIMARY KEY,
+                         PROFILE_NAME VARCHAR(30),
+                         PROFILE_PASSWORD VARCHAR(60) NOT NULL,
+                         PROFILE_AUTH_CODE INTEGER(1) NOT NULL
 );
 
-
-CREATE TABLE PROFILE_SKILL(
-                                PROFILE_USERNAME varchar(25) not null ,
-                                SKILL_ID char(36) not null,
-                                PRIMARY KEY(PROFILE_USERNAME,SKILL_ID),
-                                FOREIGN KEY(PROFILE_USERNAME) REFeRENCES Profile(PROFILE_USERNAME) ON DELETE CASCADE,
-                                FOREIGN KEY(SKILL_ID) REFERENCES SKILL(SKILL_ID) ON DELETE CASCADE
+CREATE TABLE Project (
+                         PROJECT_ID CHAR(36) PRIMARY KEY DEFAULT (UUID()),
+                         PROJECT_OWNER_PROFILE_USERNAME VARCHAR(25) NOT NULL,
+                         PROJECT_NAME VARCHAR(50) NOT NULL,
+                         PROJECT_DESC VARCHAR(500),
+                         PROJECT_MAX_TIME DOUBLE(30,2) NOT NULL,
+                         PROJECT_MAX_PRICE DOUBLE(30,2) NOT NULL,
+                         PROJECT_ENDDATE DATE not null,
+                         FOREIGN KEY (PROJECT_OWNER_PROFILE_USERNAME) REFERENCES Profile(PROFILE_USERNAME)
 );
 
-CREATE TABLE PROFILE_PROJECT(
-                              PROJECT_ID char(36) not null,
-                              PROFILE_USERNAME varchar(25) not null,
-                              PRIMARY KEY(PROFILE_USERNAME,PROJECT_ID),
-                              FOREIGN KEY(PROFILE_USERNAME) REFeRENCES Profile(PROFILE_USERNAME) ON DELETE CASCADE,
-                              FOREIGN KEY(PROJECT_ID) REFERENCES Project(PROJECT_ID) ON DELETE CASCADE
+-- Opretter Task tabel
+CREATE TABLE Task (
+                      TASK_ID CHAR(36) PRIMARY KEY DEFAULT (UUID()),
+                      TASK_PROJECT_ID CHAR(36) NOT NULL,
+                      TASK_NAME VARCHAR(50) NOT NULL,
+                      TASK_DESC VARCHAR(500),
+                      TASK_MAX_TIME DOUBLE(30,2) NOT NULL,
+                      TASK_MAX_PRICE DOUBLE(30,2) NOT NULL,
+                      FOREIGN KEY (TASK_PROJECT_ID) REFERENCES Project(PROJECT_ID)
 );
 
-CREATE TABLE SUBTASK_PROFILE(
-                                SUBTASK_ID char(36) not null,
-                                PROFILE_USERNAME varchar(25) not null,
-                                PRIMARY KEY(PROFILE_USERNAME,SUBTASK_ID),
-                                FOREIGN KEY(PROFILE_USERNAME) REFeRENCES Profile(PROFILE_USERNAME) ON DELETE CASCADE,
-                                FOREIGN KEY(SUBTASK_ID) REFERENCES SUBTASK(SUBTASK_ID) ON DELETE CASCADE
+-- Opretter Subtask tabel
+CREATE TABLE Subtask (
+                         SUBTASK_ID CHAR(36) PRIMARY KEY DEFAULT (UUID()),
+                         SUBTASK_TASK_ID CHAR(36) NOT NULL,
+                         SUBTASK_NAME VARCHAR(50) NOT NULL,
+                         SUBTASK_DESC VARCHAR(500),
+                         SUBTASK_TIME DOUBLE(30,2) NOT NULL,
+                         SUBTASK_STATUS integer(1) not null default (1),
+                         FOREIGN KEY (SUBTASK_TASK_ID) REFERENCES Task(TASK_ID)
 );
 
+-- Opretter  Skill tabel
+CREATE TABLE Skill (
+                       SKILL_ID CHAR(36) PRIMARY KEY DEFAULT (UUID()),
+                       SKILL_NAME VARCHAR(30) UNIQUE NOT NULL
+);
 
+-- Opretter  Profile_Skill tabel
+CREATE TABLE Profile_Skill (
+                               PROFILE_USERNAME VARCHAR(25) NOT NULL,
+                               SKILL_ID CHAR(36) NOT NULL,
+                               PRIMARY KEY (PROFILE_USERNAME, SKILL_ID),
+                               FOREIGN KEY (PROFILE_USERNAME) REFERENCES Profile(PROFILE_USERNAME) ON DELETE CASCADE,
+                               FOREIGN KEY (SKILL_ID) REFERENCES Skill(SKILL_ID) ON DELETE CASCADE
+);
 
+-- Opretter  Profile_Project tabel
+CREATE TABLE Profile_Project (
+                                 PROJECT_ID CHAR(36) NOT NULL,
+                                 PROFILE_USERNAME VARCHAR(25) NOT NULL,
+                                 PRIMARY KEY (PROFILE_USERNAME, PROJECT_ID),
+                                 FOREIGN KEY (PROFILE_USERNAME) REFERENCES Profile(PROFILE_USERNAME) ON DELETE CASCADE,
+                                 FOREIGN KEY (PROJECT_ID) REFERENCES Project(PROJECT_ID) ON DELETE CASCADE
+);
+
+-- Opretter Subtask_Profile tabel
+CREATE TABLE Subtask_Profile (
+                                 SUBTASK_ID CHAR(36) NOT NULL,
+                                 PROFILE_USERNAME VARCHAR(25) NOT NULL,
+                                 PRIMARY KEY (PROFILE_USERNAME, SUBTASK_ID),
+                                 FOREIGN KEY (PROFILE_USERNAME) REFERENCES Profile(PROFILE_USERNAME) ON DELETE CASCADE,
+                                 FOREIGN KEY (SUBTASK_ID) REFERENCES Subtask(SUBTASK_ID) ON DELETE CASCADE
+);
