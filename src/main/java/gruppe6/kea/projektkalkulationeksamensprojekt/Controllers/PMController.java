@@ -1,16 +1,67 @@
 package gruppe6.kea.projektkalkulationeksamensprojekt.Controllers;
 
 
+import gruppe6.kea.projektkalkulationeksamensprojekt.Models.Profile;
+import gruppe6.kea.projektkalkulationeksamensprojekt.Repositories.ProfileRepository;
+import gruppe6.kea.projektkalkulationeksamensprojekt.Services.ProfileService;
+import jakarta.servlet.http.HttpSession;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 public class PMController {
 
+    //Vi dependency injecter serviceklasser der skal benyttes i controlleren
+    ProfileService profileService;
 
+    public PMController(ProfileService profileService) {
+        this.profileService = profileService;
+    }
+
+    //Denne metoder sender en client til login siden hvis de ikke er logget ind i forvejen
     @GetMapping("/")
-    public String showLoginPage(){
+    public String showLoginPage(HttpSession session, @RequestParam(required = false) String wrongLogin, Model model){
+        if (session.getAttribute("profile")!=null){
+            return "redirect:/dashboard";
+        }
+        model.addAttribute("wrongLogin",wrongLogin);
         return "loginpage";
+    }
+
+
+
+    //Denne postmapping håndterer når en bruger prøver at logge ind på hjemmesiden
+    @PostMapping("/loginrequest")
+    public String loginRequest(@RequestParam String username, @RequestParam String password, HttpSession session,RedirectAttributes redirectAttributes){
+       Profile loggedInProfile = profileService.AuthenticateLogin(username,password);
+       if(loggedInProfile!=null){
+session.setAttribute("profile",loggedInProfile);
+session.setMaxInactiveInterval(1800);
+           return "redirect:/dashboard";
+       }else {
+           //Hvis man prøver at logge ind men skriver forkert tilføjer vi her en fejlmeddelelse
+           redirectAttributes.addAttribute("wrongLogin","Invalid Username or Password");
+           return "redirect:/";
+       }
+
+
+
+    }
+
+
+
+
+    @GetMapping("/dashboard")
+    public String showDashBoard(HttpSession session,Model model){
+        if (session.getAttribute("profile")==null){
+            return "redirect:/";
+        }
+
+model.addAttribute("profile", ((Profile) session.getAttribute("profile")));
+        return "dashboard";
     }
 
 

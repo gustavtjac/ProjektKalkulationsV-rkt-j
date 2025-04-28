@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" th:href="@{/css/styles.css}" href="/css/styles.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Alpha Solutions Project Management Dashboard</title>
+</head>
+<body>
+<main th:if="${profile.getAuthCode()==0}">
+ du er admin
+
+
+</main>
+
+<main th:if="${profile.getAuthCode()==1}">
+du er projektejer
+
+
+</main>
+
+
+<main th:if="${profile.getAuthCode()==2}">
+du er medarbejder
+</main>
+
+</body>
+</html>
