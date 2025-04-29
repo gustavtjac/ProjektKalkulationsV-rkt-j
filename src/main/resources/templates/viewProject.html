@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <link rel="stylesheet" th:href="@{/css/styles.css}" href="/css/styles.css">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title> </title>
+    <title th:text="${project.getName()}"> </title>
 </head>
 <body>
 <main th:if="${profile.getAuthCode()==0}">
@@ -14,31 +14,28 @@
 </main>
 
 <main th:if="${profile.getAuthCode()==1}">
-    <h1 th:text="'Manage your projects here '+${profile.name} + '!'"></h1>
+    <h1 th:text="'Manage ' + ${project.getName()} + ' Tasks here'"></h1>
     <table>
-        <tr th:each="project : ${projects}">
-            <td th:text="'Project name '+${project.getName()}"></td>
-            <td th:text="'Allocated time '+${project.getMaxTime() + ' Hours'}"></td>
-            <td th:text="'Budget '+${project.getMaxPrice()} + ' Kr.'"></td>
-            <td th:text="'Deadline: '+ ${project.getEndDate()}"></td>
-            <td><form th:action="@{/dashboard/{id}(id=${project.getId()})}" th:method="get"><button>View Task's</button></form></td>
-            <td><form th:method="get" th:action="@{/editproject}"><button>Edit Project</button></form></td>
+        <tr th:each="task : ${project.getTasks()}">
+        <tr th:each="task : ${project.getTasks()}">
+            <td th:text="'Task name '+${task.getName()}"></td>
+            <td th:text="'Allocated time '+${task.getMaxTime() + ' Hours'}"></td>
+            <td th:text="'Budget '+${task.getMaxPrice()} + ' Kr.'"></td>
+            <td><form th:action="@{/dashboard/{projectid}/{taskid}(projectid=${project.getId()}, taskid=${task.getId()})}" th:method="get"><button>View subtask's</button></form></td>
+            <td><form th:method="get" th:action="@{/edittask}"><button>Edit Task</button></form></td>
         </tr>
     </table>
 </main>
 
 
 <main th:if="${profile.getAuthCode()==2}">
-    <h1 th:text="'Your assgined projects '+${profile.name} + '!'"></h1>
+    <h1 th:text="'Tasks in '+${project.getName()}"></h1>
     <table>
-        <tr th:each="project : ${projects}">
-            <td th:text="'Project name '+${project.getName()}"></td>
-            <td th:text="'Allocated time '+${project.getMaxTime() + ' Hours'}"></td>
-            <td th:text="'Budget '+${project.getMaxPrice()} + ' Kr.'"></td>
-            <td th:text="'Deadline: '+ ${project.getEndDate()}"></td>
-            <td th:text="'Project leader '+${project.getProjectOwner().getName()}"></td>
-            <td><form th:action="@{/dashboard/{id}(id=${project.getId()})}" th:method="get"><button>View Task's</button></form></td>
-        </tr>
+        <tr th:each="task : ${project.getTasks()}">
+            <td th:text="'Task name '+${task.getName()}"></td>
+            <td th:text="'Allocated time '+${task.getMaxTime() + ' Hours'}"></td>
+            <td th:text="'Budget '+${task.getMaxPrice()} + ' Kr.'"></td>
+            <td><form th:action="@{/dashboard/{projectid}/{taskid}(projectid=${project.getId()}, taskid=${task.getId()})}" th:method="get"><button>View subtask's</button></form></td>
     </table>
 
     <h1>Your assgined tasks</h1>
