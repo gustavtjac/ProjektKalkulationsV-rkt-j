@@ -6,8 +6,8 @@ import lombok.Setter;
 import java.util.List;
 
 
-@Getter
 @Setter
+@Getter
 public class Profile {
     private String username;
     private String password;

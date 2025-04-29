@@ -62,8 +62,7 @@ session.setMaxInactiveInterval(1800);
         Profile loggedInProfile = ((Profile) session.getAttribute("profile"));
         if (loggedInProfile==null){
             return "redirect:/";
-        }
-        if (loggedInProfile.getAuthCode()==2){
+        } if (loggedInProfile.getAuthCode()==2) {
 
         }
         model.addAttribute("projects",projectService.getAllProjectsFromProfile(loggedInProfile));
