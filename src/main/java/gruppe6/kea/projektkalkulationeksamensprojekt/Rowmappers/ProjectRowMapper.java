@@ -24,7 +24,7 @@ public class ProjectRowMapper implements RowMapper<Project> {
        Project project = new Project();
        project.setId(rs.getString("PROJECT_ID"));
        project.setName(rs.getString("PROJECT_NAME"));
-      project.setProjectOwner(rs.getString("PROJECT_OWNER_PROFILE_USERNAME"));
+      project.setProjectOwner(profileRepository.getProfileFromUsername(rs.getString("PROJECT_OWNER_PROFILE_USERNAME")));
       project.setDescription(rs.getString("PROJECT_DESC"));
       project.setMaxTime(rs.getDouble("PROJECT_MAX_TIME"));
       project.setMaxPrice(rs.getDouble("PROJECT_MAX_PRICE"));

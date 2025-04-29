@@ -4,8 +4,12 @@ package gruppe6.kea.projektkalkulationeksamensprojekt.Repositories;
 import gruppe6.kea.projektkalkulationeksamensprojekt.Models.Profile;
 import gruppe6.kea.projektkalkulationeksamensprojekt.Rowmappers.ProfileRowMapper;
 import gruppe6.kea.projektkalkulationeksamensprojekt.Rowmappers.SkillRowmapper;
+import org.springframework.dao.DataAccessException;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -46,6 +50,18 @@ private final ProfileRowMapper profileRowMapper;
         WHERE ps.PROJECT_ID = ?
         """;
         return jdbcTemplate.query(sql,profileRowMapper, projectID);
+    }
+
+    public Profile getProfileFromUsername(String username){
+        String sql = "Select * from Profile where PROFILE_USERNAME = ?";
+
+        try{
+           return jdbcTemplate.queryForObject(sql,profileRowMapper,username);
+        } catch (DataAccessException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Profile not found for username: " + username, e);
+            }
+
+
     }
 
 

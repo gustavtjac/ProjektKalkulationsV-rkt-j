@@ -15,7 +15,7 @@ public class Project {
     private double maxTime;
     private double maxPrice;
     private Date endDate;
-    private String projectOwner;
+    private Profile projectOwner;
     private List<Profile> projectMembers;
     private List<Task> tasks;
 
