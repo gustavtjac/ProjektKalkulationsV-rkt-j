@@ -1,55 +1,78 @@
--- Indsætter testprofiler
-INSERT INTO Profile (PROFILE_USERNAME, PROFILE_NAME, PROFILE_PASSWORD, PROFILE_AUTH_CODE) VALUES
-                                                                                              ('martin123', 'Martin Madsen', '123', 1),
-                                                                                              ('sara456', 'Sara Sørensen', '123', 1),
-                                                                                              ('ole789', 'Ole Olesen', '123', 2);
+-- Opretter testdata i Profile tabellen med timeløn og ændret adgangskode
+INSERT INTO Profile (PROFILE_USERNAME, PROFILE_NAME, PROFILE_PASSWORD, PROFILE_AUTH_CODE, PROFILE_SALARY)
+VALUES
+    ('john_doe', 'John Doe', '123', 1, 25.00),  -- Projektleder (AuthCode 1), Timeløn: 25 kr. per time
+    ('jane_doe', 'Jane Doe', '123', 2, 30.00),  -- Arbejder (AuthCode 2), Timeløn: 30 kr. per time
+    ('admin', 'Admin Bruger', '123', 0, 35.00),  -- Admin (AuthCode 0), Timeløn: 35 kr. per time
+    ('alice_smith', 'Alice Smith', '123', 2, 28.00),  -- Arbejder (AuthCode 2), Timeløn: 28 kr. per time
+    ('bob_jones', 'Bob Jones', '123', 1, 40.00),  -- Projektleder (AuthCode 1), Timeløn: 40 kr. per time
+    ('charlie_brown', 'Charlie Brown', '123', 2, 32.00);  -- Arbejder (AuthCode 2), Timeløn: 32 kr. per time
 
--- Indsætter testprojekter
-INSERT INTO Project (PROJECT_OWNER_PROFILE_USERNAME, PROJECT_NAME, PROJECT_DESC, PROJECT_MAX_TIME, PROJECT_MAX_PRICE, PROJECT_ENDDATE) VALUES
-                                                                                                                                           ('martin123', 'Website Redesign', 'Vi redesigner kundens hjemmeside.', 120.00, 25000.00, ADDDATE(CURDATE(), INTERVAL 1 YEAR)),
-                                                                                                                                           ('sara456', 'App Udvikling', 'Udvikling af mobilapplikation.', 200.00, 75000.00, ADDDATE(CURDATE(), INTERVAL 1 YEAR));
+-- Opretter testdata i Project tabellen
+INSERT INTO Project (PROJECT_OWNER_PROFILE_USERNAME, PROJECT_NAME, PROJECT_DESC, PROJECT_MAX_TIME, PROJECT_MAX_PRICE, PROJECT_ENDDATE)
+VALUES
+    ('john_doe', 'Web Development', 'Projekt for udvikling af en hjemmeside', 100.00, 2000.00, '2025-12-31'),
+    ('john_doe', 'App Development', 'Projekt for udvikling af en mobilapplikation', 150.00, 3000.00, '2025-10-15'),
+    ('bob_jones', 'E-commerce Platform', 'Udvikling af en e-commerce platform', 120.00, 4000.00, '2025-11-20'),
+    ('bob_jones', 'AI Integration', 'Integrering af kunstig intelligens i en eksisterende applikation', 200.00, 5000.00, '2025-09-30'),
+    ('john_doe', 'Cloud Migration', 'Migrering af servere til skyen', 180.00, 6000.00, '2025-07-15');
 
--- Indsætter testopgaver (Tasks)
-INSERT INTO Task (TASK_PROJECT_ID, TASK_NAME, TASK_DESC, TASK_MAX_TIME, TASK_MAX_PRICE) VALUES
-                                                                                            ((SELECT PROJECT_ID FROM Project WHERE PROJECT_NAME = 'Website Redesign'), 'Frontend udvikling', 'Udvikle frontend med React.', 60.00, 12000.00),
-                                                                                            ((SELECT PROJECT_ID FROM Project WHERE PROJECT_NAME = 'Website Redesign'), 'Backend udvikling', 'Udvikle backend API.', 60.00, 13000.00),
-                                                                                            ((SELECT PROJECT_ID FROM Project WHERE PROJECT_NAME = 'App Udvikling'), 'Design af app', 'UX/UI design.', 80.00, 30000.00);
+-- Opretter testdata i Task tabellen
+INSERT INTO Task (TASK_PROJECT_ID, TASK_NAME, TASK_DESC, TASK_MAX_TIME, TASK_MAX_PRICE)
+VALUES
+    ((SELECT PROJECT_ID FROM Project WHERE PROJECT_NAME = 'Web Development'), 'Design Website', 'Designe layout og brugergrænseflade for hjemmesiden', 50.00, 1000.00),
+    ((SELECT PROJECT_ID FROM Project WHERE PROJECT_NAME = 'App Development'), 'Develop API', 'Udvikling af API til appen', 75.00, 1500.00),
+    ((SELECT PROJECT_ID FROM Project WHERE PROJECT_NAME = 'E-commerce Platform'), 'Set Up Payment Gateway', 'Opsætning af betalingsgateway til platformen', 40.00, 800.00),
+    ((SELECT PROJECT_ID FROM Project WHERE PROJECT_NAME = 'E-commerce Platform'), 'Design User Flow', 'Design af brugerflow og interaktioner', 60.00, 1200.00),
+    ((SELECT PROJECT_ID FROM Project WHERE PROJECT_NAME = 'AI Integration'), 'Train Model', 'Træning af maskinlæringsmodel', 100.00, 2000.00),
+    ((SELECT PROJECT_ID FROM Project WHERE PROJECT_NAME = 'Cloud Migration'), 'Cloud Architecture Design', 'Design af cloud-arkitektur', 150.00, 3000.00);
 
--- Indsætter testdelopgaver (Subtasks)
-INSERT INTO Subtask (SUBTASK_TASK_ID, SUBTASK_NAME, SUBTASK_DESC, SUBTASK_TIME) VALUES
-                                                                                    ((SELECT TASK_ID FROM Task WHERE TASK_NAME = 'Frontend udvikling'), 'Opsætte komponentstruktur', 'Oprette React komponenter.', 20.00),
-                                                                                    ((SELECT TASK_ID FROM Task WHERE TASK_NAME = 'Frontend udvikling'), 'Responsivt design', 'Sikre mobilvenligt layout.', 20.00),
-                                                                                    ((SELECT TASK_ID FROM Task WHERE TASK_NAME = 'Backend udvikling'), 'Database setup', 'Oprette MySQL database.', 30.00),
-                                                                                    ((SELECT TASK_ID FROM Task WHERE TASK_NAME = 'Design af app'), 'Figma prototyper', 'Lave klikbare prototyper.', 40.00);
+-- Opretter testdata i Subtask tabellen
+INSERT INTO Subtask (SUBTASK_TASK_ID, SUBTASK_NAME, SUBTASK_DESC, SUBTASK_TIME, SUBTASK_STATUS)
+VALUES
+    ((SELECT TASK_ID FROM Task WHERE TASK_NAME = 'Design Website'), 'Create Mockup', 'Lav et mockup af hjemmesiden', 20.00, 1),
+    ((SELECT TASK_ID FROM Task WHERE TASK_NAME = 'Develop API'), 'Setup Authentication', 'Opsæt brugerautentifikation for API', 30.00, 1),
+    ((SELECT TASK_ID FROM Task WHERE TASK_NAME = 'Set Up Payment Gateway'), 'Integrate Stripe', 'Integrer Stripe betalingssystemet', 25.00, 1),
+    ((SELECT TASK_ID FROM Task WHERE TASK_NAME = 'Design User Flow'), 'Create Flow Diagram', 'Lav diagram af brugerflow', 35.00, 1),
+    ((SELECT TASK_ID FROM Task WHERE TASK_NAME = 'Train Model'), 'Preprocess Data', 'Forbehandling af data før træning', 50.00, 1),
+    ((SELECT TASK_ID FROM Task WHERE TASK_NAME = 'Cloud Architecture Design'), 'Choose Cloud Provider', 'Vælg cloud-udbyder til projektet', 40.00, 1);
 
--- Indsætter testskills
-INSERT INTO Skill (SKILL_NAME) VALUES
-                                   ('HTML'),
-                                   ('CSS'),
-                                   ('JavaScript'),
-                                   ('React'),
-                                   ('MySQL'),
-                                   ('Node.js');
+-- Opretter testdata i Skill tabellen
+INSERT INTO Skill (SKILL_NAME)
+VALUES
+    ('HTML'), ('CSS'), ('JavaScript'), ('Java'), ('SQL'), ('Python'), ('Machine Learning'), ('Cloud Architecture'), ('UI/UX Design'), ('Payment Integration');
 
--- Indsætter profiler-skills
-INSERT INTO Profile_Skill (PROFILE_USERNAME, SKILL_ID) VALUES
-                                                           ('martin123', (SELECT SKILL_ID FROM Skill WHERE SKILL_NAME = 'React')),
-                                                           ('martin123', (SELECT SKILL_ID FROM Skill WHERE SKILL_NAME = 'JavaScript')),
-                                                           ('sara456', (SELECT SKILL_ID FROM Skill WHERE SKILL_NAME = 'HTML')),
-                                                           ('sara456', (SELECT SKILL_ID FROM Skill WHERE SKILL_NAME = 'CSS')),
-                                                           ('ole789', (SELECT SKILL_ID FROM Skill WHERE SKILL_NAME = 'MySQL')),
-                                                           ('ole789', (SELECT SKILL_ID FROM Skill WHERE SKILL_NAME = 'Node.js'));
+-- Opretter testdata i Profile_Skill tabellen
+INSERT INTO Profile_Skill (PROFILE_USERNAME, SKILL_ID)
+VALUES
+    ('john_doe', (SELECT SKILL_ID FROM Skill WHERE SKILL_NAME = 'HTML')),
+    ('john_doe', (SELECT SKILL_ID FROM Skill WHERE SKILL_NAME = 'CSS')),
+    ('jane_doe', (SELECT SKILL_ID FROM Skill WHERE SKILL_NAME = 'Java')),
+    ('jane_doe', (SELECT SKILL_ID FROM Skill WHERE SKILL_NAME = 'SQL')),
+    ('alice_smith', (SELECT SKILL_ID FROM Skill WHERE SKILL_NAME = 'Python')),
+    ('alice_smith', (SELECT SKILL_ID FROM Skill WHERE SKILL_NAME = 'Machine Learning')),
+    ('bob_jones', (SELECT SKILL_ID FROM Skill WHERE SKILL_NAME = 'Cloud Architecture')),
+    ('bob_jones', (SELECT SKILL_ID FROM Skill WHERE SKILL_NAME = 'UI/UX Design')),
+    ('charlie_brown', (SELECT SKILL_ID FROM Skill WHERE SKILL_NAME = 'Payment Integration')),
+    ('admin', (SELECT SKILL_ID FROM Skill WHERE SKILL_NAME = 'JavaScript'));
 
--- Indsætter profiler på projekter
-INSERT INTO Profile_Project (PROFILE_USERNAME, PROJECT_ID) VALUES
-                                                               ('martin123', (SELECT PROJECT_ID FROM Project WHERE PROJECT_NAME = 'Website Redesign')),
-                                                               ('sara456', (SELECT PROJECT_ID FROM Project WHERE PROJECT_NAME = 'Website Redesign')),
-                                                               ('sara456', (SELECT PROJECT_ID FROM Project WHERE PROJECT_NAME = 'App Udvikling')),
-                                                               ('ole789', (SELECT PROJECT_ID FROM Project WHERE PROJECT_NAME = 'App Udvikling'));
+-- Opretter testdata i Profile_Project tabellen (Projektledere og Arbejdere)
+INSERT INTO Profile_Project (PROJECT_ID, PROFILE_USERNAME)
+VALUES
+    ((SELECT PROJECT_ID FROM Project WHERE PROJECT_NAME = 'Web Development'), 'john_doe'),  -- John Doe (Projektleder) ejer projektet
+    ((SELECT PROJECT_ID FROM Project WHERE PROJECT_NAME = 'App Development'), 'john_doe'),  -- John Doe (Projektleder) ejer projektet
+    ((SELECT PROJECT_ID FROM Project WHERE PROJECT_NAME = 'E-commerce Platform'), 'bob_jones'),  -- Bob Jones (Projektleder) ejer projektet
+    ((SELECT PROJECT_ID FROM Project WHERE PROJECT_NAME = 'AI Integration'), 'bob_jones'),  -- Bob Jones (Projektleder) ejer projektet
+    ((SELECT PROJECT_ID FROM Project WHERE PROJECT_NAME = 'Cloud Migration'), 'john_doe'),  -- John Doe (Projektleder) ejer projektet
+    ((SELECT PROJECT_ID FROM Project WHERE PROJECT_NAME = 'Web Development'), 'jane_doe'),  -- Jane Doe (Arbejdere) tildelt projektet
+    ((SELECT PROJECT_ID FROM Project WHERE PROJECT_NAME = 'App Development'), 'alice_smith'),  -- Alice Smith (Arbejdere) tildelt projektet
+    ((SELECT PROJECT_ID FROM Project WHERE PROJECT_NAME = 'E-commerce Platform'), 'charlie_brown');  -- Charlie Brown (Arbejdere) tildelt projektet
 
--- Indsætter profiler på subtasks
-INSERT INTO Subtask_Profile (PROFILE_USERNAME, SUBTASK_ID) VALUES
-                                                               ('martin123', (SELECT SUBTASK_ID FROM Subtask WHERE SUBTASK_NAME = 'Opsætte komponentstruktur')),
-                                                               ('sara456', (SELECT SUBTASK_ID FROM Subtask WHERE SUBTASK_NAME = 'Responsivt design')),
-                                                               ('ole789', (SELECT SUBTASK_ID FROM Subtask WHERE SUBTASK_NAME = 'Database setup')),
-                                                               ('sara456', (SELECT SUBTASK_ID FROM Subtask WHERE SUBTASK_NAME = 'Figma prototyper'));
+-- Opretter testdata i Subtask_Profile tabellen (Tildeling af opgaver til brugere)
+INSERT INTO Subtask_Profile (SUBTASK_ID, PROFILE_USERNAME)
+VALUES
+    ((SELECT SUBTASK_ID FROM Subtask WHERE SUBTASK_NAME = 'Create Mockup'), 'john_doe'),  -- John Doe (Projektleder) arbejder på mockup
+    ((SELECT SUBTASK_ID FROM Subtask WHERE SUBTASK_NAME = 'Setup Authentication'), 'jane_doe'),  -- Jane Doe (Arbejder) arbejder på autentifikation
+    ((SELECT SUBTASK_ID FROM Subtask WHERE SUBTASK_NAME = 'Integrate Stripe'), 'alice_smith'),  -- Alice Smith (Arbejder) arbejder på Stripe integration
+    ((SELECT SUBTASK_ID FROM Subtask WHERE SUBTASK_NAME = 'Create Flow Diagram'), 'bob_jones'),  -- Bob Jones (Projektleder) arbejder på flowdiagram
+    ((SELECT SUBTASK_ID FROM Subtask WHERE SUBTASK_NAME = 'Forbehandling af data'), 'charlie_brown');  -- Charlie Brown (Arbejder) arbejder på dataforbehandling
