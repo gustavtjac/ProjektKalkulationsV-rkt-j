@@ -42,4 +42,16 @@ public class ProjectService {
         return false;
     }
 
+    public boolean checkIfProfileOwnsProject(String projectID, String username){
+        Project foundproject = projectRepository.findByID(projectID);
+        if(foundproject.getProjectOwner().getUsername().equals(username)){
+            return true;
+        }
+        return false;
+    }
+
+    public void deleteProject(String projectID){
+        projectRepository.deleteProject(projectID);
+    }
+
 }
