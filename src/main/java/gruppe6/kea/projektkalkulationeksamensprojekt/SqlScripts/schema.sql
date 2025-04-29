@@ -7,7 +7,8 @@ CREATE TABLE Profile (
                          PROFILE_USERNAME VARCHAR(25) PRIMARY KEY,
                          PROFILE_NAME VARCHAR(30),
                          PROFILE_PASSWORD VARCHAR(60) NOT NULL,
-                         PROFILE_AUTH_CODE INTEGER(1) NOT NULL
+                         PROFILE_AUTH_CODE INTEGER(1) NOT NULL,
+                         PROFILE_SALARY DOUBLE(6,2) not null
 );
 
 CREATE TABLE Project (
