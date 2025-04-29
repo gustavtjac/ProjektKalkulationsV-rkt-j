@@ -15,20 +15,32 @@
 
 <main th:if="${profile.getAuthCode()==1}">
 <h1 th:text="'Manage your projects here '+${profile.name} + '!'"></h1>
-    <div th:each="project : ${projects}">
-        <p th:text="${project.getName()}"></p>
-        <p th:text="${project.getEndDate()}"></p>
-    </div>
-
+    <table>
+        <tr th:each="project : ${projects}">
+            <td th:text="'Project name '+${project.getName()}"></td>
+            <td th:text="'Allocated time '+${project.getMaxTime() + ' Hours'}"></td>
+            <td th:text="'Budget '+${project.getMaxPrice()} + ' Kr.'"></td>
+            <td th:text="'Deadline: '+ ${project.getEndDate()}"></td>
+            <td><form th:action="@{/dashboard/{id}(id=${project.getId()})}" th:method="get"><button>View Task's</button></form></td>
+            <td><form th:method="get" th:action="@{/editproject}"><button>Edit Project</button></form></td>
+        </tr>
+    </table>
 </main>
 
 
 <main th:if="${profile.getAuthCode()==2}">
     <h1 th:text="'Your assgined projects '+${profile.name} + '!'"></h1>
-    <div th:each="project : ${projects}">
-        <p th:text="${project.getName()}"></p>
-        <p th:text="${project.getEndDate()}"></p>
-    </div>
+    <table>
+        <tr th:each="project : ${projects}">
+            <td th:text="'Project name '+${project.getName()}"></td>
+            <td th:text="'Allocated time '+${project.getMaxTime() + ' Hours'}"></td>
+            <td th:text="'Budget '+${project.getMaxPrice()} + ' Kr.'"></td>
+            <td th:text="'Deadline: '+ ${project.getEndDate()}"></td>
+            <td th:text="'Project leader '+${project.getProjectOwner().getName()}"></td>
+            <td><form th:action="@{/dashboard/{id}(id=${project.getId()})}" th:method="get"><button>View Task's</button></form></td>
+        </tr>
+    </table>
+
     <h1>Your assgined tasks</h1>
 
 </main>
