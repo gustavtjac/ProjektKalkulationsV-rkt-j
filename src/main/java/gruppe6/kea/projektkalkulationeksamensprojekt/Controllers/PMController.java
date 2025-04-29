@@ -93,6 +93,20 @@ model.addAttribute("profile",loggedInProfile);
         return "viewProject";
     }
 
+    //Slet funktioner til projekter, tasks og subtasks
+
+    @PostMapping("/deleteproject")
+    public String deleteProject(@RequestParam String projectID ,@RequestParam String username){
+        System.out.println("Test1");
+        if(projectService.checkIfProfileOwnsProject(projectID,username)){
+            System.out.println("Test2");
+            projectService.deleteProject(projectID);
+            return "redirect:/dashboard";
+        }
+
+        return "redirect:/";
+    }
+
 
 
 }

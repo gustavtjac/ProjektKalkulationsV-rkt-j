@@ -70,6 +70,10 @@ public class ProjectRepository implements CrudMethods<Project,String> {
     }
 
 
+    public void deleteProject(String projectID){
+        String deleteSQL = "DELETE FROM project WHERE project_ID = ?";
+        jdbcTemplate.update(deleteSQL, projectID);
+    }
 
 
 }
