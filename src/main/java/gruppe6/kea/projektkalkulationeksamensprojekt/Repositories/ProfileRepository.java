@@ -5,6 +5,7 @@ import gruppe6.kea.projektkalkulationeksamensprojekt.Models.Profile;
 import gruppe6.kea.projektkalkulationeksamensprojekt.Rowmappers.ProfileRowMapper;
 import gruppe6.kea.projektkalkulationeksamensprojekt.Rowmappers.SkillRowmapper;
 import org.springframework.dao.DataAccessException;
+import org.springframework.data.repository.CrudRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -14,7 +15,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.List;
 
 @Repository
-public class ProfileRepository {
+public class ProfileRepository implements CrudMethods<Profile,String> {
 
 
 
@@ -65,4 +66,18 @@ private final ProfileRowMapper profileRowMapper;
     }
 
 
+    @Override
+    public Profile findAll() {
+        return null;
+    }
+
+    @Override
+    public Profile findByID(String s) {
+        return null;
+    }
+
+    @Override
+    public Profile save(Profile object) {
+        return null;
+    }
 }

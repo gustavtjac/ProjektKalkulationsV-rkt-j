@@ -2,7 +2,9 @@ package gruppe6.kea.projektkalkulationeksamensprojekt.Controllers;
 
 
 import gruppe6.kea.projektkalkulationeksamensprojekt.Models.Profile;
+import gruppe6.kea.projektkalkulationeksamensprojekt.Models.Project;
 import gruppe6.kea.projektkalkulationeksamensprojekt.Repositories.ProfileRepository;
+import gruppe6.kea.projektkalkulationeksamensprojekt.Repositories.ProjectRepository;
 import gruppe6.kea.projektkalkulationeksamensprojekt.Services.ProfileService;
 import gruppe6.kea.projektkalkulationeksamensprojekt.Services.ProjectService;
 import jakarta.servlet.http.HttpSession;
@@ -68,6 +70,27 @@ session.setMaxInactiveInterval(1800);
         model.addAttribute("projects",projectService.getAllProjectsFromProfile(loggedInProfile));
 model.addAttribute("profile",loggedInProfile);
         return "dashboard";
+    }
+
+
+
+
+    @GetMapping("/dashboard/{projectid}")
+    public String showProject(@PathVariable String projectid, HttpSession session,Model model){
+        Profile loggedInProfile = ((Profile) session.getAttribute("profile"));
+        if (loggedInProfile==null){
+            return "redirect:/";
+        }
+
+        Project project = projectService.findById(projectid);
+        model.addAttribute("project",project);
+        model.addAttribute("profile",loggedInProfile);
+
+        if(!projectService.checkIfProfileIsAssignedProject(loggedInProfile,project)){
+            return "redirect:/";
+        }
+
+        return "viewProject";
     }
 
 
