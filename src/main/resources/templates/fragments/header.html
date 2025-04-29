@@ -2,19 +2,27 @@
 <html lang="en" xmlns:th="https://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet'>
+    <link rel="stylesheet" href="/css/styles.css" th:href="@{/css/styles.css}">
+    <script src="https://kit.fontawesome.com/1086dfba1e.js" crossorigin="anonymous"></script>
     <title>Projektkalkulationsværktøj</title>
 </head>
 <body>
 
 <div th:fragment="header">
 <nav>
+    <input type="checkbox" id="check">
+    <label for="check" class="checkbtn">
+        <i class="fa-solid fa-bars"></i>
+    </label>
     <label class="logo">Alpha solutions</label>
-    <ul class="nav_links">
-        <li><a href="#">placeholder</a></li>
-        <li><a href="#">placeholder</a></li>
-        <li><a href="#">placeholder</a></li>
-        <li><a href="#">placeholder</a></li>
-    </ul>
+<!--    <ul class="nav_links">-->
+<!--        <li><a class="active" href="#">placeholder</a></li>-->
+<!--        <li><a href="#">placeholder</a></li>-->
+<!--        <li><a href="#">placeholder</a></li>-->
+<!--        <li><a href="#">placeholder</a></li>-->
+<!--        <li><a href="#">placeholder</a></li>-->
+<!--    </ul>-->
 </nav>
 </div>
 
