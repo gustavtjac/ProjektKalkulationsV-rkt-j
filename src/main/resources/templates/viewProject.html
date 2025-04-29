@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" th:href="@{/css/styles.css}" href="/css/styles.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title> </title>
+</head>
+<body>
+<main th:if="${profile.getAuthCode()==0}">
+    du er admin
+
+
+</main>
+
+<main th:if="${profile.getAuthCode()==1}">
+    <h1 th:text="'Manage your projects here '+${profile.name} + '!'"></h1>
+    <table>
+        <tr th:each="project : ${projects}">
+            <td th:text="'Project name '+${project.getName()}"></td>
+            <td th:text="'Allocated time '+${project.getMaxTime() + ' Hours'}"></td>
+            <td th:text="'Budget '+${project.getMaxPrice()} + ' Kr.'"></td>
+            <td th:text="'Deadline: '+ ${project.getEndDate()}"></td>
+            <td><form th:action="@{/dashboard/{id}(id=${project.getId()})}" th:method="get"><button>View Task's</button></form></td>
+            <td><form th:method="get" th:action="@{/editproject}"><button>Edit Project</button></form></td>
+        </tr>
+    </table>
+</main>
+
+
+<main th:if="${profile.getAuthCode()==2}">
+    <h1 th:text="'Your assgined projects '+${profile.name} + '!'"></h1>
+    <table>
+        <tr th:each="project : ${projects}">
+            <td th:text="'Project name '+${project.getName()}"></td>
+            <td th:text="'Allocated time '+${project.getMaxTime() + ' Hours'}"></td>
+            <td th:text="'Budget '+${project.getMaxPrice()} + ' Kr.'"></td>
+            <td th:text="'Deadline: '+ ${project.getEndDate()}"></td>
+            <td th:text="'Project leader '+${project.getProjectOwner().getName()}"></td>
+            <td><form th:action="@{/dashboard/{id}(id=${project.getId()})}" th:method="get"><button>View Task's</button></form></td>
+        </tr>
+    </table>
+
+    <h1>Your assgined tasks</h1>
+
+</main>
+
+</body>
+</html>

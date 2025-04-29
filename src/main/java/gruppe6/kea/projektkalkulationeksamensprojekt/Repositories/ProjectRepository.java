@@ -3,14 +3,16 @@ package gruppe6.kea.projektkalkulationeksamensprojekt.Repositories;
 import gruppe6.kea.projektkalkulationeksamensprojekt.Models.Profile;
 import gruppe6.kea.projektkalkulationeksamensprojekt.Models.Project;
 import gruppe6.kea.projektkalkulationeksamensprojekt.Rowmappers.ProjectRowMapper;
+import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Repository
-public class ProjectRepository {
+public class ProjectRepository implements CrudMethods<Project,String> {
 
     private final JdbcTemplate jdbcTemplate;
     private final ProjectRowMapper projectRowMapper;
@@ -43,6 +45,30 @@ public class ProjectRepository {
 
 
     }
+
+
+    @Override
+    public Project findAll() {
+        return null;
+    }
+
+    @Override
+    public Project findByID(String id) {
+        String sql = "select * from Project where Project_ID = ?";
+        try {
+            return jdbcTemplate.queryForObject(sql,projectRowMapper,id);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Project not found for project id: " + id, e);
+        }
+
+
+    }
+
+    @Override
+    public Project save(Project object) {
+        return null;
+    }
+
 
 
 

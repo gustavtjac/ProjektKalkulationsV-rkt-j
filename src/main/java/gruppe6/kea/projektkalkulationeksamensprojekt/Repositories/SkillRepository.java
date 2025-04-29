@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Repository
-public class SkillRepository {
+public class SkillRepository implements CrudMethods<Skill,String>{
 
     private final JdbcTemplate jdbcTemplate;
 
@@ -29,7 +29,21 @@ public class SkillRepository {
     }
 
 
+    @Override
+    public Skill findAll() {
+        return null;
     }
+
+    @Override
+    public Skill findByID(String s) {
+        return null;
+    }
+
+    @Override
+    public Skill save(Skill object) {
+        return null;
+    }
+}
 
 
 

@@ -18,4 +18,28 @@ public class ProjectService {
     public List<Project> getAllProjectsFromProfile(Profile profile){
         return projectRepository.getAllProjectsFromProfile(profile);
     }
+
+    public Project findById(String id){
+       return projectRepository.findByID(id);
+    }
+
+    public boolean checkIfProfileIsAssignedProject(Profile profile, Project project){
+        String profileID = profile.getUsername();
+        if (profile.getAuthCode()==1){
+            if (project.getProjectOwner().getUsername().equalsIgnoreCase(profileID)){
+                return true;
+            }
+        }else if (profile.getAuthCode()==0){
+            return true;
+        }else{
+            for (Profile projectmember : project.getProjectMembers()){
+                if (projectmember.getUsername().equalsIgnoreCase(profileID)){
+                    return true;
+                }
+
+            }
+        }
+        return false;
+    }
+
 }
