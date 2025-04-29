@@ -30,7 +30,7 @@ CREATE TABLE Task (
                       TASK_DESC VARCHAR(500),
                       TASK_MAX_TIME DOUBLE(30,2) NOT NULL,
                       TASK_MAX_PRICE DOUBLE(30,2) NOT NULL,
-                      FOREIGN KEY (TASK_PROJECT_ID) REFERENCES Project(PROJECT_ID)
+                      FOREIGN KEY (TASK_PROJECT_ID) REFERENCES Project(PROJECT_ID) ON DELETE CASCADE
 );
 
 -- Opretter Subtask tabel
@@ -41,7 +41,7 @@ CREATE TABLE Subtask (
                          SUBTASK_DESC VARCHAR(500),
                          SUBTASK_TIME DOUBLE(30,2) NOT NULL,
                          SUBTASK_STATUS integer(1) not null default (1),
-                         FOREIGN KEY (SUBTASK_TASK_ID) REFERENCES Task(TASK_ID)
+                         FOREIGN KEY (SUBTASK_TASK_ID) REFERENCES Task(TASK_ID) ON DELETE CASCADE
 );
 
 -- Opretter  Skill tabel
