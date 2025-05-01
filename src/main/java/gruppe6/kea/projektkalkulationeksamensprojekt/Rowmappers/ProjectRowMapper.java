@@ -3,6 +3,7 @@ package gruppe6.kea.projektkalkulationeksamensprojekt.Rowmappers;
 import gruppe6.kea.projektkalkulationeksamensprojekt.Models.Profile;
 import gruppe6.kea.projektkalkulationeksamensprojekt.Models.Project;
 import gruppe6.kea.projektkalkulationeksamensprojekt.Repositories.ProfileRepository;
+import gruppe6.kea.projektkalkulationeksamensprojekt.Repositories.TaskRepository;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
@@ -14,9 +15,11 @@ public class ProjectRowMapper implements RowMapper<Project> {
 
 
     private final ProfileRepository profileRepository;
+    private final TaskRepository taskRepository;
 
-    public ProjectRowMapper(ProfileRepository profileRepository) {
+    public ProjectRowMapper(ProfileRepository profileRepository, TaskRepository taskRepository) {
         this.profileRepository = profileRepository;
+        this.taskRepository = taskRepository;
     }
 
     @Override
@@ -29,6 +32,7 @@ public class ProjectRowMapper implements RowMapper<Project> {
       project.setMaxTime(rs.getDouble("PROJECT_MAX_TIME"));
       project.setMaxPrice(rs.getDouble("PROJECT_MAX_PRICE"));
       project.setEndDate(rs.getDate("PROJECT_ENDDATE"));
+      project.setTasks(taskRepository.getTaskFromProjectID(project.getId()));
       List<Profile> memberlist = profileRepository.getAllMembersOfProjectFromProjectID(project.getId());
        project.setProjectMembers(memberlist);
 

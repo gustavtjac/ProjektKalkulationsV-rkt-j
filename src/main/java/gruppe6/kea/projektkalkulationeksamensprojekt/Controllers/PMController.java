@@ -1,6 +1,7 @@
 package gruppe6.kea.projektkalkulationeksamensprojekt.Controllers;
 
 
+import gruppe6.kea.projektkalkulationeksamensprojekt.DTO.ProjectDTO;
 import gruppe6.kea.projektkalkulationeksamensprojekt.Models.Profile;
 import gruppe6.kea.projektkalkulationeksamensprojekt.Models.Project;
 import gruppe6.kea.projektkalkulationeksamensprojekt.Repositories.ProfileRepository;
@@ -13,6 +14,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.util.List;
 
 @Controller
 public class PMController {
@@ -68,11 +71,38 @@ session.setMaxInactiveInterval(1800);
 
         }
         model.addAttribute("projects",projectService.getAllProjectsFromProfile(loggedInProfile));
-model.addAttribute("profile",loggedInProfile);
+        model.addAttribute("profile",loggedInProfile);
         return "dashboard";
     }
 
+    @GetMapping("/showcreatenewproject")
+    public String showCreateProject(HttpSession session, Model model) {
+        Profile loggedInProfile = ((Profile) session.getAttribute("profile"));
 
+        if (loggedInProfile==null ||loggedInProfile.getAuthCode() != 1) {
+            return "redirect:/dashboard";
+        }
+        else {
+            List<Profile> allProfiles = profileService.findAllProfiles();
+            model.addAttribute("project", new ProjectDTO());
+            model.addAttribute("profile",loggedInProfile);
+            model.addAttribute("allProfiles", allProfiles);
+            return "showcreatenewproject";
+        }
+
+    }
+
+    @PostMapping("/createnewproject")
+    public String createNewProject(@ModelAttribute ProjectDTO projectDTO, RedirectAttributes redirectAttributes) {
+
+        ProjectDTO newProject = projectService.createNewProject(projectDTO);
+        if (newProject == null) {
+            redirectAttributes.addAttribute("error", "Something Went Wrong Try Again");
+            return "redirect:/showcreatenewproject";
+        }
+
+        return "redirect:/dashboard";
+    }
 
 
     @GetMapping("/dashboard/{projectid}")
@@ -91,6 +121,20 @@ model.addAttribute("profile",loggedInProfile);
         }
 
         return "viewProject";
+    }
+
+    //Slet funktioner til projekter, tasks og subtasks
+
+    @PostMapping("/deleteproject")
+    public String deleteProject(@RequestParam String projectID ,@RequestParam String username){
+        System.out.println("Test1");
+        if(projectService.checkIfProfileOwnsProject(projectID,username)){
+            System.out.println("Test2");
+            projectService.deleteProject(projectID);
+            return "redirect:/dashboard";
+        }
+
+        return "redirect:/";
     }
 
 

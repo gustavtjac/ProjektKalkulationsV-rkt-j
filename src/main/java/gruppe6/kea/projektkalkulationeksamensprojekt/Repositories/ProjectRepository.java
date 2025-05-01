@@ -1,5 +1,6 @@
 package gruppe6.kea.projektkalkulationeksamensprojekt.Repositories;
 
+import gruppe6.kea.projektkalkulationeksamensprojekt.DTO.ProjectDTO;
 import gruppe6.kea.projektkalkulationeksamensprojekt.Models.Profile;
 import gruppe6.kea.projektkalkulationeksamensprojekt.Models.Project;
 import gruppe6.kea.projektkalkulationeksamensprojekt.Rowmappers.ProjectRowMapper;
@@ -10,6 +11,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Repository
 public class ProjectRepository implements CrudMethods<Project,String> {
@@ -41,14 +43,30 @@ public class ProjectRepository implements CrudMethods<Project,String> {
             """;
             return jdbcTemplate.query(getAssignedProjects, projectRowMapper, profile.getUsername());
         }
+    }
+
+    public ProjectDTO createNewProject(ProjectDTO projectDTO) {
+        projectDTO.setId(UUID.randomUUID().toString());
+        String sql = "INSERT into Project (PROJECT_ID,PROJECT_OWNER_PROFILE_USERNAME, PROJECT_NAME, PROJECT_DESC, PROJECT_MAX_TIME, PROJECT_MAX_PRICE, PROJECT_ENDDATE) values (?,?,?,?,?,?,?)";
+                int rowsAffected = jdbcTemplate.update(sql,projectDTO.getId(),projectDTO.getProjectOwner(), projectDTO.getName(), projectDTO.getDescription(), projectDTO.getMaxTime(), projectDTO.getMaxPrice(), projectDTO.getEndDate());
 
 
-
+                String insertWorkersSQL = "Insert into PROFILE_PROJECT (PROJECT_ID,PROFILE_USERNAME) values(?,?)";
+                
+                for (String username : projectDTO.getProjectMembers()){
+                   jdbcTemplate.update(insertWorkersSQL,projectDTO.getId(),username);
+                }
+    if (rowsAffected==0){
+        return null;
+    }
+    else {
+        return projectDTO;
+    }
     }
 
 
     @Override
-    public Project findAll() {
+    public List<Project>findAll() {
         return null;
     }
 
@@ -70,6 +88,10 @@ public class ProjectRepository implements CrudMethods<Project,String> {
     }
 
 
+    public void deleteProject(String projectID){
+        String deleteSQL = "DELETE FROM project WHERE project_ID = ?";
+        jdbcTemplate.update(deleteSQL, projectID);
+    }
 
 
 }
