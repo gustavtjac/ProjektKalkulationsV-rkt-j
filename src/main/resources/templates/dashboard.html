@@ -3,12 +3,15 @@
 <head>
   <meta charset="UTF-8">
   <link rel="stylesheet" th:href="@{/css/styles.css}" href="/css/styles.css">
+    <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet'>
+    <link rel="stylesheet" href="/css/headerStyle.css" th:href="@{/css/headerStyle.css}">
+    <script src="https://kit.fontawesome.com/1086dfba1e.js" crossorigin="anonymous"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Alpha Solutions Project Management Dashboard</title>
 </head>
 <body>
 
-<div th:replace="fragments/header :: header"></div>
+<div th:replace="~{fragments/header :: header}"></div>
 
 <main th:if="${profile.getAuthCode()==0}">
  <h1 th:text="'Welcome to admin dashboard ' + ${profile.getName()}"></h1>
@@ -53,7 +56,7 @@
 
 
 <main th:if="${profile.getAuthCode()==2}">
-    <h1 th:text="'Your assgined projects '+${profile.name} + '!'"></h1>
+    <h1 th:text="'Your assigned projects '+${profile.name} + '!'"></h1>
     <table>
         <tr th:each="project : ${projects}">
             <td th:text="'Project name '+${project.getName()}"></td>
@@ -65,7 +68,7 @@
         </tr>
     </table>
 
-    <h1>Your assgined tasks</h1>
+    <h1>Your assigned tasks</h1>
 
 </main>
 

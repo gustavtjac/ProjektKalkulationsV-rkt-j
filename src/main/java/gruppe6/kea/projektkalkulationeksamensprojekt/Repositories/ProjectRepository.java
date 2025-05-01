@@ -93,5 +93,10 @@ public class ProjectRepository implements CrudMethods<Project,String> {
         jdbcTemplate.update(deleteSQL, projectID);
     }
 
+    public void deleteTask(String taskID){
+        String deleteSQL = "DELETE FROM task WHERE task_ID = ?";
+        jdbcTemplate.update(deleteSQL, taskID);
+    }
+
 
 }

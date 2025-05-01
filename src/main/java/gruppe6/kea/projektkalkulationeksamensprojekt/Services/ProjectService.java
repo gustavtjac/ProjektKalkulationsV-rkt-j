@@ -55,6 +55,10 @@ public class ProjectService {
         projectRepository.deleteProject(projectID);
     }
 
+    public void deleteTask(String taskID){
+        projectRepository.deleteTask(taskID);
+    }
+
 
     public ProjectDTO createNewProject(ProjectDTO projectDTO) {
         return projectRepository.createNewProject(projectDTO);
