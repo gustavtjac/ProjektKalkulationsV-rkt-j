@@ -14,7 +14,25 @@
 <div th:replace="~{fragments/header :: header}"></div>
 
 <main th:if="${profile.getAuthCode()==0}">
- du er admin
+ <h1 th:text="'Welcome to admin dashboard ' + ${profile.getName()}"></h1>
+
+    <div>
+        <form th:action="@{/manageemployees}">
+            <button>Manage employees</button>
+        </form>
+        <form th:action="@{/manageskills}">
+            <button>Manage skills</button>
+        </form>
+
+        <form>
+            <button>Manage projects</button>
+        </form>
+
+    </div>
+
+
+
+
 
 
 </main>

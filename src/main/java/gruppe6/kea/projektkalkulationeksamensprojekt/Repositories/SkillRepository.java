@@ -31,7 +31,8 @@ public class SkillRepository implements CrudMethods<Skill,String>{
 
     @Override
     public List<Skill> findAll() {
-        return null;
+        String sql = "select * from skill";
+        return jdbcTemplate.query(sql,new SkillRowmapper());
     }
 
     @Override
