@@ -18,4 +18,9 @@ public class TaskService {
     public Task createNewTask(Task task){
         return taskRepository.createNewTask(task);
     }
+
+    public Task findByID(String taskID){
+        return taskRepository.findByID(taskID);
+    }
+
 }

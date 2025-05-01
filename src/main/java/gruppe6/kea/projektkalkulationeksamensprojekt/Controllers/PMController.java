@@ -15,7 +15,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.HttpSessionRequiredException;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -180,23 +182,19 @@ session.setMaxInactiveInterval(1800);
         return "redirect:/";
     }
 
-//    @PostMapping("/deletetask")
-//    public String deleteTask(@RequestParam String taskID, HttpSession session){
-//        Profile loggedInProfile = ((Profile) session.getAttribute("profile"));
-//
-//        Task foundTask = taskService.findByID(taskID);
-//
-//        if (loggedInProfile==null|| !projectService.checkIfProfileOwnsProject(foundTask.getProjectID(), loggedInProfile.getUsername()) ){
-//           throw new
-//
-//
-//        }else {
-//            projectService.deleteTask(taskID);
-//            return "redirect:/viewProject";
-//        }
-//
-//    }
-//
+    @PostMapping("/deletetask")
+    public String deleteTask(@RequestParam String taskID, HttpSession session) {
+        Profile loggedInProfile = ((Profile) session.getAttribute("profile"));
+        Task foundTask = taskService.findByID(taskID); //Finder taskID
+        if (loggedInProfile==null|| !projectService.checkIfProfileOwnsProject(foundTask.getProjectID(), loggedInProfile.getUsername()) ){
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Not allowed");
+        }else {
+            projectService.deleteTask(taskID);
+            return "redirect:/dashboard/" + foundTask.getProjectID();
+        }
+
+    }
+
 
 
 }
