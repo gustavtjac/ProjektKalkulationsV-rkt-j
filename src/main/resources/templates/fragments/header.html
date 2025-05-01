@@ -16,9 +16,9 @@
         <i class="fa-solid fa-bars"></i>
     </label>
     <ul>
-        <li><a href="#">placeholder</a></li>
-        <li><a href="#">placeholder</a></li>
-        <li><a href="#">placeholder</a></li>
+        <li th:if="${session.profile != null}">
+            <a th:href="@{/logout}">Log out</a>
+        </li>
     </ul>
 </nav>
 

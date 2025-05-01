@@ -63,9 +63,12 @@ session.setMaxInactiveInterval(1800);
            redirectAttributes.addAttribute("wrongLogin","Invalid Username or Password");
            return "redirect:/";
        }
+    }
 
-
-
+    @GetMapping("/logout")
+    public String logout(HttpSession session){
+        session.invalidate();
+        return "redirect:/";
     }
 
 
