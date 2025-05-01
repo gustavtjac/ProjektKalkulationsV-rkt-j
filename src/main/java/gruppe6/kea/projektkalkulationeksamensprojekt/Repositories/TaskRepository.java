@@ -25,7 +25,7 @@ public class TaskRepository implements CrudMethods<Task,String>{
 
 
     @Override
-    public Task findAll() {
+    public List<Task> findAll() {
         return null;
     }
 

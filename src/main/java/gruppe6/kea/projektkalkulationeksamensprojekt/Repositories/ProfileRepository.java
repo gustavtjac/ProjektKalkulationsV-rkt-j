@@ -12,6 +12,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -66,9 +67,12 @@ private final ProfileRowMapper profileRowMapper;
     }
 
 
+
     @Override
-    public Profile findAll() {
-        return null;
+    public List<Profile> findAll() {
+        String sql = "SELECT * FROM Profile";
+        List<Profile> foundProfiles = jdbcTemplate.query(sql,profileRowMapper);
+        return foundProfiles;
     }
 
     @Override

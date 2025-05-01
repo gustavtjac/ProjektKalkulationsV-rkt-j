@@ -18,6 +18,7 @@
 
 <main th:if="${profile.getAuthCode()==1}">
 <h1 th:text="'Manage your projects here '+${profile.name} + '!'"></h1>
+    <form th:action="@{/showcreatenewproject}" method="get"> <button>Create New Project</button></form>
     <table>
         <tr th:each="project : ${projects}">
             <td th:text="'Project name '+${project.getName()}"></td>

@@ -30,7 +30,7 @@ public class SkillRepository implements CrudMethods<Skill,String>{
 
 
     @Override
-    public Skill findAll() {
+    public List<Skill> findAll() {
         return null;
     }
 
