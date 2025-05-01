@@ -38,7 +38,7 @@
 
 
 <main th:if="${profile.getAuthCode()==2}">
-    <h1 th:text="'Your assgined projects '+${profile.name} + '!'"></h1>
+    <h1 th:text="'Your assigned projects '+${profile.name} + '!'"></h1>
     <table>
         <tr th:each="project : ${projects}">
             <td th:text="'Project name '+${project.getName()}"></td>
@@ -50,7 +50,7 @@
         </tr>
     </table>
 
-    <h1>Your assgined tasks</h1>
+    <h1>Your assigned tasks</h1>
 
 </main>
 
