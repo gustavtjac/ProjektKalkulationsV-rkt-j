@@ -4,6 +4,7 @@ package gruppe6.kea.projektkalkulationeksamensprojekt.Controllers;
 import gruppe6.kea.projektkalkulationeksamensprojekt.DTO.ProjectDTO;
 import gruppe6.kea.projektkalkulationeksamensprojekt.Models.Profile;
 import gruppe6.kea.projektkalkulationeksamensprojekt.Models.Project;
+import gruppe6.kea.projektkalkulationeksamensprojekt.Models.Task;
 import gruppe6.kea.projektkalkulationeksamensprojekt.Repositories.ProfileRepository;
 import gruppe6.kea.projektkalkulationeksamensprojekt.Repositories.ProjectRepository;
 import gruppe6.kea.projektkalkulationeksamensprojekt.Services.ProfileService;
@@ -15,6 +16,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.net.http.HttpResponse;
 import java.util.List;
 
 @Controller
@@ -127,16 +129,30 @@ session.setMaxInactiveInterval(1800);
 
     @PostMapping("/deleteproject")
     public String deleteProject(@RequestParam String projectID ,@RequestParam String username){
-        System.out.println("Test1");
-        if(projectService.checkIfProfileOwnsProject(projectID,username)){
-            System.out.println("Test2");
-            projectService.deleteProject(projectID);
-            return "redirect:/dashboard";
+        if(projectService.checkIfProfileOwnsProject(projectID,username)){ //Tjekker først om brugeren ejer projektet
+            projectService.deleteProject(projectID); //Sletter projektet
+            return "redirect:/dashboard"; //Redirecter tilbage til dashboardet
         }
-
         return "redirect:/";
     }
 
+//    @PostMapping("/deletetask")
+//    public String deleteTask(@RequestParam String taskID, HttpSession session){
+//        Profile loggedInProfile = ((Profile) session.getAttribute("profile"));
+//
+//        Task foundTask = taskService.findByID(taskID);
+//
+//        if (loggedInProfile==null|| !projectService.checkIfProfileOwnsProject(foundTask.getProjectID(), loggedInProfile.getUsername()) ){
+//           throw new
+//
+//
+//        }else {
+//            projectService.deleteTask(taskID);
+//            return "redirect:/viewProject";
+//        }
+//
+//    }
+//
 
 
 }

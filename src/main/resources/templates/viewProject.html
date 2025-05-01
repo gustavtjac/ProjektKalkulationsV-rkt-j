@@ -3,10 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" th:href="@{/css/styles.css}" href="/css/styles.css">
+    <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet'>
+    <link rel="stylesheet" href="/css/headerStyle.css" th:href="@{/css/headerStyle.css}">
+    <script src="https://kit.fontawesome.com/1086dfba1e.js" crossorigin="anonymous"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title th:text="${project.getName()}"> </title>
 </head>
 <body>
+
+<div th:replace="~{fragments/header :: header}"></div>
+
 <main th:if="${profile.getAuthCode()==0}">
     du er admin
 
@@ -23,6 +29,9 @@
             <td th:text="'Budget '+${task.getMaxPrice()} + ' Kr.'"></td>
             <td><form th:action="@{/dashboard/{projectid}/{taskid}(projectid=${project.getId()}, taskid=${task.getId()})}" th:method="get"><button>View subtask's</button></form></td>
             <td><form th:method="get" th:action="@{/edittask}"><button>Edit Task</button></form></td>
+            <td><form th:method="post" th:action="@{/deletetask}"><input type="hidden" name="taskID" th:value="${task.getId()}"><input
+                type="hidden" name="username" th:value="${profile.getUsername()}"><button>Delete Task</button></form></td>
+
         </tr>
     </table>
 </main>
