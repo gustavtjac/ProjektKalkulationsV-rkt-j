@@ -15,8 +15,14 @@
 
 <main th:if="${profile.getAuthCode()==1}">
     <h1 th:text="'Manage ' + ${project.getName()} + ' Tasks here'"></h1>
+
+
+    <form th:action="@{/showcreatenewtask}" th:method="get">
+        <input type="hidden" name="projectID" th:value="${projectid}">
+        <button type="submit">Create new Task</button>
+
+    </form>
     <table>
-        <tr th:each="task : ${project.getTasks()}">
         <tr th:each="task : ${project.getTasks()}">
             <td th:text="'Task name '+${task.getName()}"></td>
             <td th:text="'Allocated time '+${task.getMaxTime() + ' Hours'}"></td>
