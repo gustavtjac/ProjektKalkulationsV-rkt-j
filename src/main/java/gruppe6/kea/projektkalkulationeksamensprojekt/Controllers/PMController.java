@@ -4,15 +4,19 @@ package gruppe6.kea.projektkalkulationeksamensprojekt.Controllers;
 import gruppe6.kea.projektkalkulationeksamensprojekt.DTO.ProjectDTO;
 import gruppe6.kea.projektkalkulationeksamensprojekt.Models.Profile;
 import gruppe6.kea.projektkalkulationeksamensprojekt.Models.Project;
+import gruppe6.kea.projektkalkulationeksamensprojekt.Models.Task;
 import gruppe6.kea.projektkalkulationeksamensprojekt.Repositories.ProfileRepository;
 import gruppe6.kea.projektkalkulationeksamensprojekt.Repositories.ProjectRepository;
 import gruppe6.kea.projektkalkulationeksamensprojekt.Services.ProfileService;
 import gruppe6.kea.projektkalkulationeksamensprojekt.Services.ProjectService;
+import gruppe6.kea.projektkalkulationeksamensprojekt.Services.TaskService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
@@ -23,10 +27,12 @@ public class PMController {
     //Vi dependency injecter serviceklasser der skal benyttes i controlleren
     private final ProfileService profileService;
     private final ProjectService projectService;
+    private final TaskService taskService;
 
-    public PMController(ProfileService profileService, ProjectService projectService) {
+    public PMController(ProfileService profileService, ProjectService projectService, TaskService taskService) {
         this.profileService = profileService;
         this.projectService = projectService;
+        this.taskService = taskService;
     }
 
     //Denne metoder sender en client til login siden hvis de ikke er logget ind i forvejen
@@ -91,6 +97,45 @@ session.setMaxInactiveInterval(1800);
         }
 
     }
+    @GetMapping("/showcreatenewtask")
+    public String showCreateTask(HttpSession session, Model model,@RequestParam String projectID) {
+        Profile loggedInProfile = ((Profile) session.getAttribute("profile"));
+
+        if (loggedInProfile==null ||loggedInProfile.getAuthCode() != 1) {
+            return "redirect:/dashboard";
+        }
+        else {
+            model.addAttribute("projectID",projectID);
+            model.addAttribute("task", new Task());
+            model.addAttribute("profile",loggedInProfile);
+            return "showcreatenewtask";
+        }
+
+    }
+
+    @PostMapping("/createnewtask")
+    public String createNewTask(@ModelAttribute Task task, RedirectAttributes redirectAttributes, HttpSession session) {
+        Profile profile = ((Profile) session.getAttribute("profile"));
+
+        if (projectService.checkIfProfileOwnsProject(task.getProjectID(),profile.getUsername())){
+            Task newtask = taskService.createNewTask(task);
+            if (newtask == null) {
+                redirectAttributes.addAttribute("error", "Something Went Wrong Try Again");
+                return "redirect:/showcreatenewproject";
+            }
+
+            return "redirect:/dashboard/" + task.getProjectID();
+
+        }else {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You are not allowed to create a task for this project");
+        }
+
+
+    }
+
+
+
+
 
     @PostMapping("/createnewproject")
     public String createNewProject(@ModelAttribute ProjectDTO projectDTO, RedirectAttributes redirectAttributes) {

@@ -6,6 +6,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.UUID;
 
 @Repository
 public class TaskRepository implements CrudMethods<Task,String>{
@@ -16,6 +17,22 @@ public class TaskRepository implements CrudMethods<Task,String>{
         this.jdbcTemplate = jdbcTemplate;
         this.taskRowMapper = taskRowMapper;
     }
+
+public Task createNewTask(Task task){
+String taskid = UUID.randomUUID().toString();
+task.setId(taskid);
+        String sql = "Insert into Task (TASK_ID,TASK_PROJECT_ID,TASK_NAME,TASK_DESC,TASK_MAX_TIME,TASK_MAX_PRICE) VALUES (?,?,?,?,?,?)";
+int rowAffectred = jdbcTemplate.update(sql,task.getId(),task.getProjectID(),task.getName(),task.getDescription(),task.getMaxTime(),task.getMaxPrice());
+
+if (rowAffectred==0){
+    return null;
+}
+else {
+    return task;
+}
+
+
+}
 
 
     public List<Task> getTaskFromProjectID(String projectID){
