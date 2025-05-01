@@ -1,6 +1,7 @@
 package gruppe6.kea.projektkalkulationeksamensprojekt.Controllers;
 
 
+import gruppe6.kea.projektkalkulationeksamensprojekt.DTO.ProfileDTO;
 import gruppe6.kea.projektkalkulationeksamensprojekt.DTO.ProjectDTO;
 import gruppe6.kea.projektkalkulationeksamensprojekt.Models.Profile;
 import gruppe6.kea.projektkalkulationeksamensprojekt.Models.Project;
@@ -9,6 +10,7 @@ import gruppe6.kea.projektkalkulationeksamensprojekt.Repositories.ProfileReposit
 import gruppe6.kea.projektkalkulationeksamensprojekt.Repositories.ProjectRepository;
 import gruppe6.kea.projektkalkulationeksamensprojekt.Services.ProfileService;
 import gruppe6.kea.projektkalkulationeksamensprojekt.Services.ProjectService;
+import gruppe6.kea.projektkalkulationeksamensprojekt.Services.SkillService;
 import gruppe6.kea.projektkalkulationeksamensprojekt.Services.TaskService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,11 +30,13 @@ public class PMController {
     private final ProfileService profileService;
     private final ProjectService projectService;
     private final TaskService taskService;
+    private final SkillService skillService;
 
-    public PMController(ProfileService profileService, ProjectService projectService, TaskService taskService) {
+    public PMController(ProfileService profileService, ProjectService projectService, TaskService taskService, SkillService skillService) {
         this.profileService = profileService;
         this.projectService = projectService;
         this.taskService = taskService;
+        this.skillService = skillService;
     }
 
     //Denne metoder sender en client til login siden hvis de ikke er logget ind i forvejen
@@ -181,6 +185,70 @@ session.setMaxInactiveInterval(1800);
 
         return "redirect:/";
     }
+
+    @GetMapping("/manageemployees")
+    public String showManageEmployees(HttpSession session, Model model, @RequestParam(required = false) String msg){
+        Profile loggedInProfile = ((Profile)session.getAttribute("profile"));
+        if (loggedInProfile==null || loggedInProfile.getAuthCode()!=0){
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,"User is not allowed on this page");
+        }else {
+            model.addAttribute("message",msg);
+            model.addAttribute("employeelist",profileService.findAllProfiles());
+            return "manageemployees";
+        }
+
+    }
+    @GetMapping("/createnewemployee")
+    public String showCreateNewEmployee(HttpSession session, Model model, @RequestParam(required = false) String msg ){
+        Profile loggedInProfile = ((Profile)session.getAttribute("profile"));
+        if (loggedInProfile==null || loggedInProfile.getAuthCode()!=0){
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,"User is not allowed on this page");
+        }else {
+            model.addAttribute("message",msg);
+            model.addAttribute("emptyEmployee",new ProfileDTO());
+            model.addAttribute("skills",skillService.findAll());
+            return "showcreatenewemployee";
+
+        }
+
+    }
+
+    @PostMapping("/createnewemployee")
+    public String CreateNewEmployee(HttpSession session,@ModelAttribute ProfileDTO profileDTO,RedirectAttributes redirectAttributes){
+
+        if (profileService.checkIfUsernameExists(profileDTO.getUsername())){
+
+            redirectAttributes.addAttribute("msg","The username you chose already exists");
+            return "redirect:/createnewemployee";
+        }
+
+        Profile loggedInProfile = ((Profile)session.getAttribute("profile"));
+        if (loggedInProfile==null || loggedInProfile.getAuthCode()!=0){
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,"User is not allowed to create new profiles");
+        }else {
+
+
+
+            profileService.createNewProfile(profileDTO);
+
+
+            return "redirect:/manageemployees";
+        }
+
+    }
+    @PostMapping("/deleteemployee")
+    public String deleteEmployee(@RequestParam String profileID,HttpSession session,RedirectAttributes redirectAttributes){
+        Profile loggedInProfile = ((Profile)session.getAttribute("profile"));
+        if (loggedInProfile==null || loggedInProfile.getAuthCode()!=0){
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,"User is not allowed to delete profiles");
+        }else {
+            Profile deletedProfile = profileService.deleteFromId(profileID);
+redirectAttributes.addAttribute("msg","User with username " +deletedProfile.getUsername() + " has been deleted" );
+            return "redirect:/manageemployees";
+        }
+
+    }
+
 
 
 
