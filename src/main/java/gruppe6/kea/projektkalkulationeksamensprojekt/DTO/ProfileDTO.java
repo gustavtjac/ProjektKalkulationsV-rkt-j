@@ -15,6 +15,9 @@ public class ProfileDTO {
     private int authCode;
     private List<String> skills;
 
+    public ProfileDTO() {
+    }
+
     public ProfileDTO(String username, List<String> skills, int authCode, String name, String password) {
         this.username = username;
         this.skills = skills;
@@ -23,6 +26,5 @@ public class ProfileDTO {
         this.password = password;
     }
 
-    public ProfileDTO() {
-    }
+
 }

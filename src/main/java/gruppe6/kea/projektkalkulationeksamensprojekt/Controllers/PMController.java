@@ -4,11 +4,13 @@ package gruppe6.kea.projektkalkulationeksamensprojekt.Controllers;
 import gruppe6.kea.projektkalkulationeksamensprojekt.DTO.ProjectDTO;
 import gruppe6.kea.projektkalkulationeksamensprojekt.Models.Profile;
 import gruppe6.kea.projektkalkulationeksamensprojekt.Models.Project;
+import gruppe6.kea.projektkalkulationeksamensprojekt.Models.Subtask;
 import gruppe6.kea.projektkalkulationeksamensprojekt.Models.Task;
 import gruppe6.kea.projektkalkulationeksamensprojekt.Repositories.ProfileRepository;
 import gruppe6.kea.projektkalkulationeksamensprojekt.Repositories.ProjectRepository;
 import gruppe6.kea.projektkalkulationeksamensprojekt.Services.ProfileService;
 import gruppe6.kea.projektkalkulationeksamensprojekt.Services.ProjectService;
+import gruppe6.kea.projektkalkulationeksamensprojekt.Services.SubtaskService;
 import gruppe6.kea.projektkalkulationeksamensprojekt.Services.TaskService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,11 +30,13 @@ public class PMController {
     private final ProfileService profileService;
     private final ProjectService projectService;
     private final TaskService taskService;
+    private final SubtaskService subtaskService;
 
-    public PMController(ProfileService profileService, ProjectService projectService, TaskService taskService) {
+    public PMController(ProfileService profileService, ProjectService projectService, TaskService taskService, SubtaskService subtaskService) {
         this.profileService = profileService;
         this.projectService = projectService;
         this.taskService = taskService;
+        this.subtaskService = subtaskService;
     }
 
     //Denne metoder sender en client til login siden hvis de ikke er logget ind i forvejen
@@ -65,9 +69,7 @@ session.setMaxInactiveInterval(1800);
 
     }
 
-
-
-
+    // Denne metode viser forskellige dashbaord ift. hvilken profile er logget ind
     @GetMapping("/dashboard")
     public String showDashBoard(HttpSession session,Model model){
         Profile loggedInProfile = ((Profile) session.getAttribute("profile"));
@@ -81,6 +83,7 @@ session.setMaxInactiveInterval(1800);
         return "dashboard";
     }
 
+    // Denne metode viser siden til at oprette et nyt projekt
     @GetMapping("/showcreatenewproject")
     public String showCreateProject(HttpSession session, Model model) {
         Profile loggedInProfile = ((Profile) session.getAttribute("profile"));
@@ -137,6 +140,7 @@ session.setMaxInactiveInterval(1800);
 
 
 
+    // Denne metode håndtere oprettelsen af projektet og gemmer det i SQL
     @PostMapping("/createnewproject")
     public String createNewProject(@ModelAttribute ProjectDTO projectDTO, RedirectAttributes redirectAttributes) {
 
@@ -150,6 +154,7 @@ session.setMaxInactiveInterval(1800);
     }
 
 
+    // Metode viser siden til alle projektets task
     @GetMapping("/dashboard/{projectid}")
     public String showProject(@PathVariable String projectid, HttpSession session,Model model){
         Profile loggedInProfile = ((Profile) session.getAttribute("profile"));
@@ -168,8 +173,37 @@ session.setMaxInactiveInterval(1800);
         return "viewProject";
     }
 
-    //Slet funktioner til projekter, tasks og subtasks
+    // Metode viser siden til alle tasks, sub-task
+    @GetMapping("/dashboard/{projectid}/{taskid}")
+    public String showTask(
+            @PathVariable String taskid,
+            @PathVariable String projectid,
+            HttpSession session,
+            Model model) {
 
+        Profile loggedInProfile = ((Profile) session.getAttribute("profile"));
+        if (loggedInProfile == null) {
+            return "redirect:/";
+        }
+
+        Project project = projectService.findById(projectid);
+        if(!projectService.checkIfProfileIsAssignedProject(loggedInProfile,project)){
+            return "redirect:/";
+        }
+
+        Task task = taskService.findById(taskid);
+        List<Subtask> subtasks = subtaskService.findAllSubtaskByTaskID(taskid);
+
+        model.addAttribute("profile",loggedInProfile);
+        model.addAttribute("project",project);
+        model.addAttribute("task", task);
+        model.addAttribute("subtasks", subtasks);
+
+        return "viewTask";
+    }
+
+
+    //Slet funktioner til projekter, tasks og subtasks
     @PostMapping("/deleteproject")
     public String deleteProject(@RequestParam String projectID ,@RequestParam String username){
         System.out.println("Test1");

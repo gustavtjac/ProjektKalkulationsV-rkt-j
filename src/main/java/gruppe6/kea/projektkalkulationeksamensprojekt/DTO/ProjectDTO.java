@@ -21,9 +21,11 @@ public class ProjectDTO {
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date endDate;
-
     private String projectOwner;
     private List<String> projectMembers;
+
+    public ProjectDTO() {
+    }
 
     public ProjectDTO(String id, String name, String description, double maxTime, double maxPrice, Date endDate, String projectOwner, List<String> projectMembers) {
         this.id = id;
@@ -36,6 +38,5 @@ public class ProjectDTO {
         this.projectMembers = projectMembers;
     }
 
-    public ProjectDTO() {
-    }
+
 }
