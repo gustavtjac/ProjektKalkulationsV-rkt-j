@@ -25,7 +25,7 @@ public class SubtaskRepository implements CrudMethods<Subtask,String>{
     }
 
     @Override
-    public Subtask findAll() {
+    public List<Subtask> findAll() {
         return null;
     }
 
