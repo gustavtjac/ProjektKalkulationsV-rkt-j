@@ -6,7 +6,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.server.ResponseStatusException;
-
 import java.util.List;
 import java.util.UUID;
 
@@ -55,8 +54,18 @@ else {
 
 
     @Override
+
     public List<Task> findAll() {
         return null;
+
+    public Task findByID(String taskID) {
+        String SQL = "SELECT * FROM Task WHERE task_ID = ?";
+        try{
+            return jdbcTemplate.queryForObject(SQL,taskRowMapper, taskID);
+
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Task not found for task id: " + taskID, e );
+        }
     }
 
 

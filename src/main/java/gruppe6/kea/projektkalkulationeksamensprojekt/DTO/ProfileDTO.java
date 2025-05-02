@@ -13,6 +13,7 @@ public class ProfileDTO {
     private String password;
     private String name;
     private int authCode;
+    private double salary;
     private List<String> skills;
 
     public ProfileDTO() {

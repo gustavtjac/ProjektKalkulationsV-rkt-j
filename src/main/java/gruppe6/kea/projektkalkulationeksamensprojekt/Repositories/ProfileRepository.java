@@ -1,6 +1,7 @@
 package gruppe6.kea.projektkalkulationeksamensprojekt.Repositories;
 
 
+import gruppe6.kea.projektkalkulationeksamensprojekt.DTO.ProfileDTO;
 import gruppe6.kea.projektkalkulationeksamensprojekt.Models.Profile;
 import gruppe6.kea.projektkalkulationeksamensprojekt.Rowmappers.ProfileRowMapper;
 import gruppe6.kea.projektkalkulationeksamensprojekt.Rowmappers.SkillRowmapper;
@@ -67,6 +68,24 @@ private final ProfileRowMapper profileRowMapper;
     }
 
 
+    public Profile createNewProfile(ProfileDTO profileDTO){
+        String newProfile = "insert into Profile (Profile_USERNAME,PROFILE_NAME,PROFILE_PASSWORD,PROFILE_AUTH_CODE,PROFILE_SALARY) VALUES (?,?,?,?,?)";
+        String insertSkills = "insert INTO profile_skill (profile_username,skill_id) values (?,?)";
+
+
+        int profileRowsAffected = jdbcTemplate.update(newProfile,profileDTO.getUsername(),profileDTO.getName(),profileDTO.getPassword(),profileDTO.getAuthCode(),profileDTO.getSalary());
+if (profileRowsAffected>0){
+    for (String skillID : profileDTO.getSkills()){
+       int skillRowsAffected = jdbcTemplate.update(insertSkills,profileDTO.getUsername(),skillID);
+        if (skillRowsAffected==0){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Skill was not found");
+        }
+    }
+    return findByID(profileDTO.getUsername());
+}
+        throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE,"Username Already exists");
+    }
+
 
     @Override
     public List<Profile> findAll() {
@@ -77,11 +96,46 @@ private final ProfileRowMapper profileRowMapper;
 
     @Override
     public Profile findByID(String s) {
-        return null;
+        String sql = "select * from profile where profile_username = ?";
+
+        try {
+            return jdbcTemplate.queryForObject(sql,profileRowMapper,s);
+        } catch (DataAccessException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Username doesnt exist");
+        }
+
     }
 
     @Override
     public Profile save(Profile object) {
         return null;
+    }
+
+    public boolean checkIfUsernameExists(String username){
+        String sql = "Select * from Profile where PROFILE_USERNAME = ?";
+        List<Profile> profiles = jdbcTemplate.query(sql,profileRowMapper,username);
+        if (profiles.isEmpty()){
+            return false;
+        }
+        else {
+            return true;
+        }
+
+    }
+
+
+    public Profile deleteFromId(String id){
+
+        Profile profile = findByID(id);
+
+        String sql = "delete from profile where profile_username = ?";
+        int rowsAffected = jdbcTemplate.update(sql,id);
+
+        if (rowsAffected==0){
+            return null;
+        }else {
+            return profile;
+        }
+
     }
 }

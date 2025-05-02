@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" th:href="@{/css/styles.css}" href="/css/styles.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Manage employees</title>
+</head>
+<body>
+<main>
+    <h1>Create employee</h1>
+
+
+    <div>
+
+
+        <h1 th:text="${message}"></h1>
+        <form th:method="post" th:action="@{/createnewemployee}" th:object="${emptyEmployee}">
+            <label for="name">Employee name</label>
+            <input type="text" name="name" id="name" required>
+
+            <label for="username">Employee username</label>
+            <input type="text" name="username" id="username" maxlength="25" required>
+
+            <label for="password">Employee password</label>
+            <input type="text" name="password" id="password" min="1" max="60" required>
+
+            <label for="salary">Employee hourly salary</label>
+            <input type="number" name="salary" id="salary" min="1" max="999999" step="0.01" required>
+
+            <br>
+
+            <label>Auth level</label>
+            <br>
+            <label>
+                <input type="radio" name="authCode" value="0" required>
+                Admin
+            </label><br>
+
+            <label>
+                <input type="radio" name="authCode" value="1">
+                Project Leader
+            </label><br>
+
+            <label>
+                <input type="radio" name="authCode" value="2">
+                Employee
+            </label>
+            <br>
+            <div class="dropdown-container" id="memberDropdown">
+                <div class="dropdown-button" onclick="toggleDropdown()">Add skills to employee ▼</div>
+                <div class="checkbox-dropdown">
+                    <label th:each="skill : ${skills}">
+                        <input type="checkbox" name="skills"
+                               th:value="${skill.getId()}" />
+                        <span th:text="${skill.getName()}"></span>
+                    </label>
+                </div>
+            </div>
+
+
+
+
+
+            <button type="submit">Create new employee</button>
+        </form>
+
+    </div>
+
+
+
+
+
+
+
+</main>
+<script src="/js/script.js"></script>
+</body>
+</html>

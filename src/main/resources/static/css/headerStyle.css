@@ -47,7 +47,7 @@ nav ul li a{
     text-transform: uppercase;
 
 }
- a:hover{
+nav ul li a:hover {
     background: #1b9bff;
     transition: .5s;
 }
@@ -122,5 +122,16 @@ nav ul li a{
 
     #check:checked ~ ul {
         left: 0;
+    }
+
+    .logo:visited,
+    .logo:hover,
+    .logo:active,
+    .logo:focus {
+        color: white;
+        text-decoration: none;
+        background: none;
+        outline: none;
+        box-shadow: none;
     }
 }
