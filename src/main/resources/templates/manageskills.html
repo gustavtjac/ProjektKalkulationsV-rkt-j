@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" th:href="@{/css/styles.css}" href="/css/styles.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Manage employees</title>
+</head>
+<body>
+<main>
+  <h1>Manage skills</h1>
+
+
+  <form th:action="@{/createnewskill}">
+    <button type="submit">Create new skill</button>
+  </form>
+
+
+
+  <h3 th:text="${message}"></h3>
+  <table>
+    <thead>List of skills</thead>
+    <tr th:each="skill : ${skilllist}">
+      <td th:text="${skill.getName()}"></td>
+      <td><form th:action="@{/editskill}" th:method="get"><button>Edit skill (MANGLER AT BLIVE LAVET)</button></form></td>
+      <td><form th:action="@{/deleteskill}" th:method="post"><input type="hidden" th:value="${skill.getId()}" name="skillID"><button>Delete skill</button></form></td>
+  </table>
+
+
+
+
+
+</main>
+
+</body>
+</html>
