@@ -63,4 +63,8 @@ public class ProjectService {
     public ProjectDTO createNewProject(ProjectDTO projectDTO) {
         return projectRepository.createNewProject(projectDTO);
     }
+
+    public Project editProject(Project projectEdit){
+        return projectRepository.editProject(projectEdit);
+    }
 }

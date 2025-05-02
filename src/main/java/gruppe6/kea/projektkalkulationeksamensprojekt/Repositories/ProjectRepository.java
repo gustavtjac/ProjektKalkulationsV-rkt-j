@@ -99,4 +99,15 @@ public class ProjectRepository implements CrudMethods<Project,String> {
     }
 
 
+    public Project editProject(Project projectEdit) {
+        String editSQL = "UPDATE Project SET PROJECT_NAME = ?, PROJECT_DESC = ?, PROJECT_MAX_TIME = ?, PROJECT_MAX_PRICE = ?, PROJECT_END_DATE = ? WHERE PROJECT_ID = ?";
+        jdbcTemplate.update(editSQL,
+                projectEdit.getName(),
+                projectEdit.getDescription(),
+                projectEdit.getMaxTime(),
+                projectEdit.getMaxPrice(),
+                projectEdit.getEndDate(),
+                projectEdit.getId()); // Make sure editedProject has the ID set
+        return projectEdit;
+    }
 }
