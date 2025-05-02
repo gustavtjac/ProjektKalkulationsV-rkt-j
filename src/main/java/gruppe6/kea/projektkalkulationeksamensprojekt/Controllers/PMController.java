@@ -396,12 +396,43 @@ return "redirect:/editskill";
         }
 
     }
-
-
-
-
-
 }
+
+    @GetMapping("/editemployee")
+    public String showEditProfile(@RequestParam(required = false) String profileID, HttpSession session,Model model, @RequestParam(required = false) String msg){
+        Profile loggedInProfile = ((Profile) session.getAttribute("profile"));
+        if (loggedInProfile == null || loggedInProfile.getAuthCode() != 0) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User is not allowed on this page");
+        }else {
+            Profile profileToBeEditied = profileService.findById(profileID);
+            model.addAttribute("message",msg);
+            model.addAttribute("profileDTO",new ProfileDTO());
+            model.addAttribute("profileToBeEdited",profileToBeEditied);
+            model.addAttribute("skills",skillService.findAll());
+            return "editprofile";
+        }
+    }
+
+
+    @PostMapping("/editemployee")
+    public String editEmployee(@ModelAttribute ProfileDTO profileDTO,HttpSession session,RedirectAttributes redirectAttributes,@RequestParam String oldusername){
+        Profile loggedInProfile = ((Profile) session.getAttribute("profile"));
+        if (loggedInProfile == null || loggedInProfile.getAuthCode() != 0) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User is not allowed to edit employees");
+        }else {
+            try {
+                Profile editedProfile = profileService.saveDTO(profileDTO,oldusername);
+                redirectAttributes.addAttribute("msg","Profile has been updated");
+                return "redirect:/manageemployees";
+            } catch (RuntimeException e) {
+
+                redirectAttributes.addAttribute("msg","Employee could not be updated, username probably already exists");
+                redirectAttributes.addAttribute("profileID",oldusername);
+                return "redirect:/editemployee";
+            }
+
+        }
+    }
 
 
     @GetMapping("/dashboard/edit/{projectid}")

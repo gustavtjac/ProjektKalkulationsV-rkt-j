@@ -22,7 +22,7 @@
         <thead>List of employees</thead>
         <tr th:each="employee : ${employeelist}">
             <td th:text="${employee.getName()}"></td>
-            <td><form th:action="@{/editemployee}" th:method="get"><button>Edit employee (MANGLER AT BLIVE LAVET)</button></form></td>
+            <td><form th:action="@{/editemployee}"  th:method="get"> <input type="hidden" th:value="${employee.getUsername()}" name="profileID"><button>Edit employee</button></form></td>
             <td><form th:action="@{/deleteemployee}" th:method="post"><input type="hidden" th:value="${employee.getUsername()}" name="profileID"><button>Delete employee</button></form></td>
     </table>
 
