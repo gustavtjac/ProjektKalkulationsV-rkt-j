@@ -84,7 +84,7 @@ session.setMaxInactiveInterval(1800);
         Profile loggedInProfile = ((Profile) session.getAttribute("profile"));
         if (loggedInProfile==null){
             return "redirect:/";
-        } if (loggedInProfile.getAuthCode()==2) {
+        } if(loggedInProfile.getAuthCode()==2) {
 
         }
         model.addAttribute("projects",projectService.getAllProjectsFromProfile(loggedInProfile));
@@ -141,12 +141,7 @@ session.setMaxInactiveInterval(1800);
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You are not allowed to create a task for this project");
         }
 
-
     }
-
-
-
-
 
     @PostMapping("/createnewproject")
     public String createNewProject(@ModelAttribute ProjectDTO projectDTO, RedirectAttributes redirectAttributes) {
@@ -159,7 +154,6 @@ session.setMaxInactiveInterval(1800);
 
         return "redirect:/dashboard";
     }
-
 
     @GetMapping("/dashboard/{projectid}")
     public String showProject(@PathVariable String projectid, HttpSession session,Model model){
@@ -180,7 +174,6 @@ session.setMaxInactiveInterval(1800);
     }
 
     //Slet funktioner til projekter, tasks og subtasks
-
     @PostMapping("/deleteproject")
     public String deleteProject(@RequestParam String projectID ,@RequestParam String username){
         if(projectService.checkIfProfileOwnsProject(projectID,username)){ //Tjekker først om brugeren ejer projektet
@@ -192,7 +185,7 @@ session.setMaxInactiveInterval(1800);
 
     @PostMapping("/deletetask")
     public String deleteTask(@RequestParam String taskID, HttpSession session) {
-        Profile loggedInProfile = ((Profile) session.getAttribute("profile"));
+        Profile loggedInProfile = ((Profile) session.getAttribute("profile")); //Henter en gemt profil instans fra sessionen så den kan bruges
         Task foundTask = taskService.findByID(taskID); //Finder taskID
         if (loggedInProfile==null|| !projectService.checkIfProfileOwnsProject(foundTask.getProjectID(), loggedInProfile.getUsername()) ){
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Not allowed");
@@ -215,6 +208,7 @@ session.setMaxInactiveInterval(1800);
         }
 
     }
+
     @GetMapping("/createnewemployee")
     public String showCreateNewEmployee(HttpSession session, Model model, @RequestParam(required = false) String msg ){
         Profile loggedInProfile = ((Profile)session.getAttribute("profile"));
