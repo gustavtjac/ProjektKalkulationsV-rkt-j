@@ -30,5 +30,13 @@ public Skill createNewSkill(Skill skill){
     }
 
 
+ public Skill findByID(String id){
+      return skillRepository.findByID(id);
+ }
+
+
+ public Skill save(Skill skill){
+        return skillRepository.save(skill);
+ }
 
 }
