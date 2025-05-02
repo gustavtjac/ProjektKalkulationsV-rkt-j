@@ -199,7 +199,7 @@ public class PMController {
                 return "redirect:/";
             }
 
-            Task task = taskService.findById(taskid);
+            Task task = taskService.findByID(taskid);
             List<Subtask> subtasks = subtaskService.findAllSubtaskByTaskID(taskid);
 
             model.addAttribute("profile", loggedInProfile);
