@@ -19,7 +19,7 @@ CREATE TABLE Project (
                          PROJECT_MAX_TIME DOUBLE(30,2) NOT NULL,
                          PROJECT_MAX_PRICE DOUBLE(30,2) NOT NULL,
                          PROJECT_ENDDATE DATE not null,
-                         FOREIGN KEY (PROJECT_OWNER_PROFILE_USERNAME) REFERENCES Profile(PROFILE_USERNAME)
+                         FOREIGN KEY (PROJECT_OWNER_PROFILE_USERNAME) REFERENCES Profile(PROFILE_USERNAME) ON DELETE CASCADE
 );
 
 -- Opretter Task tabel

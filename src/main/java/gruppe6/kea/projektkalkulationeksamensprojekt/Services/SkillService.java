@@ -17,10 +17,16 @@ public class SkillService {
         this.skillRepository = skillRepository;
     }
 
-
+public Skill createNewSkill(Skill skill){
+        return skillRepository.createNewSkill(skill);
+}
 
     public List<Skill> findAll(){
         return skillRepository.findAll();
+    }
+
+    public Skill deleteFromId(String id){
+        return skillRepository.deleteFromId(id);
     }
 
 

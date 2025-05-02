@@ -5,6 +5,7 @@ import gruppe6.kea.projektkalkulationeksamensprojekt.DTO.ProfileDTO;
 import gruppe6.kea.projektkalkulationeksamensprojekt.DTO.ProjectDTO;
 import gruppe6.kea.projektkalkulationeksamensprojekt.Models.Profile;
 import gruppe6.kea.projektkalkulationeksamensprojekt.Models.Project;
+import gruppe6.kea.projektkalkulationeksamensprojekt.Models.Skill;
 import gruppe6.kea.projektkalkulationeksamensprojekt.Models.Task;
 import gruppe6.kea.projektkalkulationeksamensprojekt.Repositories.ProfileRepository;
 import gruppe6.kea.projektkalkulationeksamensprojekt.Repositories.ProjectRepository;
@@ -261,6 +262,72 @@ session.setMaxInactiveInterval(1800);
             Profile deletedProfile = profileService.deleteFromId(profileID);
 redirectAttributes.addAttribute("msg","User with username " +deletedProfile.getUsername() + " has been deleted" );
             return "redirect:/manageemployees";
+        }
+
+    }
+
+
+    @GetMapping("/manageskills")
+    public String showManageSkills(HttpSession session, Model model, @RequestParam(required = false) String msg){
+        Profile loggedInProfile = ((Profile)session.getAttribute("profile"));
+        if (loggedInProfile==null || loggedInProfile.getAuthCode()!=0){
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,"User is not allowed on this page");
+        }else {
+            model.addAttribute("message",msg);
+            model.addAttribute("skilllist",skillService.findAll());
+            return "manageskills";
+        }
+
+    }
+
+
+    @GetMapping("/createnewskill")
+    public String showCreateNewSkill(HttpSession session, Model model, @RequestParam(required = false) String msg ){
+        Profile loggedInProfile = ((Profile)session.getAttribute("profile"));
+        if (loggedInProfile==null || loggedInProfile.getAuthCode()!=0){
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,"User is not allowed on this page");
+        }else {
+            model.addAttribute("message",msg);
+            model.addAttribute("emptySkill",new Skill());
+            return "showcreatenewskill";
+        }
+
+    }
+    @PostMapping("/createnewskill")
+    public String CreateNewSkill(HttpSession session,@ModelAttribute Skill skill,RedirectAttributes redirectAttributes){
+
+        Profile loggedInProfile = ((Profile)session.getAttribute("profile"));
+        if (loggedInProfile==null || loggedInProfile.getAuthCode()!=0){
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,"User is not allowed to create new skills");
+        }else {
+
+            try {
+                skillService.createNewSkill(skill);
+            } catch (RuntimeException e) {
+                redirectAttributes.addAttribute("msg",e.getMessage());
+                return "redirect:/createnewskill";
+            }
+            redirectAttributes.addAttribute("msg","Skill created");
+            return "redirect:/manageskills";
+        }
+
+    }
+
+    @PostMapping("/deleteskill")
+    public String deleteSkill(@RequestParam String skillID,HttpSession session,RedirectAttributes redirectAttributes){
+        Profile loggedInProfile = ((Profile)session.getAttribute("profile"));
+        if (loggedInProfile==null || loggedInProfile.getAuthCode()!=0){
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,"User is not allowed to delete profiles");
+        }else {
+
+            try {
+                Skill deletedSkill = skillService.deleteFromId(skillID);
+                redirectAttributes.addAttribute("msg", deletedSkill.getName() + " has been deleted" );
+            } catch (RuntimeException e) {
+                redirectAttributes.addAttribute("msg",e.getMessage());
+            }
+            return "redirect:/manageskills";
+
         }
 
     }
