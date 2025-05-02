@@ -133,10 +133,6 @@ session.setMaxInactiveInterval(1800);
 
     }
 
-
-
-
-
     @PostMapping("/createnewproject")
     public String createNewProject(@ModelAttribute ProjectDTO projectDTO, RedirectAttributes redirectAttributes) {
 
@@ -182,6 +178,36 @@ session.setMaxInactiveInterval(1800);
         return "redirect:/";
     }
 
+    @GetMapping("/dashboard/edit/{projectid}")
+    public String showEditProject(@PathVariable String projectid, HttpSession session, Model model){
+        Profile loggedInProfile = ((Profile) session.getAttribute("profile"));
+        if (loggedInProfile==null || loggedInProfile.getAuthCode()==2){
+            return "redirect:/";
+        }
 
+        List<Profile> allProfiles = profileService.findAllProfiles();
+        Project projectToBeEditied = projectService.findById(projectid);
+        model.addAttribute("emptyProject",new ProjectDTO());
+        model.addAttribute("projectEdit",projectToBeEditied);
+        model.addAttribute("profile", loggedInProfile);
+        model.addAttribute("allProfiles", allProfiles);
+
+        return "editProject";
+    }
+
+
+    @PostMapping("/editproject")
+    public String editProject(@ModelAttribute("projectEdit") ProjectDTO editedProject, HttpSession session) {
+        Profile loggedInProfile = (Profile) session.getAttribute("profile");
+        Project foundProject = projectService.findById(editedProject.getId());
+        if (loggedInProfile == null || !projectService.checkIfProfileIsAssignedProject(loggedInProfile,foundProject)) {
+            // throw httpresponse
+        }
+
+//        projectService.saveProject(editedProject);
+
+
+        return "redirect:/dashboard/";
+    }
 
 }
