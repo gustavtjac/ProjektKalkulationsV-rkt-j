@@ -2,9 +2,10 @@ package gruppe6.kea.projektkalkulationeksamensprojekt.Repositories;
 
 import gruppe6.kea.projektkalkulationeksamensprojekt.Models.Task;
 import gruppe6.kea.projektkalkulationeksamensprojekt.Rowmappers.TaskRowMapper;
+import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
-
+import org.springframework.web.server.ResponseStatusException;
 import java.util.List;
 import java.util.UUID;
 
@@ -34,21 +35,26 @@ else {
 
 }
 
-
     public List<Task> getTaskFromProjectID(String projectID){
         String sql = "select * from Task where TASK_PROJECT_ID = ?";
         return jdbcTemplate.query(sql,taskRowMapper,projectID);
     }
 
-
     @Override
+
     public List<Task> findAll() {
         return null;
     }
 
     @Override
-    public Task findByID(String s) {
-        return null;
+    public Task findByID(String taskID) {
+        String SQL = "SELECT * FROM Task WHERE task_ID = ?";
+        try{
+            return jdbcTemplate.queryForObject(SQL,taskRowMapper, taskID);
+
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Task not found for task id: " + taskID, e );
+        }
     }
 
     @Override
