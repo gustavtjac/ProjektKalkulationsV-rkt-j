@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" th:href="@{/css/styles.css}" href="/css/styles.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Alpha Solutions Edit Project</title>
+</head>
+<body>
+
+<div th:replace="fragments/header :: header"></div>
+
+<main th:if="${profile.getAuthCode()==1}">
+    <h1 th:text="'Edit Your Project: ' + ${projectEdit.getName()}"></h1>
+
+    <div>
+        <form th:action="@{/editProject}" th:method="post" th:object="${projectEdit}">
+            <label for="name">Project Name</label>
+            <input type="text" name="name" id="name" maxlength="50" th:value="${projectEdit.getName()}" required>
+
+            <label for="description">Project Descriptions</label>
+            <input type="text" name="description" id="description" th:value="${projectEdit.getDescription()}" maxlength="500" required>
+
+            <label for="maxTime">Max Time</label>
+            <input type="number" name="maxTime" id="maxTime" step="0.01" th:value="${projectEdit.getMaxTime()}" min="0" max="9999999999999999999999999999.99" required>
+
+            <label for="maxPrice">Max Price</label>
+            <input type="number" name="maxPrice" id="maxPrice" step="0.01" th:value="${projectEdit.getMaxPrice()}" min="0" max="9999999999999999999999999999.99" required>
+
+            <label for="endDate">End Date</label>
+            <input type="date" name="endDate" id="endDate" th:value="${projectEdit.getEndDate()}" required>
+
+            <div class="dropdown-container" id="memberDropdown">
+                <div class="dropdown-button" onclick="toggleDropdown()">Add Members ▼</div>
+                <div class="checkbox-dropdown">
+                    <label th:each="profile : ${allProfiles}" th:if="${profile.authCode == 2}">
+                        <input  type="checkbox" name="projectMembers"
+                               th:value="${profile.username}" th:checked="${projectEdit.getProjectMembers().contains(profile.getUsername())}"/>
+                        <span th:text="${profile.name}"></span>
+                    </label>
+                </div>
+            </div>
+
+
+
+            <input type="hidden" name="projectOwner" th:value="${profile.getUsername()}">
+            <button type="submit">Save Changes</button>
+
+
+        </form>
+    </div>
+</main>
+
+<script src="/js/script.js"></script>
+</body>
+</html>

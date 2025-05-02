@@ -47,7 +47,7 @@
             <td th:text="'Budget '+${project.getMaxPrice()} + ' Kr.'"></td>
             <td th:text="'Deadline: '+ ${project.getEndDate()}"></td>
             <td><form th:action="@{/dashboard/{id}(id=${project.getId()})}" th:method="get"><button>View Task's</button></form></td>
-            <td><form th:method="get" th:action="@{/editproject}"><button>Edit Project</button></form></td>
+            <td><form th:method="get" th:action="@{/dashboard/edit/{id}(id=${project.getId()})}"><button>Edit Project</button></form></td>
             <td><form th:method="post" th:action="@{/deleteproject}"><input type="hidden" name="projectID" th:value="${project.getId()}"><input
                     type="hidden" name="username" th:value="${profile.getUsername()}"><button>Delete Project</button></form></td>
         </tr>
