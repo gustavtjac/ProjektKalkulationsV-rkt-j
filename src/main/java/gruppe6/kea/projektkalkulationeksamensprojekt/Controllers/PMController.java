@@ -1,25 +1,18 @@
 package gruppe6.kea.projektkalkulationeksamensprojekt.Controllers;
 
-
 import gruppe6.kea.projektkalkulationeksamensprojekt.DTO.ProfileDTO;
 import gruppe6.kea.projektkalkulationeksamensprojekt.DTO.ProjectDTO;
 import gruppe6.kea.projektkalkulationeksamensprojekt.Models.Profile;
 import gruppe6.kea.projektkalkulationeksamensprojekt.Models.Project;
-
 import gruppe6.kea.projektkalkulationeksamensprojekt.Models.Subtask;
-
 import gruppe6.kea.projektkalkulationeksamensprojekt.Models.Skill;
-
 import gruppe6.kea.projektkalkulationeksamensprojekt.Models.Task;
 import gruppe6.kea.projektkalkulationeksamensprojekt.Repositories.ProfileRepository;
 import gruppe6.kea.projektkalkulationeksamensprojekt.Repositories.ProjectRepository;
 import gruppe6.kea.projektkalkulationeksamensprojekt.Services.ProfileService;
 import gruppe6.kea.projektkalkulationeksamensprojekt.Services.ProjectService;
-
 import gruppe6.kea.projektkalkulationeksamensprojekt.Services.SubtaskService;
-
 import gruppe6.kea.projektkalkulationeksamensprojekt.Services.SkillService;
-
 import gruppe6.kea.projektkalkulationeksamensprojekt.Services.TaskService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +24,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
 import java.net.http.HttpResponse;
 import java.util.List;
 
@@ -42,347 +34,341 @@ public class PMController {
     private final ProfileService profileService;
     private final ProjectService projectService;
     private final TaskService taskService;
-
     private final SubtaskService subtaskService;
+    private final SkillService skillService;
 
-    public PMController(ProfileService profileService, ProjectService projectService, TaskService taskService, SubtaskService subtaskService) {
+    public PMController(ProfileService profileService, ProjectService projectService, TaskService taskService, SubtaskService subtaskService, SkillService skillService) {
         this.profileService = profileService;
         this.projectService = projectService;
         this.taskService = taskService;
         this.subtaskService = subtaskService;
-
-    private final SkillService skillService;
-
-    public PMController(ProfileService profileService, ProjectService projectService, TaskService taskService, SkillService skillService) {
-        this.profileService = profileService;
-        this.projectService = projectService;
-        this.taskService = taskService;
         this.skillService = skillService;
     }
 
-    //Denne metoder sender en client til login siden hvis de ikke er logget ind i forvejen
-    @GetMapping("/")
-    public String showLoginPage(HttpSession session, @RequestParam(required = false) String wrongLogin, Model model){
-        if (session.getAttribute("profile")!=null){
-            return "redirect:/dashboard";
+        //Denne metoder sender en client til login siden hvis de ikke er logget ind i forvejen
+        @GetMapping("/")
+        public String showLoginPage (HttpSession session, @RequestParam(required = false) String wrongLogin, Model model)
+        {
+            if (session.getAttribute("profile") != null) {
+                return "redirect:/dashboard";
+            }
+            model.addAttribute("wrongLogin", wrongLogin);
+            return "loginpage";
         }
-        model.addAttribute("wrongLogin",wrongLogin);
-        return "loginpage";
-    }
 
 
+        //Denne postmapping håndterer når en bruger prøver at logge ind på hjemmesiden
+        @PostMapping("/loginrequest")
+        public String loginRequest (@RequestParam String username, @RequestParam String password, HttpSession
+        session, RedirectAttributes redirectAttributes){
+            Profile loggedInProfile = profileService.AuthenticateLogin(username, password);
+            if (loggedInProfile != null) {
+                session.setAttribute("profile", loggedInProfile);
+                session.setMaxInactiveInterval(1800);
+                return "redirect:/dashboard";
+            } else {
+                //Hvis man prøver at logge ind men skriver forkert tilføjer vi her en fejlmeddelelse
+                redirectAttributes.addAttribute("wrongLogin", "Invalid Username or Password");
+                return "redirect:/";
+            }
+        }
 
-    //Denne postmapping håndterer når en bruger prøver at logge ind på hjemmesiden
-    @PostMapping("/loginrequest")
-    public String loginRequest(@RequestParam String username, @RequestParam String password, HttpSession session,RedirectAttributes redirectAttributes){
-       Profile loggedInProfile = profileService.AuthenticateLogin(username,password);
-       if(loggedInProfile!=null){
-session.setAttribute("profile",loggedInProfile);
-session.setMaxInactiveInterval(1800);
-           return "redirect:/dashboard";
-       }else {
-           //Hvis man prøver at logge ind men skriver forkert tilføjer vi her en fejlmeddelelse
-           redirectAttributes.addAttribute("wrongLogin","Invalid Username or Password");
-           return "redirect:/";
-       }
-    }
-
-    @GetMapping("/logout")
-    public String logout(HttpSession session){
-        session.invalidate();
-        return "redirect:/";
-    }
-
-    // Denne metode viser forskellige dashbaord ift. hvilken profile er logget ind
-    @GetMapping("/dashboard")
-    public String showDashBoard(HttpSession session,Model model){
-        Profile loggedInProfile = ((Profile) session.getAttribute("profile"));
-        if (loggedInProfile==null){
+        @GetMapping("/logout")
+        public String logout (HttpSession session){
+            session.invalidate();
             return "redirect:/";
-        } if(loggedInProfile.getAuthCode()==2) {
-
-        }
-        model.addAttribute("projects",projectService.getAllProjectsFromProfile(loggedInProfile));
-        model.addAttribute("profile",loggedInProfile);
-        return "dashboard";
-    }
-
-    // Denne metode viser siden til at oprette et nyt projekt
-    @GetMapping("/showcreatenewproject")
-    public String showCreateProject(HttpSession session, Model model) {
-        Profile loggedInProfile = ((Profile) session.getAttribute("profile"));
-
-        if (loggedInProfile==null ||loggedInProfile.getAuthCode() != 1) {
-            return "redirect:/dashboard";
-        }
-        else {
-            List<Profile> allProfiles = profileService.findAllProfiles();
-            model.addAttribute("project", new ProjectDTO());
-            model.addAttribute("profile",loggedInProfile);
-            model.addAttribute("allProfiles", allProfiles);
-            return "showcreatenewproject";
         }
 
-    }
-    @GetMapping("/showcreatenewtask")
-    public String showCreateTask(HttpSession session, Model model,@RequestParam String projectID) {
-        Profile loggedInProfile = ((Profile) session.getAttribute("profile"));
+        // Denne metode viser forskellige dashbaord ift. hvilken profile er logget ind
+        @GetMapping("/dashboard")
+        public String showDashBoard (HttpSession session, Model model){
+            Profile loggedInProfile = ((Profile) session.getAttribute("profile"));
+            if (loggedInProfile == null) {
+                return "redirect:/";
+            }
+            if (loggedInProfile.getAuthCode() == 2) {
 
-        if (loggedInProfile==null ||loggedInProfile.getAuthCode() != 1) {
-            return "redirect:/dashboard";
+            }
+            model.addAttribute("projects", projectService.getAllProjectsFromProfile(loggedInProfile));
+            model.addAttribute("profile", loggedInProfile);
+            return "dashboard";
         }
-        else {
-            model.addAttribute("projectID",projectID);
-            model.addAttribute("task", new Task());
-            model.addAttribute("profile",loggedInProfile);
-            return "showcreatenewtask";
+
+        // Denne metode viser siden til at oprette et nyt projekt
+        @GetMapping("/showcreatenewproject")
+        public String showCreateProject (HttpSession session, Model model){
+            Profile loggedInProfile = ((Profile) session.getAttribute("profile"));
+
+            if (loggedInProfile == null || loggedInProfile.getAuthCode() != 1) {
+                return "redirect:/dashboard";
+            } else {
+                List<Profile> allProfiles = profileService.findAllProfiles();
+                model.addAttribute("project", new ProjectDTO());
+                model.addAttribute("profile", loggedInProfile);
+                model.addAttribute("allProfiles", allProfiles);
+                return "showcreatenewproject";
+            }
+
+        }
+        @GetMapping("/showcreatenewtask")
+        public String showCreateTask (HttpSession session, Model model, @RequestParam String projectID){
+            Profile loggedInProfile = ((Profile) session.getAttribute("profile"));
+
+            if (loggedInProfile == null || loggedInProfile.getAuthCode() != 1) {
+                return "redirect:/dashboard";
+            } else {
+                model.addAttribute("projectID", projectID);
+                model.addAttribute("task", new Task());
+                model.addAttribute("profile", loggedInProfile);
+                return "showcreatenewtask";
+            }
+
         }
 
-    }
+        @PostMapping("/createnewtask")
+        public String createNewTask (@ModelAttribute Task task, RedirectAttributes redirectAttributes, HttpSession
+        session){
+            Profile profile = ((Profile) session.getAttribute("profile"));
 
-    @PostMapping("/createnewtask")
-    public String createNewTask(@ModelAttribute Task task, RedirectAttributes redirectAttributes, HttpSession session) {
-        Profile profile = ((Profile) session.getAttribute("profile"));
+            if (projectService.checkIfProfileOwnsProject(task.getProjectID(), profile.getUsername())) {
+                Task newtask = taskService.createNewTask(task);
+                if (newtask == null) {
+                    redirectAttributes.addAttribute("error", "Something Went Wrong Try Again");
+                    return "redirect:/showcreatenewproject";
+                }
 
-        if (projectService.checkIfProfileOwnsProject(task.getProjectID(),profile.getUsername())){
-            Task newtask = taskService.createNewTask(task);
-            if (newtask == null) {
+                return "redirect:/dashboard/" + task.getProjectID();
+
+            } else {
+                throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You are not allowed to create a task for this project");
+            }
+
+        }
+
+
+        // Denne metode håndtere oprettelsen af projektet og gemmer det i SQL
+        @PostMapping("/createnewproject")
+        public String createNewProject (@ModelAttribute ProjectDTO projectDTO, RedirectAttributes redirectAttributes){
+
+            ProjectDTO newProject = projectService.createNewProject(projectDTO);
+            if (newProject == null) {
                 redirectAttributes.addAttribute("error", "Something Went Wrong Try Again");
                 return "redirect:/showcreatenewproject";
             }
 
-            return "redirect:/dashboard/" + task.getProjectID();
-
-        }else {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You are not allowed to create a task for this project");
+            return "redirect:/dashboard";
         }
 
-    }
 
+        // Metode viser siden til alle projektets task
 
-
-
-
-
-    // Denne metode håndtere oprettelsen af projektet og gemmer det i SQL
-    @PostMapping("/createnewproject")
-    public String createNewProject(@ModelAttribute ProjectDTO projectDTO, RedirectAttributes redirectAttributes) {
-
-        ProjectDTO newProject = projectService.createNewProject(projectDTO);
-        if (newProject == null) {
-            redirectAttributes.addAttribute("error", "Something Went Wrong Try Again");
-            return "redirect:/showcreatenewproject";
-        }
-
-        return "redirect:/dashboard";
-    }
-
-
-
-    // Metode viser siden til alle projektets task
-
-    @GetMapping("/dashboard/{projectid}")
-    public String showProject(@PathVariable String projectid, HttpSession session,Model model){
-        Profile loggedInProfile = ((Profile) session.getAttribute("profile"));
-        if (loggedInProfile==null){
-            return "redirect:/";
-        }
-
-        Project project = projectService.findById(projectid);
-        model.addAttribute("project",project);
-        model.addAttribute("profile",loggedInProfile);
-
-        if(!projectService.checkIfProfileIsAssignedProject(loggedInProfile,project)){
-            return "redirect:/";
-        }
-
-        return "viewProject";
-    }
-
-
-    // Metode viser siden til alle tasks, sub-task
-    @GetMapping("/dashboard/{projectid}/{taskid}")
-    public String showTask(
-            @PathVariable String taskid,
-            @PathVariable String projectid,
-            HttpSession session,
-            Model model) {
-
-        Profile loggedInProfile = ((Profile) session.getAttribute("profile"));
-        if (loggedInProfile == null) {
-            return "redirect:/";
-        }
-
-        Project project = projectService.findById(projectid);
-        if(!projectService.checkIfProfileIsAssignedProject(loggedInProfile,project)){
-            return "redirect:/";
-        }
-
-        Task task = taskService.findById(taskid);
-        List<Subtask> subtasks = subtaskService.findAllSubtaskByTaskID(taskid);
-
-        model.addAttribute("profile",loggedInProfile);
-        model.addAttribute("project",project);
-        model.addAttribute("task", task);
-        model.addAttribute("subtasks", subtasks);
-
-        return "viewTask";
-    }
-
-    //Slet funktioner til projekter, tasks og subtasks
-    @PostMapping("/deleteproject")
-    public String deleteProject(@RequestParam String projectID ,@RequestParam String username){
-        if(projectService.checkIfProfileOwnsProject(projectID,username)){ //Tjekker først om brugeren ejer projektet
-            projectService.deleteProject(projectID); //Sletter projektet
-            return "redirect:/dashboard"; //Redirecter tilbage til dashboardet
-        }
-        return "redirect:/";
-    }
-
-    @PostMapping("/deletetask")
-    public String deleteTask(@RequestParam String taskID, HttpSession session) {
-        Profile loggedInProfile = ((Profile) session.getAttribute("profile")); //Henter en gemt profil instans fra sessionen så den kan bruges
-        Task foundTask = taskService.findByID(taskID); //Finder taskID
-        if (loggedInProfile==null|| !projectService.checkIfProfileOwnsProject(foundTask.getProjectID(), loggedInProfile.getUsername()) ){
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Not allowed");
-        }else {
-            projectService.deleteTask(taskID);
-            return "redirect:/dashboard/" + foundTask.getProjectID();
-        }
-
-    }
-
-    @GetMapping("/manageemployees")
-    public String showManageEmployees(HttpSession session, Model model, @RequestParam(required = false) String msg){
-        Profile loggedInProfile = ((Profile)session.getAttribute("profile"));
-        if (loggedInProfile==null || loggedInProfile.getAuthCode()!=0){
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,"User is not allowed on this page");
-        }else {
-            model.addAttribute("message",msg);
-            model.addAttribute("employeelist",profileService.findAllProfiles());
-            return "manageemployees";
-        }
-
-    }
-
-    @GetMapping("/createnewemployee")
-    public String showCreateNewEmployee(HttpSession session, Model model, @RequestParam(required = false) String msg ){
-        Profile loggedInProfile = ((Profile)session.getAttribute("profile"));
-        if (loggedInProfile==null || loggedInProfile.getAuthCode()!=0){
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,"User is not allowed on this page");
-        }else {
-            model.addAttribute("message",msg);
-            model.addAttribute("emptyEmployee",new ProfileDTO());
-            model.addAttribute("skills",skillService.findAll());
-            return "showcreatenewemployee";
-
-        }
-
-    }
-
-    @PostMapping("/createnewemployee")
-    public String CreateNewEmployee(HttpSession session,@ModelAttribute ProfileDTO profileDTO,RedirectAttributes redirectAttributes){
-
-        if (profileService.checkIfUsernameExists(profileDTO.getUsername())){
-
-            redirectAttributes.addAttribute("msg","The username you chose already exists");
-            return "redirect:/createnewemployee";
-        }
-
-        Profile loggedInProfile = ((Profile)session.getAttribute("profile"));
-        if (loggedInProfile==null || loggedInProfile.getAuthCode()!=0){
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,"User is not allowed to create new profiles");
-        }else {
-
-
-
-            profileService.createNewProfile(profileDTO);
-
-
-            return "redirect:/manageemployees";
-        }
-
-    }
-    @PostMapping("/deleteemployee")
-    public String deleteEmployee(@RequestParam String profileID,HttpSession session,RedirectAttributes redirectAttributes){
-        Profile loggedInProfile = ((Profile)session.getAttribute("profile"));
-        if (loggedInProfile==null || loggedInProfile.getAuthCode()!=0){
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,"User is not allowed to delete profiles");
-        }else {
-            Profile deletedProfile = profileService.deleteFromId(profileID);
-redirectAttributes.addAttribute("msg","User with username " +deletedProfile.getUsername() + " has been deleted" );
-            return "redirect:/manageemployees";
-        }
-
-    }
-
-
-    @GetMapping("/manageskills")
-    public String showManageSkills(HttpSession session, Model model, @RequestParam(required = false) String msg){
-        Profile loggedInProfile = ((Profile)session.getAttribute("profile"));
-        if (loggedInProfile==null || loggedInProfile.getAuthCode()!=0){
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,"User is not allowed on this page");
-        }else {
-            model.addAttribute("message",msg);
-            model.addAttribute("skilllist",skillService.findAll());
-            return "manageskills";
-        }
-
-    }
-
-
-    @GetMapping("/createnewskill")
-    public String showCreateNewSkill(HttpSession session, Model model, @RequestParam(required = false) String msg ){
-        Profile loggedInProfile = ((Profile)session.getAttribute("profile"));
-        if (loggedInProfile==null || loggedInProfile.getAuthCode()!=0){
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,"User is not allowed on this page");
-        }else {
-            model.addAttribute("message",msg);
-            model.addAttribute("emptySkill",new Skill());
-            return "showcreatenewskill";
-        }
-
-    }
-    @PostMapping("/createnewskill")
-    public String CreateNewSkill(HttpSession session,@ModelAttribute Skill skill,RedirectAttributes redirectAttributes){
-
-        Profile loggedInProfile = ((Profile)session.getAttribute("profile"));
-        if (loggedInProfile==null || loggedInProfile.getAuthCode()!=0){
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,"User is not allowed to create new skills");
-        }else {
-
-            try {
-                skillService.createNewSkill(skill);
-            } catch (RuntimeException e) {
-                redirectAttributes.addAttribute("msg",e.getMessage());
-                return "redirect:/createnewskill";
+        @GetMapping("/dashboard/{projectid}")
+        public String showProject (@PathVariable String projectid, HttpSession session, Model model){
+            Profile loggedInProfile = ((Profile) session.getAttribute("profile"));
+            if (loggedInProfile == null) {
+                return "redirect:/";
             }
-            redirectAttributes.addAttribute("msg","Skill created");
-            return "redirect:/manageskills";
-        }
 
-    }
+            Project project = projectService.findById(projectid);
+            model.addAttribute("project", project);
+            model.addAttribute("profile", loggedInProfile);
 
-    @PostMapping("/deleteskill")
-    public String deleteSkill(@RequestParam String skillID,HttpSession session,RedirectAttributes redirectAttributes){
-        Profile loggedInProfile = ((Profile)session.getAttribute("profile"));
-        if (loggedInProfile==null || loggedInProfile.getAuthCode()!=0){
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,"User is not allowed to delete profiles");
-        }else {
-
-            try {
-                Skill deletedSkill = skillService.deleteFromId(skillID);
-                redirectAttributes.addAttribute("msg", deletedSkill.getName() + " has been deleted" );
-            } catch (RuntimeException e) {
-                redirectAttributes.addAttribute("msg",e.getMessage());
+            if (!projectService.checkIfProfileIsAssignedProject(loggedInProfile, project)) {
+                return "redirect:/";
             }
-            return "redirect:/manageskills";
+
+            return "viewProject";
+        }
+
+
+        // Metode viser siden til alle tasks, sub-task
+        @GetMapping("/dashboard/{projectid}/{taskid}")
+        public String showTask (
+                @PathVariable String taskid,
+                @PathVariable String projectid,
+                HttpSession session,
+                Model model){
+
+            Profile loggedInProfile = ((Profile) session.getAttribute("profile"));
+            if (loggedInProfile == null) {
+                return "redirect:/";
+            }
+
+            Project project = projectService.findById(projectid);
+            if (!projectService.checkIfProfileIsAssignedProject(loggedInProfile, project)) {
+                return "redirect:/";
+            }
+
+            Task task = taskService.findById(taskid);
+            List<Subtask> subtasks = subtaskService.findAllSubtaskByTaskID(taskid);
+
+            model.addAttribute("profile", loggedInProfile);
+            model.addAttribute("project", project);
+            model.addAttribute("task", task);
+            model.addAttribute("subtasks", subtasks);
+
+            return "viewTask";
+        }
+
+        //Slet funktioner til projekter, tasks og subtasks
+        @PostMapping("/deleteproject")
+        public String deleteProject (@RequestParam String projectID, @RequestParam String username){
+            if (projectService.checkIfProfileOwnsProject(projectID, username)) { //Tjekker først om brugeren ejer projektet
+                projectService.deleteProject(projectID); //Sletter projektet
+                return "redirect:/dashboard"; //Redirecter tilbage til dashboardet
+            }
+            return "redirect:/";
+        }
+
+        @PostMapping("/deletetask")
+        public String deleteTask (@RequestParam String taskID, HttpSession session){
+            Profile loggedInProfile = ((Profile) session.getAttribute("profile")); //Henter en gemt profil instans fra sessionen så den kan bruges
+            Task foundTask = taskService.findByID(taskID); //Finder taskID
+            if (loggedInProfile == null || !projectService.checkIfProfileOwnsProject(foundTask.getProjectID(), loggedInProfile.getUsername())) {
+                throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Not allowed");
+            } else {
+                projectService.deleteTask(taskID);
+                return "redirect:/dashboard/" + foundTask.getProjectID();
+            }
 
         }
 
+        @GetMapping("/manageemployees")
+        public String showManageEmployees (HttpSession session, Model model, @RequestParam(required = false) String msg)
+        {
+            Profile loggedInProfile = ((Profile) session.getAttribute("profile"));
+            if (loggedInProfile == null || loggedInProfile.getAuthCode() != 0) {
+                throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User is not allowed on this page");
+            } else {
+                model.addAttribute("message", msg);
+                model.addAttribute("employeelist", profileService.findAllProfiles());
+                return "manageemployees";
+            }
+
+        }
+
+        @GetMapping("/createnewemployee")
+        public String showCreateNewEmployee (HttpSession session, Model model, @RequestParam(required = false) String
+        msg ){
+            Profile loggedInProfile = ((Profile) session.getAttribute("profile"));
+            if (loggedInProfile == null || loggedInProfile.getAuthCode() != 0) {
+                throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User is not allowed on this page");
+            } else {
+                model.addAttribute("message", msg);
+                model.addAttribute("emptyEmployee", new ProfileDTO());
+                model.addAttribute("skills", skillService.findAll());
+                return "showcreatenewemployee";
+
+            }
+
+        }
+
+        @PostMapping("/createnewemployee")
+        public String CreateNewEmployee (HttpSession session, @ModelAttribute ProfileDTO profileDTO, RedirectAttributes
+        redirectAttributes){
+
+            if (profileService.checkIfUsernameExists(profileDTO.getUsername())) {
+
+                redirectAttributes.addAttribute("msg", "The username you chose already exists");
+                return "redirect:/createnewemployee";
+            }
+
+            Profile loggedInProfile = ((Profile) session.getAttribute("profile"));
+            if (loggedInProfile == null || loggedInProfile.getAuthCode() != 0) {
+                throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User is not allowed to create new profiles");
+            } else {
+
+
+                profileService.createNewProfile(profileDTO);
+
+
+                return "redirect:/manageemployees";
+            }
+
+        }
+        @PostMapping("/deleteemployee")
+        public String deleteEmployee (@RequestParam String profileID, HttpSession session, RedirectAttributes
+        redirectAttributes){
+            Profile loggedInProfile = ((Profile) session.getAttribute("profile"));
+            if (loggedInProfile == null || loggedInProfile.getAuthCode() != 0) {
+                throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User is not allowed to delete profiles");
+            } else {
+                Profile deletedProfile = profileService.deleteFromId(profileID);
+                redirectAttributes.addAttribute("msg", "User with username " + deletedProfile.getUsername() + " has been deleted");
+                return "redirect:/manageemployees";
+            }
+
+        }
+
+
+        @GetMapping("/manageskills")
+        public String showManageSkills (HttpSession session, Model model, @RequestParam(required = false) String msg){
+            Profile loggedInProfile = ((Profile) session.getAttribute("profile"));
+            if (loggedInProfile == null || loggedInProfile.getAuthCode() != 0) {
+                throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User is not allowed on this page");
+            } else {
+                model.addAttribute("message", msg);
+                model.addAttribute("skilllist", skillService.findAll());
+                return "manageskills";
+            }
+
+        }
+
+
+        @GetMapping("/createnewskill")
+        public String showCreateNewSkill (HttpSession session, Model model, @RequestParam(required = false) String msg )
+        {
+            Profile loggedInProfile = ((Profile) session.getAttribute("profile"));
+            if (loggedInProfile == null || loggedInProfile.getAuthCode() != 0) {
+                throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User is not allowed on this page");
+            } else {
+                model.addAttribute("message", msg);
+                model.addAttribute("emptySkill", new Skill());
+                return "showcreatenewskill";
+            }
+
+        }
+        @PostMapping("/createnewskill")
+        public String CreateNewSkill (HttpSession session, @ModelAttribute Skill skill, RedirectAttributes
+        redirectAttributes){
+
+            Profile loggedInProfile = ((Profile) session.getAttribute("profile"));
+            if (loggedInProfile == null || loggedInProfile.getAuthCode() != 0) {
+                throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User is not allowed to create new skills");
+            } else {
+
+                try {
+                    skillService.createNewSkill(skill);
+                } catch (RuntimeException e) {
+                    redirectAttributes.addAttribute("msg", e.getMessage());
+                    return "redirect:/createnewskill";
+                }
+                redirectAttributes.addAttribute("msg", "Skill created");
+                return "redirect:/manageskills";
+            }
+
+        }
+
+        @PostMapping("/deleteskill")
+        public String deleteSkill (@RequestParam String skillID, HttpSession session, RedirectAttributes
+        redirectAttributes){
+            Profile loggedInProfile = ((Profile) session.getAttribute("profile"));
+            if (loggedInProfile == null || loggedInProfile.getAuthCode() != 0) {
+                throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User is not allowed to delete profiles");
+            } else {
+
+                try {
+                    Skill deletedSkill = skillService.deleteFromId(skillID);
+                    redirectAttributes.addAttribute("msg", deletedSkill.getName() + " has been deleted");
+                } catch (RuntimeException e) {
+                    redirectAttributes.addAttribute("msg", e.getMessage());
+                }
+                return "redirect:/manageskills";
+
+            }
+
+        }
+
+
     }
 
-
-
-
-}
