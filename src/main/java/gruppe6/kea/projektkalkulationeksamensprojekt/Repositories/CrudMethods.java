@@ -6,6 +6,7 @@ public interface CrudMethods<T,ID>{
 
     List<T> findAll();
 
+
     T findByID(ID id);
 
     T save(T object);

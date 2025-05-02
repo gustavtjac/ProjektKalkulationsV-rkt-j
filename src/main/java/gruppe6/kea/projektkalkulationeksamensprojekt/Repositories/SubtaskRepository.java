@@ -24,6 +24,12 @@ public class SubtaskRepository implements CrudMethods<Subtask,String>{
         return jdbcTemplate.query(sql,new SubtaskRowmapper(),taskID);
     }
 
+    public List<Subtask> findAllSubtaskByTaskID(String id) {
+        String sql = "SELECT * FROM Subtask WHERE SUBTASK_TASK_ID = ?";
+        return jdbcTemplate.query(sql, new SubtaskRowmapper(),id);
+
+    }
+
     @Override
     public List<Subtask> findAll() {
         return null;
