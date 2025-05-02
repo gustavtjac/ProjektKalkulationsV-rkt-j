@@ -3,6 +3,7 @@ package gruppe6.kea.projektkalkulationeksamensprojekt.Repositories;
 
 import gruppe6.kea.projektkalkulationeksamensprojekt.DTO.ProfileDTO;
 import gruppe6.kea.projektkalkulationeksamensprojekt.Models.Profile;
+import gruppe6.kea.projektkalkulationeksamensprojekt.Models.Skill;
 import gruppe6.kea.projektkalkulationeksamensprojekt.Rowmappers.ProfileRowMapper;
 import gruppe6.kea.projektkalkulationeksamensprojekt.Rowmappers.SkillRowmapper;
 import org.springframework.dao.DataAccessException;
@@ -109,6 +110,25 @@ if (profileRowsAffected>0){
     @Override
     public Profile save(Profile object) {
         return null;
+    }
+
+    public Profile save(Profile object,String oldUsername) {
+        String sql = "UPDATE Profile SET PROFILE_NAME = ?, PROFILE_USERNAME = ?, PROFILE_PASSWORD = ?, PROFILE_AUTH_CODE = ?, PROFILE_SALARY = ? WHERE PROFILE_USERNAME = ?";
+        String deleteOldSkillsSql = "delete from profile_skill where profile_USERNAME = ?";
+        String insertNewSkillsSql = "insert into profile_skill (PROFILE_USERNAME,skill_ID) values (?,?)";
+
+try{
+    jdbcTemplate.update(sql,object.getName(),object.getUsername(),object.getPassword(),object.getAuthCode(),object.getSalary(),oldUsername);
+    jdbcTemplate.update(deleteOldSkillsSql,object.getUsername());
+for (Skill skill : object.getSkills()){
+    jdbcTemplate.update(insertNewSkillsSql,object.getUsername(),skill.getId());
+}
+    return object;
+} catch (DataAccessException e) {
+    throw new RuntimeException("Could not save the edited employee");
+}
+
+
     }
 
     public boolean checkIfUsernameExists(String username){

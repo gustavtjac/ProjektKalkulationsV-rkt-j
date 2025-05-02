@@ -25,8 +25,10 @@ public class ProfileRowMapper implements RowMapper<Profile> {
     public Profile mapRow(ResultSet rs, int rowNum) throws SQLException {
         Profile profile = new Profile();
         profile.setUsername(rs.getString("PROFILE_USERNAME"));
-        profile.setName(rs.getString("PROFILE_NAME")); // careful, you had "PROFILE_NAME" hardcoded
+        profile.setName(rs.getString("PROFILE_NAME"));
         profile.setAuthCode(rs.getInt("PROFILE_AUTH_CODE"));
+        profile.setPassword(rs.getString("PROFILE_PASSWORD"));
+        profile.setSalary(rs.getDouble("PROFILE_SALARY"));
         List<Skill> skillList = skillRepository.getAllAssignedSkillsFromUsername(profile.getUsername());
         if (skillList.isEmpty()){
             profile.setSkills(new ArrayList<>());

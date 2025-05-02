@@ -19,7 +19,7 @@ CREATE TABLE Project (
                          PROJECT_MAX_TIME DOUBLE(30,2) NOT NULL,
                          PROJECT_MAX_PRICE DOUBLE(30,2) NOT NULL,
                          PROJECT_ENDDATE DATE not null,
-                         FOREIGN KEY (PROJECT_OWNER_PROFILE_USERNAME) REFERENCES Profile(PROFILE_USERNAME) ON DELETE CASCADE
+                         FOREIGN KEY (PROJECT_OWNER_PROFILE_USERNAME) REFERENCES Profile(PROFILE_USERNAME) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 -- Opretter Task tabel
@@ -55,7 +55,7 @@ CREATE TABLE Profile_Skill (
                                PROFILE_USERNAME VARCHAR(25) NOT NULL,
                                SKILL_ID CHAR(36) NOT NULL,
                                PRIMARY KEY (PROFILE_USERNAME, SKILL_ID),
-                               FOREIGN KEY (PROFILE_USERNAME) REFERENCES Profile(PROFILE_USERNAME) ON DELETE CASCADE,
+                               FOREIGN KEY (PROFILE_USERNAME) REFERENCES Profile(PROFILE_USERNAME) ON DELETE CASCADE ON UPDATE CASCADE,
                                FOREIGN KEY (SKILL_ID) REFERENCES Skill(SKILL_ID) ON DELETE CASCADE
 );
 
@@ -64,7 +64,7 @@ CREATE TABLE Profile_Project (
                                  PROJECT_ID CHAR(36) NOT NULL,
                                  PROFILE_USERNAME VARCHAR(25) NOT NULL,
                                  PRIMARY KEY (PROFILE_USERNAME, PROJECT_ID),
-                                 FOREIGN KEY (PROFILE_USERNAME) REFERENCES Profile(PROFILE_USERNAME) ON DELETE CASCADE,
+                                 FOREIGN KEY (PROFILE_USERNAME) REFERENCES Profile(PROFILE_USERNAME) ON DELETE CASCADE ON UPDATE CASCADE,
                                  FOREIGN KEY (PROJECT_ID) REFERENCES Project(PROJECT_ID) ON DELETE CASCADE
 );
 
@@ -73,6 +73,6 @@ CREATE TABLE Subtask_Profile (
                                  SUBTASK_ID CHAR(36) NOT NULL,
                                  PROFILE_USERNAME VARCHAR(25) NOT NULL,
                                  PRIMARY KEY (PROFILE_USERNAME, SUBTASK_ID),
-                                 FOREIGN KEY (PROFILE_USERNAME) REFERENCES Profile(PROFILE_USERNAME) ON DELETE CASCADE,
+                                 FOREIGN KEY (PROFILE_USERNAME) REFERENCES Profile(PROFILE_USERNAME) ON DELETE CASCADE ON UPDATE CASCADE,
                                  FOREIGN KEY (SUBTASK_ID) REFERENCES Subtask(SUBTASK_ID) ON DELETE CASCADE
 );
