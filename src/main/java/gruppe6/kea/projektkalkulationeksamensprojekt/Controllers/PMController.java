@@ -350,8 +350,7 @@ public class PMController {
         }
 
         @PostMapping("/deleteskill")
-        public String deleteSkill (@RequestParam String skillID, HttpSession session, RedirectAttributes
-        redirectAttributes){
+        public String deleteSkill (@RequestParam String skillID, HttpSession session, RedirectAttributes redirectAttributes){
             Profile loggedInProfile = ((Profile) session.getAttribute("profile"));
             if (loggedInProfile == null || loggedInProfile.getAuthCode() != 0) {
                 throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User is not allowed to delete profiles");
@@ -364,10 +363,47 @@ public class PMController {
                     redirectAttributes.addAttribute("msg", e.getMessage());
                 }
                 return "redirect:/manageskills";
-
             }
-
         }
+@GetMapping("/editskill")
+    public String showEditSkill(@RequestParam String skillID, HttpSession session,Model model, @RequestParam(required = false) String msg){
+    Profile loggedInProfile = ((Profile) session.getAttribute("profile"));
+    if (loggedInProfile == null || loggedInProfile.getAuthCode() != 0) {
+        throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User is not allowed on this page");
+    }else {
+        Skill skillToBeEditied = skillService.findByID(skillID);
+        model.addAttribute("message",msg);
+        model.addAttribute("skillToBeEdited",skillToBeEditied);
+        return "editskill";
+    }
+}
+
+@PostMapping("/editskill")
+    public String editSkill(@ModelAttribute Skill skill,HttpSession session,RedirectAttributes redirectAttributes){
+    Profile loggedInProfile = ((Profile) session.getAttribute("profile"));
+    if (loggedInProfile == null || loggedInProfile.getAuthCode() != 0) {
+        throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User is not allowed on this page");
+    }else {
+        try {
+            Skill savedSkill = skillService.save(skill);
+            redirectAttributes.addAttribute("msg","Skill has been updated");
+            return "redirect:/manageskills";
+        } catch (RuntimeException e) {
+
+            redirectAttributes.addAttribute("msg","Skill could not be updated, name probably already exists");
+            redirectAttributes.addAttribute("skillID",skill.getId());
+return "redirect:/editskill";
+        }
+
+    }
+
+
+
+
+
+}
+
+
 
 
     }

@@ -22,7 +22,7 @@
     <thead>List of skills</thead>
     <tr th:each="skill : ${skilllist}">
       <td th:text="${skill.getName()}"></td>
-      <td><form th:action="@{/editskill}" th:method="get"><button>Edit skill (MANGLER AT BLIVE LAVET)</button></form></td>
+      <td><form th:action="@{/editskill}" th:method="get"><input type="hidden" th:value="${skill.getId()}" name="skillID"><button>Edit skill</button></form></td>
       <td><form th:action="@{/deleteskill}" th:method="post"><input type="hidden" th:value="${skill.getId()}" name="skillID"><button>Delete skill</button></form></td>
   </table>
 
