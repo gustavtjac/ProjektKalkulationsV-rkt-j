@@ -35,29 +35,18 @@ else {
 
 }
 
-
     public List<Task> getTaskFromProjectID(String projectID){
         String sql = "select * from Task where TASK_PROJECT_ID = ?";
         return jdbcTemplate.query(sql,taskRowMapper,projectID);
     }
 
     @Override
-    public Task findByID(String id) {
-        String sql = "SELECT * FROM TASK WHERE TASK_ID = ?";
-        try {
-            return jdbcTemplate.queryForObject(sql,taskRowMapper,id);
-
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Task not found for Task id: " + id, e);
-        }
-    }
-
-
-    @Override
 
     public List<Task> findAll() {
         return null;
+    }
 
+    @Override
     public Task findByID(String taskID) {
         String SQL = "SELECT * FROM Task WHERE task_ID = ?";
         try{
@@ -67,7 +56,6 @@ else {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Task not found for task id: " + taskID, e );
         }
     }
-
 
     @Override
     public Task save(Task object) {

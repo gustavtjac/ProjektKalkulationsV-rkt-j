@@ -18,11 +18,6 @@ public class TaskService {
         return taskRepository.createNewTask(task);
     }
 
-
-    public Task findById(String id) {
-        return taskRepository.findByID(id);
-    }
-
     public Task findByID(String taskID){
         return taskRepository.findByID(taskID);
     }
