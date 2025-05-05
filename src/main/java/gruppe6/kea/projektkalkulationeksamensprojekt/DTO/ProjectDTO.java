@@ -18,7 +18,6 @@ public class ProjectDTO {
     private String description;
     private double maxTime;
     private double maxPrice;
-
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date endDate;
     private String projectOwner;
@@ -38,5 +37,17 @@ public class ProjectDTO {
         this.projectMembers = projectMembers;
     }
 
-
+    @Override
+    public String toString() {
+        return "ProjectDTO{" +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", maxTime=" + maxTime +
+                ", maxPrice=" + maxPrice +
+                ", endDate=" + endDate +
+                ", projectOwner='" + projectOwner + '\'' +
+                ", projectMembers=" + projectMembers +
+                '}';
+    }
 }

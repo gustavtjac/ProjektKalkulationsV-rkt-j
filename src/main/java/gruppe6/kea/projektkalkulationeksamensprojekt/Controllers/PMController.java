@@ -435,37 +435,47 @@ return "redirect:/editskill";
     }
 
 
-    @GetMapping("/dashboard/edit/{projectid}")
-    public String showEditProject(@PathVariable String projectid, HttpSession session, Model model){
+    @GetMapping("/editproject")
+    public String showEditProject(@RequestParam String projectid, HttpSession session, Model model){
         Profile loggedInProfile = ((Profile) session.getAttribute("profile"));
         if (loggedInProfile==null || loggedInProfile.getAuthCode()==2){
             return "redirect:/";
         }
-
+        System.out.println("HEJ");
         List<Profile> allProfiles = profileService.findAllProfiles();
         Project projectToBeEditied = projectService.findById(projectid);
-        model.addAttribute("emptyProject",new ProjectDTO());
+        model.addAttribute("projectDTO",new ProjectDTO());
         model.addAttribute("projectEdit",projectToBeEditied);
         model.addAttribute("profile", loggedInProfile);
         model.addAttribute("allProfiles", allProfiles);
+        System.out.println("HEEEEEEJ");
 
         return "editProject";
     }
 
 
     @PostMapping("/editproject")
-    public String editProject(@ModelAttribute("projectEdit") ProjectDTO editedProject, HttpSession session) {
+    public String editProject(@ModelAttribute ProjectDTO projectDTO, HttpSession session, RedirectAttributes redirectAttributes) {
+        System.out.println(projectDTO);
+        System.out.println("yo");
         Profile loggedInProfile = (Profile) session.getAttribute("profile");
-        Project foundProject = projectService.findById(editedProject.getId());
-        if (loggedInProfile == null || !projectService.checkIfProfileIsAssignedProject(loggedInProfile,foundProject)) {
-            // throw httpresponse
+        System.out.println("yoooo");
+
+        if (loggedInProfile == null || loggedInProfile.getAuthCode() !=1 || !projectService.checkIfProfileOwnsProject(projectDTO.getId(),loggedInProfile.getUsername())) {
+            System.out.println("not allow");
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "This user is not allowed to edit project");
+        } else {
+
+            try{
+                projectService.save(projectDTO);
+                System.out.println("test");
+                redirectAttributes.addAttribute("msg","Project has been updated");
+                return "redirect:/dashboard";
+            } catch (RuntimeException e){
+                redirectAttributes.addAttribute("msg","Project could not be updated");
+                return "redirect:/editProject";
+            }
         }
-
-//        projectService.saveProject(editedProject);
-
-
-        return "redirect:/dashboard/";
     }
-
-    }
+}
 

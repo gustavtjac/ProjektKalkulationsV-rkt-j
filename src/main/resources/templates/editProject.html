@@ -14,7 +14,12 @@
     <h1 th:text="'Edit Your Project: ' + ${projectEdit.getName()}"></h1>
 
     <div>
-        <form th:action="@{/editProject}" th:method="post" th:object="${projectEdit}">
+        <h1 th:text="${message}"></h1>
+        <form th:action="@{/editproject}" th:method="post" th:object="${projectDTO}">
+            <input type="hidden" name="id" th:value="${projectEdit.getId()}"/>
+
+            <input type="hidden" name="projectOwner" th:value="${projectEdit.getProjectOwner().getUsername()}"/>
+
             <label for="name">Project Name</label>
             <input type="text" name="name" id="name" maxlength="50" th:value="${projectEdit.getName()}" required>
 
@@ -34,16 +39,13 @@
                 <div class="dropdown-button" onclick="toggleDropdown()">Add Members ▼</div>
                 <div class="checkbox-dropdown">
                     <label th:each="profile : ${allProfiles}" th:if="${profile.authCode == 2}">
-                        <input  type="checkbox" name="projectMembers"
-                               th:value="${profile.username}" th:checked="${projectEdit.getProjectMembers().contains(profile.getUsername())}"/>
+                        <input type="checkbox" name="projectMembers"
+                               th:value="${profile.username}" th:checked="${#lists.contains(projectEdit.projectMembers.![username], profile.username)}"/>
                         <span th:text="${profile.name}"></span>
                     </label>
                 </div>
             </div>
 
-
-
-            <input type="hidden" name="projectOwner" th:value="${profile.getUsername()}">
             <button type="submit">Save Changes</button>
 
 

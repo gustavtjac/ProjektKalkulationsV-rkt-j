@@ -3,7 +3,9 @@ package gruppe6.kea.projektkalkulationeksamensprojekt.Repositories;
 import gruppe6.kea.projektkalkulationeksamensprojekt.DTO.ProjectDTO;
 import gruppe6.kea.projektkalkulationeksamensprojekt.Models.Profile;
 import gruppe6.kea.projektkalkulationeksamensprojekt.Models.Project;
+import gruppe6.kea.projektkalkulationeksamensprojekt.Models.Skill;
 import gruppe6.kea.projektkalkulationeksamensprojekt.Rowmappers.ProjectRowMapper;
+import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -74,11 +76,11 @@ public class ProjectRepository implements CrudMethods<Project,String> {
     public Project findByID(String id) {
         String sql = "select * from Project where Project_ID = ?";
         try {
+            System.out.println("repo2");
             return jdbcTemplate.queryForObject(sql,projectRowMapper,id);
         } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Project not found for project id: " + id, e);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Project not found", e);
         }
-
 
     }
 
@@ -86,6 +88,27 @@ public class ProjectRepository implements CrudMethods<Project,String> {
     public Project save(Project object) {
         return null;
     }
+
+    public Project save(ProjectDTO object) {
+
+        String sql = "UPDATE Project SET PROJECT_NAME = ?, PROJECT_DESC = ?, PROJECT_MAX_TIME = ?, PROJECT_MAX_PRICE = ?, PROJECT_ENDDATE = ?, PROJECT_OWNER_PROFILE_USERNAME = ? WHERE PROJECT_ID = ?";
+        String deleteOldMemberSql = "delete from profile_project where project_ID = ?";
+        String insertNewMemberSql = "insert into profile_project (PROJECT_ID,PROFILE_USERNAME) values (?,?)";
+
+        try {
+            jdbcTemplate.update(sql, object.getName(), object.getDescription(), object.getMaxTime(), object.getMaxPrice(), object.getEndDate(),object.getProjectOwner(), object.getId());
+            jdbcTemplate.update(deleteOldMemberSql, object.getId());
+            for (String profile : object.getProjectMembers()) {
+                jdbcTemplate.update(insertNewMemberSql, object.getId(), profile);
+            }
+
+            return findByID(object.getId());
+        } catch (DataAccessException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Could not save changes to project");
+        }
+    }
+
 
 
     public void deleteProject(String projectID){
@@ -100,14 +123,8 @@ public class ProjectRepository implements CrudMethods<Project,String> {
 
 
     public Project editProject(Project projectEdit) {
-        String editSQL = "UPDATE Project SET PROJECT_NAME = ?, PROJECT_DESC = ?, PROJECT_MAX_TIME = ?, PROJECT_MAX_PRICE = ?, PROJECT_END_DATE = ? WHERE PROJECT_ID = ?";
-        jdbcTemplate.update(editSQL,
-                projectEdit.getName(),
-                projectEdit.getDescription(),
-                projectEdit.getMaxTime(),
-                projectEdit.getMaxPrice(),
-                projectEdit.getEndDate(),
-                projectEdit.getId()); // Make sure editedProject has the ID set
+        String sql = "UPDATE Project SET PROJECT_NAME = ?, PROJECT_DESC = ?, PROJECT_MAX_TIME = ?, PROJECT_MAX_PRICE = ?, PROJECT_END_DATE = ? WHERE PROJECT_ID = ?";
+        jdbcTemplate.update(sql, projectEdit.getName(), projectEdit.getDescription(), projectEdit.getMaxTime(), projectEdit.getMaxPrice(), projectEdit.getEndDate(), projectEdit.getId()); // Make sure editedProject has the ID set
         return projectEdit;
     }
 }

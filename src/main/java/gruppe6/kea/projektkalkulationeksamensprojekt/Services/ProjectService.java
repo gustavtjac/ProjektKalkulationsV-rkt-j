@@ -1,19 +1,25 @@
 package gruppe6.kea.projektkalkulationeksamensprojekt.Services;
 
+import gruppe6.kea.projektkalkulationeksamensprojekt.DTO.ProfileDTO;
 import gruppe6.kea.projektkalkulationeksamensprojekt.DTO.ProjectDTO;
 import gruppe6.kea.projektkalkulationeksamensprojekt.Models.Profile;
 import gruppe6.kea.projektkalkulationeksamensprojekt.Models.Project;
+import gruppe6.kea.projektkalkulationeksamensprojekt.Models.Skill;
+import gruppe6.kea.projektkalkulationeksamensprojekt.Repositories.ProfileRepository;
 import gruppe6.kea.projektkalkulationeksamensprojekt.Repositories.ProjectRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class ProjectService {
     private final ProjectRepository projectRepository;
+    private final ProfileRepository profileRepository;
 
-    public ProjectService(ProjectRepository projectRepository) {
+    public ProjectService(ProjectRepository projectRepository, ProfileRepository profileRepository) {
         this.projectRepository = projectRepository;
+        this.profileRepository = profileRepository;
     }
 
     public List<Project> getAllProjectsFromProfile(Profile profile){
@@ -66,5 +72,9 @@ public class ProjectService {
 
     public Project editProject(Project projectEdit){
         return projectRepository.editProject(projectEdit);
+    }
+
+    public Project save(ProjectDTO dto){
+        return projectRepository.save(dto);
     }
 }
