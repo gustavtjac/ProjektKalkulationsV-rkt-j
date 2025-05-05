@@ -158,4 +158,11 @@ for (Skill skill : object.getSkills()){
         }
 
     }
+
+
+
+    public List<Profile> getAllprofilesAssginedToSubtask(String subtaskID){
+        String sql = "SELECT p.* FROM Profile p JOIN Subtask_Profile sp ON p.PROFILE_USERNAME = sp.PROFILE_USERNAME WHERE sp.SUBTASK_ID = ?";
+        return jdbcTemplate.query(sql,profileRowMapper,subtaskID);
+    }
 }

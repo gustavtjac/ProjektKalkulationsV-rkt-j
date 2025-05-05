@@ -64,4 +64,9 @@ public Profile saveDTO(ProfileDTO dto, String oldUsername){
         return profileRepository.deleteFromId(id);
     }
 
+
+    public List<Profile> getAllProfilesAssignedToProject(String projectID){
+        return profileRepository.getAllMembersOfProjectFromProjectID(projectID);
+    }
+
 }
