@@ -1,5 +1,6 @@
 package gruppe6.kea.projektkalkulationeksamensprojekt.Repositories;
 
+import gruppe6.kea.projektkalkulationeksamensprojekt.DTO.TaskDTO;
 import gruppe6.kea.projektkalkulationeksamensprojekt.Models.Task;
 import gruppe6.kea.projektkalkulationeksamensprojekt.Rowmappers.TaskRowMapper;
 import org.springframework.http.HttpStatus;
@@ -13,10 +14,12 @@ import java.util.UUID;
 public class TaskRepository implements CrudMethods<Task,String>{
     private final JdbcTemplate jdbcTemplate;
     private final TaskRowMapper taskRowMapper;
+    private final SubtaskRepository subtaskRepository;
 
-    public TaskRepository(JdbcTemplate jdbcTemplate, TaskRowMapper taskRowMapper) {
+    public TaskRepository(JdbcTemplate jdbcTemplate, TaskRowMapper taskRowMapper, SubtaskRepository subtaskRepository) {
         this.jdbcTemplate = jdbcTemplate;
         this.taskRowMapper = taskRowMapper;
+        this.subtaskRepository = subtaskRepository;
     }
 
 public Task createNewTask(Task task){
@@ -48,10 +51,11 @@ else {
 
     @Override
     public Task findByID(String taskID) {
-        String SQL = "SELECT * FROM Task WHERE task_ID = ?";
+        String SQL = "SELECT * FROM Task WHERE TASK_ID = ?";
+        System.out.println(taskID);
         try{
-            return jdbcTemplate.queryForObject(SQL,taskRowMapper, taskID);
-
+            System.out.println(taskID);
+            return jdbcTemplate.queryForObject(SQL, taskRowMapper , taskID);
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Task not found for task id: " + taskID, e );
         }
@@ -60,5 +64,12 @@ else {
     @Override
     public Task save(Task object) {
         return null;
+    }
+
+    public Task save(TaskDTO object) {
+        System.out.println(object);
+        String sqlTask = "UPDATE Task SET TASK_NAME = ?, TASK_DESC = ?, TASK_MAX_TIME = ?, TASK_MAX_PRICE = ? WHERE TASK_ID = ?";
+        jdbcTemplate.update(sqlTask,object.getName(),object.getDescription(), object.getMaxTime(), object.getMaxPrice(), object.getId());
+        return findByID(object.getId());
     }
 }

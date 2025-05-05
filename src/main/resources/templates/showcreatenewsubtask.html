@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" th:href="@{/css/styles.css}" href="/css/styles.css">
+  <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet'>
+  <link rel="stylesheet" href="/css/headerStyle.css" th:href="@{/css/headerStyle.css}">
+  <script src="https://kit.fontawesome.com/1086dfba1e.js" crossorigin="anonymous"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Alpha Solutions Project Management Create Subtask</title>
+  <script src="https://kit.fontawesome.com/1086dfba1e.js" crossorigin="anonymous"></script>
+</head>
+<body>
+
+<div th:replace="~{fragments/header :: header}"></div>
+
+<main>
+  <h1 th:text="'Create Subtask for task ' + ${task.name}"></h1>
+
+  <div>
+    <form th:action="@{/createnewsubtask}" th:method="post" th:object="${emptySubtask}">
+      <label for="name">Subtask name</label>
+      <input type="text" name="name" id="name" maxlength="50" required>
+
+      <label for="description">Description</label>
+      <input type="text" name="description" id="description" maxlength="500" required>
+
+      <label for="maxTime">Allocated time</label>
+      <input type="number" name="time" id="maxTime" step="1" min="0" max="9999999999999999999999999999.99" required>
+
+
+      <div class="dropdown-container" id="memberDropdown">
+        <div class="dropdown-button" onclick="toggleDropdown()">Add Employees to subtask ▼</div>
+        <div class="checkbox-dropdown">
+          <label th:each="profile : ${employees}" th:if="${profile.authCode == 2}">
+            <input type="checkbox" name="assignedProfiles"
+                   th:value="${profile.username}" />
+            <span th:text="${profile.name}"></span>
+          </label>
+        </div>
+      </div>
+
+
+
+      <input type="hidden" name="taskId" th:value="${task.getId()}">
+      <button type="submit">Create Subtask</button>
+
+
+    </form>
+  </div>
+</main>
+
+<script src="/js/script.js"></script>
+</body>
+</html>
