@@ -2,6 +2,7 @@ package gruppe6.kea.projektkalkulationeksamensprojekt.Controllers;
 
 import gruppe6.kea.projektkalkulationeksamensprojekt.DTO.ProfileDTO;
 import gruppe6.kea.projektkalkulationeksamensprojekt.DTO.ProjectDTO;
+import gruppe6.kea.projektkalkulationeksamensprojekt.DTO.TaskDTO;
 import gruppe6.kea.projektkalkulationeksamensprojekt.Models.Profile;
 import gruppe6.kea.projektkalkulationeksamensprojekt.Models.Project;
 import gruppe6.kea.projektkalkulationeksamensprojekt.Models.Subtask;
@@ -466,6 +467,40 @@ return "redirect:/editskill";
 
         return "redirect:/dashboard/";
     }
+
+    @GetMapping("/edittask")
+    public String showEditTask(@RequestParam(required = false) String taskID, HttpSession session, Model model, @RequestParam(required = false) String message){
+        Profile loggedInProfile = ((Profile) session.getAttribute("profile"));
+        if (loggedInProfile == null || loggedInProfile.getAuthCode() != 1) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User is not allowed on this page");
+        }else{
+            Task chosenTask = taskService.findByID(taskID);
+            model.addAttribute("message", message);
+            model.addAttribute("taskDTO", new TaskDTO());
+            model.addAttribute("chosenTask", chosenTask);
+            return "edittask";
+        }
+    }
+
+    @PostMapping("/edittask")
+    public String editTask(@ModelAttribute TaskDTO taskDTO, HttpSession session, RedirectAttributes redirectAttributes){
+        Profile loggedInProfile = ((Profile) session.getAttribute("profile"));
+        if (loggedInProfile == null || loggedInProfile.getAuthCode() != 1) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User is not allowed to edit employees");
+        }else {
+            try{
+                Task editedTask = taskService.saveTask(taskDTO);
+                redirectAttributes.addAttribute("message", "Profile has been updated");
+                return "redirect:/dashboard/"+taskDTO.getProjectID();
+            } catch (RuntimeException e){
+                redirectAttributes.addAttribute("taskID",taskDTO.getId());
+                redirectAttributes.addAttribute("message", "Task could not be updated");
+                return "redirect:/edittask";
+            }
+        }
+    }
+
+
 
     }
 

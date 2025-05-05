@@ -20,7 +20,8 @@ public class SubtaskRepository implements CrudMethods<Subtask,String>{
 
 
     public List<Subtask> getSubtasksFromTaskID(String taskID){
-        String sql = "select * from subtask where subtask_task_ID = ?";
+        String sql = "SELECT * FROM subtask WHERE subtask_task_ID = ?";
+
         return jdbcTemplate.query(sql,new SubtaskRowmapper(),taskID);
     }
 

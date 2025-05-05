@@ -11,8 +11,37 @@
 </head>
 <body>
 
+<div th:replace="~{fragments/header :: header}"></div>
+
+<main>
+
+    <div>
+        <h1 th:text="${message}"></h1>
+        <form th:method="post" th:action="@{/edittask}" th:object="${taskDTO}">
+
+        <label for="name">Task Name</label>
+        <input type="text" name="name" id="name" maxlength="50" required th:value="${chosenTask.getName()}">
+
+        <label for="description">Task Description</label>
+        <input type="text" name="description" id="description" maxlength="500" required th:value="${chosenTask.getDescription()}">
+
+        <label for="maxTime">Max Time</label>
+        <input type="number" name="maxTime" id="maxTime" step="0.01" min="0" max="9999999999999999999999999999.99" required th:value="${chosenTask.getMaxTime()}">
+
+        <label for="maxPrice">Max Price</label>
+        <input type="number" name="maxPrice" id="maxPrice" step="0.01" min="0" max="9999999999999999999999999999.99" required th:value="${chosenTask.getMaxPrice()}">
+
+        <input type="hidden" name="projectID" id="projectID" th:value="${chosenTask.getProjectID()}">
+            <input type="hidden" name="id" id="id" th:value="${chosenTask.getId()}">
+
+        <button type="submit">Save Task</button>
+        </form>
+    </div>
 
 
+
+
+</main>
 
 </body>
 </html>
