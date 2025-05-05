@@ -24,7 +24,6 @@ public class ProjectRowMapper implements RowMapper<Project> {
 
     @Override
     public Project mapRow(ResultSet rs, int rowNum) throws SQLException {
-        System.out.println("rowmapper start");
         Project project = new Project();
        project.setId(rs.getString("PROJECT_ID"));
        project.setName(rs.getString("PROJECT_NAME"));
@@ -36,7 +35,6 @@ public class ProjectRowMapper implements RowMapper<Project> {
       project.setTasks(taskRepository.getTaskFromProjectID(project.getId()));
       List<Profile> memberlist = profileRepository.getAllMembersOfProjectFromProjectID(project.getId());
        project.setProjectMembers(memberlist);
-        System.out.println("rowmapper good");
         return project;
     }
 }

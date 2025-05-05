@@ -474,14 +474,12 @@ return "redirect:/editskill";
         if (loggedInProfile==null || loggedInProfile.getAuthCode()==2){
             return "redirect:/";
         }
-        System.out.println("HEJ");
         List<Profile> allProfiles = profileService.findAllProfiles();
         Project projectToBeEditied = projectService.findById(projectid);
         model.addAttribute("projectDTO",new ProjectDTO());
         model.addAttribute("projectEdit",projectToBeEditied);
         model.addAttribute("profile", loggedInProfile);
         model.addAttribute("allProfiles", allProfiles);
-        System.out.println("HEEEEEEJ");
 
         return "editProject";
     }
@@ -489,19 +487,13 @@ return "redirect:/editskill";
 
     @PostMapping("/editproject")
     public String editProject(@ModelAttribute ProjectDTO projectDTO, HttpSession session, RedirectAttributes redirectAttributes) {
-        System.out.println(projectDTO);
-        System.out.println("yo");
         Profile loggedInProfile = (Profile) session.getAttribute("profile");
-        System.out.println("yoooo");
-
         if (loggedInProfile == null || loggedInProfile.getAuthCode() !=1 || !projectService.checkIfProfileOwnsProject(projectDTO.getId(),loggedInProfile.getUsername())) {
-            System.out.println("not allow");
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "This user is not allowed to edit project");
         } else {
 
             try{
                 projectService.save(projectDTO);
-                System.out.println("test");
                 redirectAttributes.addAttribute("msg","Project has been updated");
                 return "redirect:/dashboard";
             } catch (RuntimeException e){
