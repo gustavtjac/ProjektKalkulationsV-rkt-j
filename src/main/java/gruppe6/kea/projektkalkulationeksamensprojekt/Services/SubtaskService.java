@@ -24,4 +24,13 @@ public class SubtaskService {
         return subtaskRepository.createNewSubtask(subtaskDTO);
     }
 
+    public Subtask findById(String id){
+        return subtaskRepository.findByID(id);
+    }
+
+    public Subtask deleteSubtask(String id){
+        return subtaskRepository.deleteSubtask(id);
+    }
+
+
 }
