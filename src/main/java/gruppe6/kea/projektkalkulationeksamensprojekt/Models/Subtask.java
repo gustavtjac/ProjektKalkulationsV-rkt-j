@@ -4,6 +4,8 @@ package gruppe6.kea.projektkalkulationeksamensprojekt.Models;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 public class Subtask {
@@ -13,6 +15,7 @@ public class Subtask {
     private String description;
     private double time;
     private int status;
+    private List<Profile> assignedProfiles;
 
     public Subtask(){
 

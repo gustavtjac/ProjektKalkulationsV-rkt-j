@@ -13,35 +13,39 @@
 
 </main>
 
+
+
 <main th:if="${profile.getAuthCode()==1}">
   <h1 th:text="'Manage ' + ${task.getName()} + ' SubTask here'"></h1>
 
+  <h2 th:text="${message}"></h2>
 
-  <form th:action="@{/showcreatenewsubtask}" th:method="get">
-    <input type="hidden" name="projectID" th:value="${projectid}">
-    <button type="submit">Create new Sub-Task</button>
+  <form th:action="@{/createnewsubtask}" th:method="get">
+    <input type="hidden" name="taskID" th:value="${task.getId()}">
+    <button type="submit">Create new Subtask</button>
 
   </form>
   <table>
-    <tr th:each="task : ${task.getSubtasks()}">
-      <td th:text="'Sub-task name '+${subtasks.getName()}"></td>
-      <td th:text="'Allocated time '+${subtasks.getTime() + ' Hours'}"></td>
-      <td th:text="'Status '+${subtask.get()} + ' Kr.'"></td>
-      <td><form th:action="@{/dashboard/{projectid}/{taskid}(projectid=${project.getId()}, taskid=${task.getId()})}" th:method="get"><button>View subtask's</button></form></td>
-      <td><form th:method="get" th:action="@{/edittask}"><button>Edit Task</button></form></td>
+    <tr th:each="subtask : ${task.getSubtasks()}">
+      <td th:text="'Sub-task name '+${subtask.getName()}"></td>
+      <td th:text="'Allocated time '+${subtask.getTime() + ' Hours'}"></td>
+      <td th:text="'Status '+${subtask.getStatus()}"></td>
+      <td><form th:method="get" th:action="@{/edittask}"><button>Edit subtask</button></form></td>
     </tr>
   </table>
 </main>
 
 
 <main th:if="${profile.getAuthCode()==2}">
-  <h1 th:text="'Tasks in '+${project.getName()}"></h1>
+  <h1 th:text="'Subtasks in '+${task.getName()}"></h1>
   <table>
-    <tr th:each="task : ${project.getTasks()}">
-      <td th:text="'Task name '+${task.getName()}"></td>
-      <td th:text="'Allocated time '+${task.getMaxTime() + ' Hours'}"></td>
-      <td th:text="'Budget '+${task.getMaxPrice()} + ' Kr.'"></td>
-      <td><form th:action="@{/dashboard/{projectid}/{taskid}(projectid=${project.getId()}, taskid=${task.getId()})}" th:method="get"><button>View subtask's</button></form></td>
+    <tr th:each="subtask : ${task.getSubtasks()}">
+      <td th:text="'Sub-task name '+${subtask.getName()}"></td>
+      <td th:text="'Allocated time '+${subtask.getTime() + ' Hours'}"></td>
+      <td th:text="'Status '+${subtask.getStatus()}"></td>
+      <td><form th:method="get" th:action="@{/}"><button>Update status</button></form></td>
+
+    </tr>
   </table>
 
   <h1>Your assigned tasks</h1>

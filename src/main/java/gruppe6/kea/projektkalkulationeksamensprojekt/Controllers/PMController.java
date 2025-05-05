@@ -3,6 +3,7 @@ package gruppe6.kea.projektkalkulationeksamensprojekt.Controllers;
 import gruppe6.kea.projektkalkulationeksamensprojekt.DTO.ProfileDTO;
 import gruppe6.kea.projektkalkulationeksamensprojekt.DTO.ProjectDTO;
 import gruppe6.kea.projektkalkulationeksamensprojekt.DTO.TaskDTO;
+import gruppe6.kea.projektkalkulationeksamensprojekt.DTO.SubtaskDTO;
 import gruppe6.kea.projektkalkulationeksamensprojekt.Models.Profile;
 import gruppe6.kea.projektkalkulationeksamensprojekt.Models.Project;
 import gruppe6.kea.projektkalkulationeksamensprojekt.Models.Subtask;
@@ -115,8 +116,8 @@ public class PMController {
         public String showCreateTask (HttpSession session, Model model, @RequestParam String projectID){
             Profile loggedInProfile = ((Profile) session.getAttribute("profile"));
 
-            if (loggedInProfile == null || loggedInProfile.getAuthCode() != 1) {
-                return "redirect:/dashboard";
+            if (loggedInProfile == null || loggedInProfile.getAuthCode() != 1 || !projectService.checkIfProfileOwnsProject(projectID,loggedInProfile.getUsername())) {
+                throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You are not allowed on this page");
             } else {
                 model.addAttribute("projectID", projectID);
                 model.addAttribute("task", new Task());
@@ -184,25 +185,20 @@ public class PMController {
 
         // Metode viser siden til alle tasks, sub-task
         @GetMapping("/dashboard/{projectid}/{taskid}")
-        public String showTask (
-                @PathVariable String taskid,
-                @PathVariable String projectid,
-                HttpSession session,
-                Model model){
+        public String showTask (@PathVariable String taskid, @PathVariable String projectid, HttpSession session, Model model, @RequestParam(required = false) String msg){
 
             Profile loggedInProfile = ((Profile) session.getAttribute("profile"));
             if (loggedInProfile == null) {
                 return "redirect:/";
             }
-
             Project project = projectService.findById(projectid);
-            if (!projectService.checkIfProfileIsAssignedProject(loggedInProfile, project)) {
-                return "redirect:/";
+            if (!projectService.checkIfProfileIsAssignedProject(loggedInProfile, project) || !projectService.checkIfProfileOwnsProject(project.getId(),loggedInProfile.getUsername())) {
+                throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You are not assigned to this project");
             }
-
             Task task = taskService.findByID(taskid);
-            List<Subtask> subtasks = subtaskService.findAllSubtaskByTaskID(taskid);
+            List<Subtask> subtasks = task.getSubtasks();
 
+            model.addAttribute("message",msg);
             model.addAttribute("profile", loggedInProfile);
             model.addAttribute("project", project);
             model.addAttribute("task", task);
@@ -210,6 +206,42 @@ public class PMController {
 
             return "viewTask";
         }
+
+
+        @GetMapping ("/createnewsubtask")
+        public String showCreateNewSubtask(HttpSession session,  Model model, @RequestParam String taskID, @RequestParam(required = false) String msg){
+            Profile loggedInProfile = ((Profile) session.getAttribute("profile"));
+
+            if (loggedInProfile == null || loggedInProfile.getAuthCode() != 1 || !projectService.checkIfProfileOwnsProject(taskService.findByID(taskID).getProjectID(),loggedInProfile.getUsername())) {
+                throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You are not assigned to this project");
+            } else {
+                model.addAttribute("message",msg);
+                model.addAttribute("emptySubtask",new SubtaskDTO());
+                model.addAttribute("task",taskService.findByID(taskID));
+                model.addAttribute("employees",profileService.getAllProfilesAssignedToProject(taskService.findByID(taskID).getProjectID()));
+                return "showcreatenewsubtask";
+            }
+        }
+    @PostMapping("/createnewsubtask")
+    public String createNewSubtask (@ModelAttribute SubtaskDTO subtaskDTO, RedirectAttributes redirectAttributes, HttpSession session){
+
+        Profile loggedInProfile = ((Profile) session.getAttribute("profile"));
+       Task task = taskService.findByID(subtaskDTO.getTaskId());
+
+
+
+        if (loggedInProfile == null || loggedInProfile.getAuthCode() != 1 || !projectService.checkIfProfileOwnsProject(task.getProjectID(),loggedInProfile.getUsername())) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN,"You are not allowed to create new tasks");
+        }
+            Subtask subtask = subtaskService.createNewSubtask(subtaskDTO);
+            redirectAttributes.addAttribute("msg","Subtask created");
+            return "redirect:/dashboard/" + task.getProjectID() + "/" + subtask.getTaskId();
+
+
+    }
+
+
+
 
         //Slet funktioner til projekter, tasks og subtasks
         @PostMapping("/deleteproject")
@@ -416,7 +448,7 @@ return "redirect:/editskill";
 
 
     @PostMapping("/editemployee")
-    public String editEmployee(@ModelAttribute ProfileDTO profileDTO,HttpSession session,RedirectAttributes redirectAttributes,@RequestParam String oldusername){
+    public String editProfile(@ModelAttribute ProfileDTO profileDTO,HttpSession session,RedirectAttributes redirectAttributes,@RequestParam String oldusername){
         Profile loggedInProfile = ((Profile) session.getAttribute("profile"));
         if (loggedInProfile == null || loggedInProfile.getAuthCode() != 0) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User is not allowed to edit employees");
