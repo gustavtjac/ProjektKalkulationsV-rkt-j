@@ -76,7 +76,6 @@ public class ProjectRepository implements CrudMethods<Project,String> {
     public Project findByID(String id) {
         String sql = "select * from Project where Project_ID = ?";
         try {
-            System.out.println("repo2");
             return jdbcTemplate.queryForObject(sql,projectRowMapper,id);
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Project not found", e);
@@ -104,7 +103,6 @@ public class ProjectRepository implements CrudMethods<Project,String> {
 
             return findByID(object.getId());
         } catch (DataAccessException e) {
-            e.printStackTrace();
             throw new RuntimeException("Could not save changes to project");
         }
     }
