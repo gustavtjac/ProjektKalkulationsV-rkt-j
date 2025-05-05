@@ -535,6 +535,27 @@ return "redirect:/editskill";
         }
     }
 
+    @PostMapping("/deletesubtask")
+    public String deleteSubtask (@RequestParam String subtaskID, HttpSession session, RedirectAttributes redirectAttributes){
+        Profile loggedInProfile = ((Profile) session.getAttribute("profile"));
+
+        String taskID = subtaskService.findById(subtaskID).getTaskId();
+        if (loggedInProfile == null || loggedInProfile.getAuthCode() != 1 || !projectService.checkIfProfileOwnsProject(taskService.findByID(subtaskService.findById(subtaskID).getTaskId()).getProjectID(),loggedInProfile.getUsername())) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User is not allowed to delete subtasks");
+        } else {
+            try {
+                Subtask deletedSubtask = subtaskService.deleteSubtask(subtaskID);
+
+                redirectAttributes.addAttribute("msg", deletedSubtask.getName() + " has been deleted");
+            } catch (RuntimeException e) {
+
+                redirectAttributes.addAttribute("msg", e.getMessage());
+            }
+
+            return "redirect:/dashboard/"+taskService.findByID(taskID).getProjectID()+"/"+taskID;
+        }
+    }
+
 
 
     }

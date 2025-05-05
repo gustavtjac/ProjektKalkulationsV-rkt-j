@@ -78,7 +78,6 @@ public class SubtaskRepository implements CrudMethods<Subtask,String>{
     @Override
     public Subtask findByID(String s) {
 
-
         String sql = "select * from Subtask where subtask_ID = ?";
         try {
             return jdbcTemplate.queryForObject(sql,subtaskRowmapper,s);
@@ -87,6 +86,20 @@ public class SubtaskRepository implements CrudMethods<Subtask,String>{
         }
 
 
+    }
+
+
+    public Subtask deleteSubtask(String id){
+        Subtask deletedSubtask = findByID(id);
+        String sql = "Delete from subtask where subtask_ID = ?";
+
+        try {
+            jdbcTemplate.update(sql,id);
+        } catch (DataAccessException e) {
+            throw new RuntimeException("Could not delete subtask");
+        }
+
+        return deletedSubtask;
     }
 
     @Override
