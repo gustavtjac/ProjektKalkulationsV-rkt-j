@@ -52,9 +52,7 @@ else {
     @Override
     public Task findByID(String taskID) {
         String SQL = "SELECT * FROM Task WHERE TASK_ID = ?";
-        System.out.println(taskID);
         try{
-            System.out.println(taskID);
             return jdbcTemplate.queryForObject(SQL, taskRowMapper , taskID);
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Task not found for task id: " + taskID, e );
@@ -67,7 +65,6 @@ else {
     }
 
     public Task save(TaskDTO object) {
-        System.out.println(object);
         String sqlTask = "UPDATE Task SET TASK_NAME = ?, TASK_DESC = ?, TASK_MAX_TIME = ?, TASK_MAX_PRICE = ? WHERE TASK_ID = ?";
         jdbcTemplate.update(sqlTask,object.getName(),object.getDescription(), object.getMaxTime(), object.getMaxPrice(), object.getId());
         return findByID(object.getId());

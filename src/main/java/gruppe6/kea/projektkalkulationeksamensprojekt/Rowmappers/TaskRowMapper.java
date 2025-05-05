@@ -23,7 +23,6 @@ public class TaskRowMapper implements RowMapper<Task> {
 
     @Override
     public Task mapRow(ResultSet rs, int rowNum) throws SQLException {
-        System.out.println("Rowmapper test1");
         Task task = new Task();
         task.setId(rs.getString("TASK_ID"));
         task.setDescription(rs.getString("TASK_DESC"));
@@ -38,8 +37,6 @@ public class TaskRowMapper implements RowMapper<Task> {
         }else {
             task.setSubtasks(subtaskList);
         }
-
-        System.out.println("Rowmapper test2");
 
         return task;
     }
