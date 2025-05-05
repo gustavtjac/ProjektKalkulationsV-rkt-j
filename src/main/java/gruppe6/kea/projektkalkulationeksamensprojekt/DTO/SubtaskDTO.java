@@ -1,5 +1,13 @@
 package gruppe6.kea.projektkalkulationeksamensprojekt.DTO;
 
+
+import lombok.Getter;
+import lombok.Setter;
+
+import java.util.List;
+
+@Getter
+@Setter
 public class SubtaskDTO {
     private String id;
     private String taskId;
@@ -7,17 +15,22 @@ public class SubtaskDTO {
     private String description;
     private double time;
     private int status;
+    private List<String> assignedProfiles;
 
-    public SubtaskDTO() {
+    public SubtaskDTO(){
+
     }
 
-    public SubtaskDTO(String id, String taskId, String name, String description, double time, int status) {
-        this.id = id;
-        this.taskId = taskId;
-        this.name = name;
-        this.description = description;
-        this.time = time;
-        this.status = status;
-    }
 
+
+    @Override
+    public String toString() {
+        return "Subtask{" +
+                "id=" + id +
+                ", taskId=" + taskId +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", time=" + time +
+                '}';
+    }
 }

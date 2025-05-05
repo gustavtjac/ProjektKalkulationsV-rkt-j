@@ -1,5 +1,6 @@
 package gruppe6.kea.projektkalkulationeksamensprojekt.Services;
 
+import gruppe6.kea.projektkalkulationeksamensprojekt.DTO.SubtaskDTO;
 import gruppe6.kea.projektkalkulationeksamensprojekt.Models.Subtask;
 import gruppe6.kea.projektkalkulationeksamensprojekt.Repositories.SubtaskRepository;
 import org.springframework.stereotype.Service;
@@ -18,4 +19,9 @@ public class SubtaskService {
     public List<Subtask> findAllSubtaskByTaskID(String id) {
         return subtaskRepository.findAllSubtaskByTaskID(id);
     }
+
+    public Subtask createNewSubtask(SubtaskDTO subtaskDTO){
+        return subtaskRepository.createNewSubtask(subtaskDTO);
+    }
+
 }
