@@ -10,6 +10,9 @@ a {
     text-decoration: none;
     color: inherit;
 }
+main{
+    color: white;
+}
 
 .dropdown-container {
     position: relative;
@@ -170,4 +173,55 @@ color: white;
     border-radius: 20px;
     padding: 30px;
     background-color: #09479D;
+}
+
+table, td, th {
+    border: 1px solid;
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+.welcome-box{
+    background-color: #09479D;
+justify-content: center;
+
+}
+.employee-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: Arial, sans-serif;
+}
+
+.employee-table__head {
+    background-color: #081F37;
+    color: white;
+}
+
+.employee-table__row--even {
+    background-color: #1E549F;
+    color: white;
+}
+
+.employee-table__row--odd {
+    background-color: #2E79BA;
+    color: white;
+}
+
+.employee-table th,
+.employee-table td {
+    padding: 12px 16px;
+    text-align: left;
+}
+
+.employee-table__button {
+    background: none;
+    border: none;
+    font-size: 1.2em;
+    cursor: pointer;
+    color: white;
+}
+
+.employee-table__button:hover {
+    opacity: 0.8;
 }
