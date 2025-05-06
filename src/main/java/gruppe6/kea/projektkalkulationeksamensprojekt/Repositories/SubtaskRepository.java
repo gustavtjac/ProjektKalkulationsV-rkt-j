@@ -4,8 +4,10 @@ import gruppe6.kea.projektkalkulationeksamensprojekt.DTO.SubtaskDTO;
 import gruppe6.kea.projektkalkulationeksamensprojekt.Models.Subtask;
 import gruppe6.kea.projektkalkulationeksamensprojekt.Rowmappers.SubtaskRowmapper;
 import org.springframework.dao.DataAccessException;
+import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.UUID;
@@ -76,13 +78,14 @@ public class SubtaskRepository implements CrudMethods<Subtask,String>{
     }
 
     @Override
-    public Subtask findByID(String s) {
-
+    public Subtask findByID(String subtaskID) {
         String sql = "select * from Subtask where subtask_ID = ?";
         try {
-            return jdbcTemplate.queryForObject(sql,subtaskRowmapper,s);
-        } catch (DataAccessException e) {
-            throw new RuntimeException("could not find subtask");
+            System.out.println("Findbyid problemer");
+            System.out.println(subtaskID);
+            return jdbcTemplate.queryForObject(sql,subtaskRowmapper,subtaskID);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Subtask not found!");
         }
 
 
@@ -101,6 +104,29 @@ public class SubtaskRepository implements CrudMethods<Subtask,String>{
 
         return deletedSubtask;
     }
+
+    public Subtask saveSubtask(SubtaskDTO subtaskDTO){
+
+        String sqlDeleteOldAssignedProfiles = "DELETE FROM subtask_profile WHERE subtask_id = ?";
+        String sqlAddNewAssignedProfiles = "INSERT INTO subtask_profile (subtask_id, profile_username) VALUES (?,?)";
+        String sql = "UPDATE subtask SET subtask_name = ?, subtask_desc = ?, subtask_time = ?, subtask_status = ? WHERE subtask_id = ?";
+
+
+        try {
+            jdbcTemplate.update(sqlDeleteOldAssignedProfiles, subtaskDTO.getId());
+            jdbcTemplate.update(sql, subtaskDTO.getName(), subtaskDTO.getDescription(), subtaskDTO.getTime(), subtaskDTO.getStatus(), subtaskDTO.getId());
+
+            for (String username : subtaskDTO.getAssignedProfiles()) {
+                jdbcTemplate.update(sqlAddNewAssignedProfiles, subtaskDTO.getId(), username);
+            }
+        }catch (Exception e){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Subtask not found!");
+
+        }
+
+        return findByID(subtaskDTO.getId());
+    }
+
 
     @Override
     public Subtask save(Subtask object) {

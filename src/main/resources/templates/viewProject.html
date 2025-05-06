@@ -11,7 +11,8 @@
 </head>
 <body>
 
-<div th:replace="~{fragments/header :: header}"></div>
+
+<header th:replace="~{fragments/header :: header}"></header>
 
 <main th:if="${profile.getAuthCode()==0}">
     du er admin
