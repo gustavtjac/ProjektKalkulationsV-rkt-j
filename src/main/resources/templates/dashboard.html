@@ -13,16 +13,23 @@
 
 <header th:replace="~{fragments/header :: header}"></header>
 
-<main th:if="${profile.getAuthCode()==0}">
- <h1 th:text="'Welcome to admin dashboard ' + ${profile.getName()}"></h1>
+<main th:if="${profile.getAuthCode()==0}" class="admin-dashboard">
+<div class="admin-dashboard-welcome-box">
+    <h1 th:text="'Welcome to admin dashboard ' + ${profile.getName()}"></h1>
+</div>
 
-    <div>
-        <form th:action="@{/manageemployees}">
-            <button>Manage employees</button>
-        </form>
-        <form th:action="@{/manageskills}">
-            <button>Manage skills</button>
-        </form>
+
+
+    <div class="admin-dashboard-holder">
+
+        <a th:href="@{/manageemployees}" class="admin-dashboard-bubble">
+            <p>Manage <br> employees 🧑‍💼👩‍💼  </p>
+        </a>
+        <a th:href="@{/manageskills}" class="admin-dashboard-bubble">
+            <p>Manage <br> skills 🎓 </p>
+        </a>
+
+
     </div>
 
 
