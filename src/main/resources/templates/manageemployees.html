@@ -2,31 +2,65 @@
 <html lang="en" xmlns:th="https://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" th:href="@{/css/styles.css}" href="/css/styles.css">
+    <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet'>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <link rel="stylesheet" th:href="@{/css/headerStyle.css}">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Manage employees</title>
+    <script src="https://kit.fontawesome.com/1086dfba1e.js" crossorigin="anonymous"></script>
+    <title>Alpha Solutions Manage Employees</title>
 </head>
 <body>
 
 <header th:replace="~{fragments/header :: header}"></header>
 
-<main>
-    <h1>Manage employees</h1>
+<main class="admin-dashboard">
+
+    <div class="admin-dashboard-welcome-box">
+        <div class="welcome-box">
+            <h1>Manage employees</h1>
+        </div>
 
 
-    <form th:action="@{/createnewemployee}">
-        <button type="submit">Create new employee</button>
-    </form>
+
+        <form th:action="@{/createnewemployee}">
+            <button type="submit">Create new employee</button>
+        </form>
+
+    </div>
+
+
 
 
 
     <h3 th:text="${message}"></h3>
-    <table>
-        <thead>List of employees</thead>
-        <tr th:each="employee : ${employeelist}">
+
+
+    <table class="employee-table">
+        <thead class="employee-table__head">
+        <tr>
+            <th>Employee name 🧑🏽</th>
+            <th>Edit Employee ✏️</th>
+            <th>Delete Employee ❌</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="employee, stat : ${employeelist}"
+            th:class="'employee-table__row--' + (${stat.index % 2 == 0} ? 'even' : 'odd')">
             <td th:text="${employee.getName()}"></td>
-            <td><form th:action="@{/editemployee}"  th:method="get"> <input type="hidden" th:value="${employee.getUsername()}" name="profileID"><button>Edit employee</button></form></td>
-            <td><form th:action="@{/deleteemployee}" th:method="post"><input type="hidden" th:value="${employee.getUsername()}" name="profileID"><button>Delete employee</button></form></td>
+            <td>
+                <form th:action="@{/editemployee}" th:method="get">
+                    <input type="hidden" th:value="${employee.getUsername()}" name="profileID">
+                    <button class="employee-table__button">✏️</button>
+                </form>
+            </td>
+            <td>
+                <form th:action="@{/deleteemployee}" th:method="post">
+                    <input type="hidden" th:value="${employee.getUsername()}" name="profileID">
+                    <button class="employee-table__button">❌</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
     </table>
 
 
