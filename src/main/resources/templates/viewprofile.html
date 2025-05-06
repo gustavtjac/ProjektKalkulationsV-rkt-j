@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" th:href="@{/css/styles.css}" href="/css/styles.css">
+  <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet'>
+  <link rel="stylesheet" href="/css/headerStyle.css" th:href="@{/css/headerStyle.css}">
+  <script src="https://kit.fontawesome.com/1086dfba1e.js" crossorigin="anonymous"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title th:text="${profile.getName()}" ></title>
+</head>
+<body>
+
+<div th:replace="~{fragments/header :: header}"></div>
+
+<main>
+
+  <h1 th:text="${profile.getName() + 's profile'}"></h1>
+
+
+  <label>System Authorization level</label>
+  <span th:if="${profile.authCode == 0}">Admin</span>
+  <span th:if="${profile.authCode == 1}">Project Manager</span>
+  <span th:if="${profile.authCode == 2}">Employee</span>
+
+
+  <br>
+  <table th:if="${profile.getSkills().size()>0}">
+    <thead>Skills
+    <tr th:each="skill : ${profile.getSkills()}">
+      <td th:text="${skill.getName()}"></td>
+    </thead>
+
+  </table>
+
+
+
+
+</main>
+
+</body>
+</html>
