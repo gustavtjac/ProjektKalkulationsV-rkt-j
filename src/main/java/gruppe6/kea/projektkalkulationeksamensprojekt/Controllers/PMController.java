@@ -525,7 +525,7 @@ return "redirect:/editskill";
         }else {
             try{
                 Task editedTask = taskService.saveTask(taskDTO);
-                redirectAttributes.addAttribute("message", "Profile has been updated");
+                redirectAttributes.addAttribute("message", "Task has been updated");
                 return "redirect:/dashboard/"+taskDTO.getProjectID();
             } catch (RuntimeException e){
                 redirectAttributes.addAttribute("taskID",taskDTO.getId());
@@ -534,6 +534,50 @@ return "redirect:/editskill";
             }
         }
     }
+
+
+    @GetMapping("/editsubtask")
+    public String showEditSubtask(HttpSession session, Model model, @RequestParam(required = false) String subtaskID, @RequestParam(required = false) String message){
+        Profile loggedInProfile = ((Profile) session.getAttribute("profile"));
+        if (loggedInProfile == null || loggedInProfile.getAuthCode() != 1) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User is not allowed to edit employees");
+        }else {
+
+                Subtask chosenSubtask = subtaskService.findById(subtaskID);
+                System.out.println("Get else problem");
+                model.addAttribute("message", message);
+                model.addAttribute("subtaskDTO", new SubtaskDTO());
+                model.addAttribute("allprofiles", profileService.getAllProfilesAssignedToProject(projectService.findById(taskService.findByID(chosenSubtask.getTaskId()).getProjectID()).getId()));
+                 model.addAttribute("profile", loggedInProfile);
+                model.addAttribute("chosenSubtask", chosenSubtask);
+                return "editsubtask";
+        }
+    }
+
+    @PostMapping("/editsubtask")
+    public String editSubtask(@ModelAttribute SubtaskDTO subtaskDTO, HttpSession session, RedirectAttributes redirectAttributes){
+        Profile loggedInProfile = ((Profile) session.getAttribute("profile"));
+        if (loggedInProfile == null || loggedInProfile.getAuthCode() != 1) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User is not allowed to edit employees");
+        }else {
+            try{
+                subtaskService.saveSubtask(subtaskDTO);
+                System.out.println(subtaskDTO.getTaskId());
+                redirectAttributes.addAttribute("message", "Subtask has been updated");
+                System.out.println("Post try problem");
+
+                return "redirect:/dashboard/" + projectService.findById(taskService.findByID(subtaskDTO.getTaskId()).getProjectID()).getId() + "/" + taskService.findByID(subtaskDTO.getTaskId()).getId() ;
+
+            } catch (RuntimeException e){
+                redirectAttributes.addAttribute("message", "Subtask could not be updated");
+                e.printStackTrace();
+                return "redirect:/editsubtask";
+            }
+        }
+
+    }
+
+
 
     @PostMapping("/deletesubtask")
     public String deleteSubtask (@RequestParam String subtaskID, HttpSession session, RedirectAttributes redirectAttributes){

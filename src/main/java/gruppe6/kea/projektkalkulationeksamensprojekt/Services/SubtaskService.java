@@ -32,5 +32,10 @@ public class SubtaskService {
         return subtaskRepository.deleteSubtask(id);
     }
 
+    public Subtask saveSubtask(SubtaskDTO subtaskDTO){
+        return subtaskRepository.saveSubtask(subtaskDTO);
+    }
+
+
 
 }

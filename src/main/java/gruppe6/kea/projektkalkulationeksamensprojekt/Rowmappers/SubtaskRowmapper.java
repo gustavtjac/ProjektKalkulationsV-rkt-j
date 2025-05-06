@@ -27,7 +27,7 @@ public class SubtaskRowmapper implements RowMapper<Subtask> {
         subtask.setTaskId(rs.getString("SUBTASK_TASK_ID"));
         subtask.setTime(rs.getDouble("SUBTASK_TIME"));
         subtask.setStatus(rs.getInt("SUBTASK_STATUS"));
-subtask.setAssignedProfiles(profileRepository.getAllprofilesAssginedToSubtask(subtask.getId()));
+        subtask.setAssignedProfiles(profileRepository.getAllprofilesAssginedToSubtask(subtask.getId()));
         return subtask;
     }
 }

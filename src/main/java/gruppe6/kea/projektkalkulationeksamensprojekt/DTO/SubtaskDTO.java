@@ -4,6 +4,7 @@ package gruppe6.kea.projektkalkulationeksamensprojekt.DTO;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -15,13 +16,11 @@ public class SubtaskDTO {
     private String description;
     private double time;
     private int status;
-    private List<String> assignedProfiles;
+    private List<String> assignedProfiles = new ArrayList<>();
 
     public SubtaskDTO(){
 
     }
-
-
 
     @Override
     public String toString() {
