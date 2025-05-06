@@ -209,8 +209,16 @@ public class PMController {
                 return "redirect:/";
             }
             Project project = projectService.findById(projectid);
-            if (!projectService.checkIfProfileIsAssignedProject(loggedInProfile, project) || !projectService.checkIfProfileOwnsProject(project.getId(),loggedInProfile.getUsername())) {
-                throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You are not assigned to this project");
+            if (loggedInProfile.getAuthCode()==1){
+                if (!projectService.checkIfProfileOwnsProject(project.getId(),loggedInProfile.getUsername())){
+                    throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You dont own this project");
+                }
+
+            }
+            if (loggedInProfile.getAuthCode()==2) {
+                if (!projectService.checkIfProfileIsAssignedProject(loggedInProfile, project)) {
+                    throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You are not assigned to this project");
+                }
             }
             Task task = taskService.findByID(taskid);
             List<Subtask> subtasks = task.getSubtasks();
