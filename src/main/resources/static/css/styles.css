@@ -6,6 +6,10 @@ html, body {
 body {
     font-family: Montserrat, sans-serif;
 }
+a {
+    text-decoration: none;
+    color: inherit;
+}
 
 .dropdown-container {
     position: relative;
@@ -127,4 +131,43 @@ main{
 }
 #loginError{
     color: #f35656;
+}
+
+.admin-dashboard{
+color: white;
+    display: flex;
+    flex-direction: column;
+}
+
+.admin-dashboard-holder{
+    width: 60vw;
+    height: 30vw;
+   display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.admin-dashboard-bubble {
+    width: 20vw;         /* or any consistent size you prefer */
+    height: 20vw;
+    font-size: 4vh;
+    border-radius: 3%;
+    background-color: #2E79BA;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.admin-dashboard-bubble:hover {
+    background-color: #1f5f8e;
+    transform: scale(1.05);
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+.admin-dashboard-welcome-box{
+    margin: 30px;
+    border-radius: 20px;
+    padding: 30px;
+    background-color: #09479D;
 }
