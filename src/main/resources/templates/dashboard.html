@@ -70,7 +70,18 @@
         </tr>
     </table>
 
-    <h1>Your assigned tasks</h1>
+    <h1 th:text="'Your Assinged Subtask ' +${profile.name} + '!'"></h1>
+    <table>
+        <tr th:each="subtask : ${subtasks}">
+            <td th:text="'Subtask Name' + ${subtask.getName()}"></td>
+            <td th:text="'Allocated time ' + ${subtask.getName()}"></td>
+            <td th:text="'Status ' + ${subtask.getName()}"></td>
+            <form th:action="@{/redirecttosubtask}" method="get">
+                <input type="hidden" name="subtaskID" th:value="${subtask.getId()}">
+                <button type="submit">View Subtask</button>
+            </form>
+        </tr>
+    </table>
 
 </main>
 

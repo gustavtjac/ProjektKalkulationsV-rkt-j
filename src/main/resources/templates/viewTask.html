@@ -35,6 +35,7 @@
       <td th:text="'Sub-task name '+${subtask.getName()}"></td>
       <td th:text="'Allocated time '+${subtask.getTime() + ' Hours'}"></td>
       <td th:text="'Status '+${subtask.getStatus()}"></td>
+      <td><form th:method="get" th:action="@{/dashboard/{projectid}/{taskid}/{subtaskid}(projectid=${project.getId()}, taskid=${task.getId()}, subtaskid=${subtask.getId()})}"><button>View subtask's</button></form></td>
       <td><form th:method="get" th:action="@{/editsubtask}"><input type="hidden" name="subtaskID" th:value="${subtask.getId()}"><button>Edit subtask</button></form></td>
       <td><form th:method="post" th:action="@{/deletesubtask}"><input type="hidden" name="subtaskID" th:value="${subtask.getId()}"><button>Delete subtask</button></form></td>
     </tr>
