@@ -17,8 +17,17 @@
     </label>
     <ul>
         <li th:if="${session.profile != null}">
+            <a th:href="@{/user/{username}(username=${session.profile.username})}"
+               class="profile-avatar">
+                <span th:text="${#strings.substring(session.profile.name, 0, 1)}"></span>
+            </a>
+        </li>
+    </ul>
+    <ul>
+        <li th:if="${session.profile != null}">
             <a th:href="@{/logout}">Log out</a>
         </li>
+
     </ul>
 </nav>
 
