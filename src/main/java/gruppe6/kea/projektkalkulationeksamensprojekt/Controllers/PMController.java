@@ -83,7 +83,7 @@ public class PMController {
 
         // Denne metode viser forskellige dashbaord ift. hvilken profile er logget ind
         @GetMapping("/dashboard")
-        public String showDashBoard (HttpSession session, Model model){
+        public String showDashBoard (HttpSession session, Model model, @ModelAttribute Subtask subtask){
             Profile loggedInProfile = ((Profile) session.getAttribute("profile"));
             if (loggedInProfile == null) {
                 return "redirect:/";
@@ -93,6 +93,9 @@ public class PMController {
             }
             model.addAttribute("projects", projectService.getAllProjectsFromProfile(loggedInProfile));
             model.addAttribute("profile", loggedInProfile);
+            model.addAttribute("subtasks", subtaskService.getAllSubtaskFromProfile(loggedInProfile));
+            System.out.println(subtaskService.getAllSubtaskFromProfile(loggedInProfile));
+            System.out.println(projectService.getAllProjectsFromProfile(loggedInProfile));
             return "dashboard";
         }
 
@@ -125,6 +128,20 @@ public class PMController {
                 return "showcreatenewtask";
             }
 
+        }
+
+        @GetMapping("/redirecttosubtask")
+        public String redirectToSubtask(HttpSession session, @RequestParam String subtaskID){
+            Profile loggedInProfile = ((Profile) session.getAttribute("profile"));
+
+            if (loggedInProfile == null ) {
+                return "redirect:/dashboard";
+            }
+            String projectID = projectService.findById(taskService.findByID(subtaskService.findByID(subtaskID).getTaskId()).getProjectID()).getId();
+            String taskID = subtaskService.findById(subtaskID).getTaskId();
+
+
+            return "redirect:/dashboard/" + projectID + "/"+taskID+"/"+subtaskID;
         }
 
         @PostMapping("/createnewtask")
@@ -205,6 +222,43 @@ public class PMController {
             model.addAttribute("subtasks", subtasks);
 
             return "viewTask";
+        }
+
+        @GetMapping("/dashboard/{projectid}/{taskid}/{subtaskid}")
+        public String showSubtask (@PathVariable String subtaskid, @PathVariable String taskid, @PathVariable String projectid, HttpSession session, Model model, @RequestParam(required = false) String msg) {
+
+            Profile loggedInProfile = ((Profile) session.getAttribute("profile"));
+            if (loggedInProfile == null) {
+                return "redirect:/";
+            }
+            Project project = projectService.findById(projectid);
+           if (loggedInProfile.getAuthCode()==1){
+               if (!projectService.checkIfProfileOwnsProject(project.getId(),loggedInProfile.getUsername())){
+                   throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You dont own this project");
+               }
+
+           }
+           if (loggedInProfile.getAuthCode()==2){
+               if (!projectService.checkIfProfileIsAssignedProject(loggedInProfile, project) ) {
+                   throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You are not assigned to this project");
+               }
+           }
+
+            Task task = taskService.findByID(taskid);
+
+            Subtask subtask = subtaskService.findByID(subtaskid);
+
+            if (!subtask.getTaskId().equals(taskid)) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Subtask does not belong to the task.");
+            }
+
+            model.addAttribute("message",msg);
+            model.addAttribute("profile", loggedInProfile);
+            model.addAttribute("project",project);
+            model.addAttribute("task",task);
+            model.addAttribute("subtask",subtask);
+
+            return "viewSubtask";
         }
 
 
