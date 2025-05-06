@@ -17,17 +17,26 @@
 
 
 
-    <div>
-        <h1 th:text="${wrongLogin}"></h1>
-        <form th:action="@{/loginrequest}" th:method="post">
+    <div class="loginBox">
+        <div class="loginBox_header">
+            <h3>Sign in</h3>
+            <img id="login_img" src="/images/logohvid.svg" alt="Alpha solutions Logo">
+        </div>
 
-            <label for="username">Username</label>
-            <input type="text" name="username" id="username">
-            <label for="password">Password</label>
-            <input type="text" name="password" id="password">
-            <button type="submit">Login</button>
+<div class="loginBox_form">
+    <h1 id="loginError" th:text="${wrongLogin}"></h1>
+    <form th:action="@{/loginrequest}" th:method="post">
 
-        </form>
+        <label for="username">Username</label>
+        <input type="text" name="username" id="username">
+        <label for="password">Password</label>
+        <input type="password" name="password" id="password">
+        <button type="submit">Sign in</button>
+
+    </form>
+
+</div>
+
     </div>
 
 

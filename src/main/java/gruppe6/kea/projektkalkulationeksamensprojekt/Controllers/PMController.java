@@ -557,7 +557,7 @@ return "redirect:/editskill";
     }
 
 
-    @GetMapping("/{username}")
+    @GetMapping("/user/{username}")
     public String viewProfile(HttpSession session, Model model,@PathVariable String username){
         Profile loggedInProfile = ((Profile) session.getAttribute("profile"));
         if (loggedInProfile == null){

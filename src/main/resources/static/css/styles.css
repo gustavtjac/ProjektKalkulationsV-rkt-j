@@ -1,4 +1,12 @@
 
+html, body {
+    height: 100%;
+    margin: 0;
+}
+body {
+    font-family: Montserrat, sans-serif;
+}
+
 .dropdown-container {
     position: relative;
     display: inline-block;
@@ -33,4 +41,90 @@
 
 .dropdown-container.open .checkbox-dropdown {
     display: block;
+}
+
+main{
+    height: 100%;
+    width: 100%;
+    background-color: #1E1E1E;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.loginBox{
+    border-radius: 3%;
+    background-color: #09479D;
+    color: white;
+    width: 40vw;
+    height: 35vw;
+}
+.loginBox_header{
+    font-size: 4vh;
+    padding-top: 50px;
+    padding-bottom: 50px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+
+}
+.loginBox_header >*{
+    margin-left: 25px;
+    margin-right: 25px;
+}
+
+
+#login_img{
+    width: 200px;
+    height: 50%;
+}
+.loginBox_form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.loginBox_form form {
+    margin: 30px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.loginBox_form form input {
+    width: 90%;
+    max-width: 400px;
+    padding: 10px;
+    margin: 10px 0;
+    font-size: 1rem;
+    box-sizing: border-box;
+}
+
+.loginBox_form form label{
+    align-items: start;
+}
+
+.loginBox_form form button {
+    font-weight: bold;
+    font-size: 2vh;
+    font-family: Montserrat, sans-serif;
+    height: 50px;
+    width: 100px;
+    margin: 25px;
+    background-color: #2E79BA;
+    color: white;
+    border: none;
+    border-radius: 5px; /* Optional: adds rounded corners */
+    cursor: pointer;
+    transition: all 0.3s ease; /* Smooth transition for all properties */
+}
+
+.loginBox_form form button:hover {
+    background-color: #1F5F87; /* Darker blue when hovered */
+    transform: scale(1.1); /* Slight zoom effect */
+}
+#loginError{
+    color: #f35656;
 }
