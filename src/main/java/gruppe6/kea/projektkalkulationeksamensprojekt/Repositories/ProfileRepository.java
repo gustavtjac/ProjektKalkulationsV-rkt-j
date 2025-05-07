@@ -34,6 +34,7 @@ private final ProfileRowMapper profileRowMapper;
 
     //denne metoder indsamler alle de rækker hvor username og password er = med input
     public Profile AuthenticateLogin(String username, String password){
+
         String sqlString = "Select * from PROFILE where PROFILE_USERNAME = ? and PROFILE_PASSWORD = ?";
         List<Profile> matchedProfile = jdbcTemplate.query(sqlString,profileRowMapper,username,password);
         if (matchedProfile.isEmpty()){

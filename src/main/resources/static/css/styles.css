@@ -66,7 +66,7 @@ main{
 main{
     height: 100%;
     width: 100%;
-    background-color: #1E1E1E;
+    background-color: #393E46;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -188,9 +188,7 @@ color: white;
     background-color: #09479D;
 }
 
-table, td, th {
-    border: 1px solid;
-}
+
 table {
     width: 100%;
     border-collapse: collapse;
@@ -250,7 +248,7 @@ justify-content: center;
 }
 
 .employee-table__button:hover {
-    opacity: 0.8;
+      opacity: 0.8;
 }
 .employee-panel{
 
@@ -364,4 +362,106 @@ width: 50vw;
 .right-align {
     display: flex;
     justify-content: flex-end;
+}
+
+.hero-page {
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+}
+.hero-page-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #09479D;
+    border-radius: 20px;
+    height: 100px;
+    width: 500px;
+    margin: 20px 100px;
+}
+
+.table-layout {
+    width: 80%;
+    margin: 40px auto;
+    border-collapse: collapse;
+    border-spacing: 0;
+    font-family: Montserrat, sans-serif;
+}
+
+.table-layout td form {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.table-layout th form {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.table-layout thead {
+    background-color: #081f37;
+    border: none;
+}
+
+.table-layout th{
+    padding: 16px;
+    text-align: left;
+    font-size: 3vh;
+    border: none;
+    background-clip: padding-box;
+}
+
+.table-layout td {
+    padding: 16px;
+    text-align: left;
+    font-size: 2vh;
+    border: none;
+    background-clip: padding-box;
+}
+
+
+
+.table-layout tbody tr:nth-child(even) {
+    background-color: #2E79BA;
+}
+
+.table-layout tbody tr:nth-child(odd) {
+    background-color: #1E549F;
+}
+
+.create-button {
+    background-color: #42B883;
+    color: white;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    width: 80%;
+    font-size: 3vh;
+}
+
+.action-button {
+    background-color: #3a91d8;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+    width: 90px;
+}
+
+.action-button:hover {
+    background-color: #2c7cc0;
+}
+
+.action-button.delete {
+    background-color: #ec5a5a;
+}
+
+.action-button.delete:hover {
+    background-color: #d23c3c;
 }
