@@ -90,30 +90,64 @@
 </main>
 
 
-<main th:if="${profile.getAuthCode()==2}">
-    <h1 th:text="'Your assigned projects '+${profile.name} + '!'"></h1>
-    <table>
-        <tr th:each="project : ${projects}">
-            <td th:text="'Project name '+${project.getName()}"></td>
-            <td th:text="'Allocated time '+${project.getMaxTime() + ' Hours'}"></td>
-            <td th:text="'Budget '+${project.getMaxPrice()} + ' Kr.'"></td>
-            <td th:text="'Deadline: '+ ${project.getEndDate()}"></td>
-            <td th:text="'Project leader '+${project.getProjectOwner().getName()}"></td>
-            <td><form th:action="@{/dashboard/{id}(id=${project.getId()})}" th:method="get"><button>View Task's</button></form></td>
+<main class="hero-page" th:if="${profile.getAuthCode()==2}">
+
+    <div class="hero-page-header"  style="text-align: center">
+        <h1 th:text="'Your Assigned Projects, ' + ${profile.name} + '!'"></h1>
+    </div>
+
+    <table class="table-layout">
+        <thead>
+        <tr>
+            <th>Project Name</th>
+            <th>Allocated Time</th>
+            <th>Budget</th>
+            <th>Deadline</th>
+            <th>Project Leader</th>
+            <th>Actions</th>
         </tr>
+        </thead>
+        <tbody>
+        <tr th:each="project : ${projects}">
+            <td th:text="${project.getName()}"></td>
+            <td th:text="${project.getMaxTime()} + ' Hours'"></td>
+            <td th:text="${project.getMaxPrice()} + ' Kr.'"></td>
+            <td th:text="${project.getEndDate()}"></td>
+            <td th:text="${project.getProjectOwner().getName()}"></td>
+            <td>
+                <form th:action="@{/dashboard/{id}(id=${project.getId()})}" th:method="get">
+                    <button class="action-button">View Tasks</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
     </table>
 
-    <h1 th:text="'Your Assinged Subtask ' +${profile.name} + '!'"></h1>
-    <table>
-        <tr th:each="subtask : ${subtasks}">
-            <td th:text="'Subtask Name' + ${subtask.getName()}"></td>
-            <td th:text="'Allocated time ' + ${subtask.getName()}"></td>
-            <td th:text="'Status ' + ${subtask.getName()}"></td>
-            <form th:action="@{/redirecttosubtask}" method="get">
-                <input type="hidden" name="subtaskID" th:value="${subtask.getId()}">
-                <button type="submit">View Subtask</button>
-            </form>
+    <div class="hero-page-header " style="text-align: center">
+        <h1 th:text="'Your Assigned Subtasks, ' + ${profile.name} + '!'"></h1>
+    </div>
+    <table class="table-layout">
+        <thead>
+        <tr>
+            <th>Subtask Name</th>
+            <th>Allocated Time</th>
+            <th>Status</th>
+            <th>Action</th>
         </tr>
+        </thead>
+        <tbody>
+        <tr th:each="subtask : ${subtasks}">
+            <td th:text="${subtask.getName()}"></td>
+            <td th:text="${subtask.getTime()} + ' Hours'"></td>
+            <td th:text="${subtask.getStatus()}"></td>
+            <td>
+                <form th:action="@{/redirecttosubtask}" method="get">
+                    <input type="hidden" name="subtaskID" th:value="${subtask.getId()}">
+                    <button class="action-button">View Subtask</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
     </table>
 
 </main>
