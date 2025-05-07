@@ -20,40 +20,83 @@
 
 </main>
 
-<main th:if="${profile.getAuthCode()==1}">
-    <h1 th:text="'Manage ' + ${project.getName()} + ' Tasks here'"></h1>
+<main class="hero-page" th:if="${profile.getAuthCode()==1}">
 
+    <div class="hero-page-header">
+        <h1 th:text="'Manage ' + ${project.getName()} + ' Tasks here'"></h1>
+    </div>
 
-    <form th:action="@{/showcreatenewtask}" th:method="get">
-        <input type="hidden" name="projectID" th:value="${projectid}">
-        <button type="submit">Create new Task</button>
-
-    </form>
-    <table>
-        <tr th:each="task : ${project.getTasks()}">
-            <td th:text="'Task name '+${task.getName()}"></td>
-            <td th:text="'Allocated time '+${task.getMaxTime() + ' Hours'}"></td>
-            <td th:text="'Budget '+${task.getMaxPrice()} + ' Kr.'"></td>
-            <td><form th:action="@{/dashboard/{projectid}/{taskid}(projectid=${project.getId()}, taskid=${task.getId()})}" th:method="get"><button>View subtask's</button></form></td>
-            <td><form th:method="get" th:action="@{/edittask}"><input type="hidden" name="taskID" th:value="${task.getId()}"><button>Edit Task</button></form></td>
-            <td><form th:method="post" th:action="@{/deletetask}"><input type="hidden" name="taskID" th:value="${task.getId()}"><button>Delete Task</button></form></td>
-
+    <table class="table-layout">
+        <thead>
+        <tr>
+            <th>Task Name</th>
+            <th>Allocated Time</th>
+            <th>Budget</th>
+            <th colspan="3">
+                <form th:action="@{/showcreatenewtask}" method="get">
+                    <input type="hidden" name="projectID" th:value="${projectid}">
+                    <button class="create-button">Create New Task</button>
+                </form>
+            </th>
         </tr>
+        </thead>
+        <tbody>
+        <tr th:each="task : ${project.getTasks()}">
+            <td th:text="${task.getName()}"></td>
+            <td th:text="${task.getMaxTime()} + ' Hours'"></td>
+            <td th:text="${task.getMaxPrice()} + ' Kr.'"></td>
+            <td>
+                <form th:action="@{/dashboard/{projectid}/{taskid}(projectid=${project.getId()}, taskid=${task.getId()})}" th:method="get">
+                    <button class="action-button">View Subtasks</button>
+                </form>
+            </td>
+            <td>
+                <form th:method="get" th:action="@{/edittask}">
+                    <input type="hidden" name="taskID" th:value="${task.getId()}">
+                    <button class="action-button">Edit Task</button>
+                </form>
+            </td>
+            <td>
+                <form th:method="post" th:action="@{/deletetask}">
+                    <input type="hidden" name="taskID" th:value="${task.getId()}">
+                    <button class="action-button delete">Delete Task</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
     </table>
+
 </main>
 
 
-<main th:if="${profile.getAuthCode()==2}">
-    <h1 th:text="'Tasks in '+${project.getName()}"></h1>
-    <table>
-        <tr th:each="task : ${project.getTasks()}">
-            <td th:text="'Task name '+${task.getName()}"></td>
-            <td th:text="'Allocated time '+${task.getMaxTime() + ' Hours'}"></td>
-            <td th:text="'Budget '+${task.getMaxPrice()} + ' Kr.'"></td>
-            <td><form th:action="@{/dashboard/{projectid}/{taskid}(projectid=${project.getId()}, taskid=${task.getId()})}" th:method="get"><button>View subtask's</button></form></td>
-    </table>
+<main class="hero-page" th:if="${profile.getAuthCode()==2}">
 
-    <h1>Your assigned tasks</h1>
+    <div class="hero-page-header">
+        <h1 th:text="'Tasks in ' + ${project.getName()}"></h1>
+    </div>
+
+    <table class="table-layout">
+        <thead>
+        <tr>
+            <th>Task Name</th>
+            <th>Allocated Time</th>
+            <th>Budget</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="task : ${project.getTasks()}">
+            <td th:text="${task.getName()}"></td>
+            <td th:text="${task.getMaxTime()} + ' Hours'"></td>
+            <td th:text="${task.getMaxPrice()} + ' Kr.'"></td>
+            <td>
+                <form th:action="@{/dashboard/{projectid}/{taskid}(projectid=${project.getId()}, taskid=${task.getId()})}" th:method="get">
+                    <button class="action-button">View Subtasks</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
 
 </main>
 

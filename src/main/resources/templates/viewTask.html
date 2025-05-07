@@ -20,43 +20,85 @@
 
 
 
-<main th:if="${profile.getAuthCode()==1}">
-  <h1 th:text="'Manage ' + ${task.getName()} + ' SubTask here'"></h1>
+<main class="hero-page" th:if="${profile.getAuthCode()==1}">
+  <div class="hero-page-header">
+    <h1 th:text="'Manage ' + ${task.getName()} + ' Subtasks here'"></h1>
+  </div>
 
-  <h2 th:text="${message}"></h2>
+  <div class="message-box">
+    <h2 th:text="${message}"></h2>
+  </div>
 
-  <form th:action="@{/createnewsubtask}" th:method="get">
-    <input type="hidden" name="taskID" th:value="${task.getId()}">
-    <button type="submit">Create new Subtask</button>
-
-  </form>
-  <table>
-    <tr th:each="subtask : ${task.getSubtasks()}">
-      <td th:text="'Sub-task name '+${subtask.getName()}"></td>
-      <td th:text="'Allocated time '+${subtask.getTime() + ' Hours'}"></td>
-      <td th:text="'Status '+${subtask.getStatus()}"></td>
-      <td><form th:method="get" th:action="@{/dashboard/{projectid}/{taskid}/{subtaskid}(projectid=${project.getId()}, taskid=${task.getId()}, subtaskid=${subtask.getId()})}"><button>View subtask's</button></form></td>
-      <td><form th:method="get" th:action="@{/editsubtask}"><input type="hidden" name="subtaskID" th:value="${subtask.getId()}"><button>Edit subtask</button></form></td>
-      <td><form th:method="post" th:action="@{/deletesubtask}"><input type="hidden" name="subtaskID" th:value="${subtask.getId()}"><button>Delete subtask</button></form></td>
+  <table class="table-layout">
+    <thead>
+    <tr>
+      <th>Subtask Name</th>
+      <th>Allocated Time</th>
+      <th>Status</th>
+      <th colspan="3">
+        <form th:action="@{/createnewsubtask}" th:method="get">
+          <input type="hidden" name="taskID" th:value="${task.getId()}">
+          <button class="create-button">Create New Subtask</button>
+        </form>
+      </th>
     </tr>
+    </thead>
+    <tbody>
+    <tr th:each="subtask : ${task.getSubtasks()}">
+      <td th:text="${subtask.getName()}"></td>
+      <td th:text="${subtask.getTime()} + ' Hours'"></td>
+      <td th:text="${subtask.getStatus()}"></td>
+      <td>
+        <form th:method="get" th:action="@{/dashboard/{projectid}/{taskid}/{subtaskid}(projectid=${project.getId()}, taskid=${task.getId()}, subtaskid=${subtask.getId()})}">
+          <button class="action-button">View</button>
+        </form>
+      </td>
+      <td>
+        <form th:method="get" th:action="@{/editsubtask}">
+          <input type="hidden" name="subtaskID" th:value="${subtask.getId()}">
+          <button class="action-button">Edit</button>
+        </form>
+      </td>
+      <td>
+        <form th:method="post" th:action="@{/deletesubtask}">
+          <input type="hidden" name="subtaskID" th:value="${subtask.getId()}">
+          <button class="action-button delete">Delete</button>
+        </form>
+      </td>
+    </tr>
+    </tbody>
   </table>
 </main>
 
 
-<main th:if="${profile.getAuthCode()==2}">
-  <h1 th:text="'Subtasks in '+${task.getName()}"></h1>
-  <table>
-    <tr th:each="subtask : ${task.getSubtasks()}">
-      <td th:text="'Sub-task name '+${subtask.getName()}"></td>
-      <td th:text="'Allocated time '+${subtask.getTime() + ' Hours'}"></td>
-      <td th:text="'Status '+${subtask.getStatus()}"></td>
-      <td><form th:method="get" th:action="@{/}"><button>Update status</button></form></td>
 
+<main class="hero-page" th:if="${profile.getAuthCode()==2}">
+  <div class="hero-page-header">
+    <h1 th:text="'Subtasks in ' + ${task.getName()}"></h1>
+  </div>
+
+  <table class="table-layout">
+    <thead>
+    <tr>
+      <th>Subtask Name</th>
+      <th>Allocated Time</th>
+      <th>Status</th>
+      <th>Action</th>
     </tr>
+    </thead>
+    <tbody>
+    <tr th:each="subtask : ${task.getSubtasks()}">
+      <td th:text="${subtask.getName()}"></td>
+      <td th:text="${subtask.getTime()} + ' Hours'"></td>
+      <td th:text="${subtask.getStatus()}"></td>
+      <td>
+        <form th:method="get" th:action="@{/}">
+          <button class="action-button">Update Status</button>
+        </form>
+      </td>
+    </tr>
+    </tbody>
   </table>
-
-  <h1>Your assigned tasks</h1>
-
 </main>
 
 </body>
