@@ -49,13 +49,15 @@
                 </select>
             </div>
 
-            <div class="form-section-full dropdown-container" id="memberDropdown">
-                <div class="dropdown-button" onclick="toggleDropdown()">Add skills to employee ▼</div>
-                <div class="checkbox-dropdown">
-                    <label th:each="skill : ${skills}">
-                        <input type="checkbox" name="skills" th:value="${skill.getId()}" />
-                        <span class="small-text" th:text="${skill.getName()}"></span>
-                    </label>
+            <div class="form-section-full right-align">
+                <div class="dropdown-container" id="memberDropdown">
+                    <div class="dropdown-button" onclick="toggleDropdown()">Add skills to employee ▼</div>
+                    <div class="checkbox-dropdown">
+                        <label th:each="skill : ${skills}">
+                            <input type="checkbox" name="skills" th:value="${skill.getId()}" />
+                            <span class="small-text" th:text="${skill.getName()}"></span>
+                        </label>
+                    </div>
                 </div>
             </div>
 

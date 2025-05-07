@@ -7,41 +7,47 @@
     <link rel="stylesheet" href="/css/headerStyle.css" th:href="@{/css/headerStyle.css}">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <script src="https://kit.fontawesome.com/1086dfba1e.js" crossorigin="anonymous"></script>
-    <title>Edit task</title>
+    <title>Edit Task</title>
 </head>
 <body>
 
 <header th:replace="~{fragments/header :: header}"></header>
 
-<main>
-
-    <div>
-        <h1 th:text="${message}"></h1>
-        <form th:method="post" th:action="@{/edittask}" th:object="${taskDTO}">
-
-        <label for="name">Task Name</label>
-        <input type="text" name="name" id="name" maxlength="50" required th:value="${chosenTask.getName()}">
-
-        <label for="description">Task Description</label>
-        <input type="text" name="description" id="description" maxlength="500" required th:value="${chosenTask.getDescription()}">
-
-        <label for="maxTime">Max Time</label>
-        <input type="number" name="maxTime" id="maxTime" step="0.01" min="0" max="9999999999999999999999999999.99" required th:value="${chosenTask.getMaxTime()}">
-
-        <label for="maxPrice">Max Price</label>
-        <input type="number" name="maxPrice" id="maxPrice" step="0.01" min="0" max="9999999999999999999999999999.99" required th:value="${chosenTask.getMaxPrice()}">
-
-        <input type="hidden" name="projectID" id="projectID" th:value="${chosenTask.getProjectID()}">
-            <input type="hidden" name="id" id="id" th:value="${chosenTask.getId()}">
-
-        <button type="submit">Save Task</button>
-        </form>
+<main class="employee-panel">
+    <div class="employee-panel-top-row">
+        <div class="welcome-box">
+            <h2>Edit Task</h2>
+        </div>
     </div>
 
+    <div class="custom-message">
+        <h3 th:text="${message}"></h3>
+    </div>
 
+    <div class="edit-box-holder">
+        <form th:method="post" th:action="@{/edittask}" th:object="${taskDTO}" class="two-row-form">
+            <input type="hidden" name="projectID" id="projectID" th:value="${chosenTask.getProjectID()}">
+            <input type="hidden" name="id" id="id" th:value="${chosenTask.getId()}">
 
+            <label for="name">Task Name</label>
+            <input type="text" name="name" id="name" maxlength="50" required th:value="${chosenTask.getName()}">
 
+            <label for="description">Task Description</label>
+            <input type="text" name="description" id="description" maxlength="500" required th:value="${chosenTask.getDescription()}">
+
+            <label for="maxTime">Max Time</label>
+            <input type="number" name="maxTime" id="maxTime" step="0.01" min="0" max="9999999999999999999999999999.99" required th:value="${chosenTask.getMaxTime()}">
+
+            <label for="maxPrice">Max Price</label>
+            <input type="number" name="maxPrice" id="maxPrice" step="0.01" min="0" max="9999999999999999999999999999.99" required th:value="${chosenTask.getMaxPrice()}">
+
+            <div class="form-section-full">
+                <button type="submit" id="standard-button">Save Task</button>
+            </div>
+        </form>
+    </div>
 </main>
 
+<script src="/js/script.js"></script>
 </body>
 </html>

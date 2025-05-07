@@ -361,3 +361,7 @@ width: 50vw;
     box-sizing: border-box;
     font-family: Montserrat, sans-serif;
 }
+.right-align {
+    display: flex;
+    justify-content: flex-end;
+}
