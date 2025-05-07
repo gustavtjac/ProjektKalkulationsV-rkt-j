@@ -33,7 +33,7 @@
     <thead>
     <tr>
       <th>Subtask Name</th>
-      <th>Allocated Time</th>
+      <th>Spent Time</th>
       <th>Status</th>
       <th colspan="3">
         <form th:action="@{/createnewsubtask}" th:method="get">
@@ -47,7 +47,15 @@
     <tr th:each="subtask : ${task.getSubtasks()}">
       <td th:text="${subtask.getName()}"></td>
       <td th:text="${subtask.getTime()} + ' Hours'"></td>
-      <td th:text="${subtask.getStatus()}"></td>
+      <td>
+          <span th:switch="${subtask.getStatus()}">
+            <span th:case="1">🕓 Not Started</span>
+            <span th:case="2">✅ Ready</span>
+            <span th:case="3">🚧 Ongoing</span>
+            <span th:case="4">🏁 Finished</span>
+            <span th:case="*">❓ Unknown</span>
+          </span>
+      </td>
       <td>
         <form th:method="get" th:action="@{/dashboard/{projectid}/{taskid}/{subtaskid}(projectid=${project.getId()}, taskid=${task.getId()}, subtaskid=${subtask.getId()})}">
           <button class="action-button">View</button>
@@ -81,7 +89,7 @@
     <thead>
     <tr>
       <th>Subtask Name</th>
-      <th>Allocated Time</th>
+      <th>Spent Time</th>
       <th>Status</th>
       <th>Action</th>
     </tr>
@@ -90,7 +98,15 @@
     <tr th:each="subtask : ${task.getSubtasks()}">
       <td th:text="${subtask.getName()}"></td>
       <td th:text="${subtask.getTime()} + ' Hours'"></td>
-      <td th:text="${subtask.getStatus()}"></td>
+      <td>
+          <span th:switch="${subtask.getStatus()}">
+            <span th:case="1">🕓 Not Started</span>
+            <span th:case="2">✅ Ready</span>
+            <span th:case="3">🚧 Ongoing</span>
+            <span th:case="4">🏁 Finished</span>
+            <span th:case="*">❓ Unknown</span>
+          </span>
+      </td>
       <td>
         <form th:method="get" th:action="@{/}">
           <button class="action-button">Update Status</button>
