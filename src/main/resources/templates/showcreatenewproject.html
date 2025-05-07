@@ -7,50 +7,53 @@
     <link rel="stylesheet" href="/css/headerStyle.css" th:href="@{/css/headerStyle.css}">
     <script src="https://kit.fontawesome.com/1086dfba1e.js" crossorigin="anonymous"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Alpha Solutions Project Management Create New Project</title>
-    <script src="https://kit.fontawesome.com/1086dfba1e.js" crossorigin="anonymous"></script>
+    <title>Alpha Solutions Project Management - Create New Project</title>
 </head>
 <body>
 
 <header th:replace="~{fragments/header :: header}"></header>
 
-<main>
-    <h1 th:text="'Create New Project'"></h1>
+<main class="employee-panel">
+    <div class="employee-panel-top-row">
+        <div class="welcome-box">
+            <h2>Create New Project</h2>
+        </div>
+    </div>
 
-    <div>
-        <form th:action="@{/createnewproject}" th:method="post" th:object="${project}">
+    <div class="edit-box-holder">
+        <form th:action="@{/createnewproject}" th:method="post" th:object="${project}" class="two-row-form">
             <label for="name">Project Name</label>
             <input type="text" name="name" id="name" maxlength="50" required>
 
-            <label for="description">Project Descriptions</label>
+            <label for="description">Project Description</label>
             <input type="text" name="description" id="description" maxlength="500" required>
 
             <label for="maxTime">Max Time</label>
-            <input type="number" name="maxTime" id="maxTime" step="0.01" min="0" max="9999999999999999999999999999.99" required>
+            <input type="number" name="maxTime" id="maxTime" step="0.01" min="0" required>
 
             <label for="maxPrice">Max Price</label>
-            <input type="number" name="maxPrice" id="maxPrice" step="0.01" min="0" max="9999999999999999999999999999.99" required>
+            <input type="number" name="maxPrice" id="maxPrice" step="0.01" min="0" required>
 
             <label for="endDate">End Date</label>
             <input type="date" name="endDate" id="endDate" required>
 
-            <div class="dropdown-container" id="memberDropdown">
-                <div class="dropdown-button" onclick="toggleDropdown()">Add Members ▼</div>
-                <div class="checkbox-dropdown">
-                    <label th:each="profile : ${allProfiles}" th:if="${profile.authCode == 2}">
-                        <input type="checkbox" name="projectMembers"
-                               th:value="${profile.username}" />
-                        <span th:text="${profile.name}"></span>
-                    </label>
+            <div class="form-section-full right-align">
+                <div class="dropdown-container" id="memberDropdown">
+                    <div class="dropdown-button" onclick="toggleDropdown()">Add Members ▼</div>
+                    <div class="checkbox-dropdown">
+                        <label th:each="profile : ${allProfiles}" th:if="${profile.authCode == 2}">
+                            <input type="checkbox" name="projectMembers" th:value="${profile.username}" />
+                            <span class="small-text" th:text="${profile.name}"></span>
+                        </label>
+                    </div>
                 </div>
             </div>
 
-
-
             <input type="hidden" name="projectOwner" th:value="${profile.getUsername()}">
-            <button type="submit">Create Project</button>
 
-
+            <div class="form-section-full">
+                <button type="submit" id="standard-button">Create Project</button>
+            </div>
         </form>
     </div>
 </main>

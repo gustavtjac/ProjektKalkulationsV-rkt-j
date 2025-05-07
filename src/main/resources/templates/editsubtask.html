@@ -13,42 +13,50 @@
 
 <header th:replace="~{fragments/header :: header}"></header>
 
-<main>
+<main class="employee-panel">
+    <div class="employee-panel-top-row">
+        <div class="welcome-box">
+            <h2 th:text="'Update Subtask ' + ${chosenSubtask.name}"></h2>
+        </div>
+    </div>
 
-    <h1 th:text="'Update Subtask ' + ${chosenSubtask.name}"></h1>
+    <div class="edit-box-holder">
+        <h2 th:text="${message}"></h2>
+        <form th:action="@{/editsubtask}" th:method="post" th:object="${subtaskDTO}" class="two-row-form">
 
-    <div>
-        <h1 th:text="${message}"></h1>
-        <form th:action="@{/editsubtask}" th:method="post" th:object="${subtaskDTO}">
             <input type="hidden" name="id" th:value="${chosenSubtask.getId()}">
             <input type="hidden" name="taskId" th:value="${chosenSubtask.getTaskId()}">
 
-            <label for="name">Subtask name</label>
-                <input type="text" name="name" id="name" maxlength="50" required th:value="${chosenSubtask.getName()}">
+            <label for="name">Subtask Name</label>
+            <input type="text" name="name" id="name" maxlength="50" required th:value="${chosenSubtask.getName()}">
 
             <label for="description">Description</label>
             <input type="text" name="description" id="description" maxlength="500" required th:value="${chosenSubtask.getDescription()}">
 
-            <label for="maxTime">Allocated time</label>
+            <label for="maxTime">Spent Time</label>
             <input type="number" name="time" id="maxTime" step="1" min="0" max="9999999999999999999999999999.99" required th:value="${chosenSubtask.getTime()}">
 
-
-            <div class="dropdown-container" id="memberDropdown">
-                <div class="dropdown-button" onclick="toggleDropdown()">Add Employees to subtask ▼</div>
-                <div class="checkbox-dropdown">
-                    <label th:each="profile : ${allprofiles}" th:if="${profile.authCode == 2}">
-                        <input type="checkbox" name="assignedProfiles"
-                               th:value="${profile.username}" th:checked="${#lists.contains(chosenSubtask.assignedProfiles.![username], profile.username)}" />
-                        <span th:text="${profile.name}"></span>
-                    </label>
+            <div class="form-section-full right-align">
+                <div class="dropdown-container" id="memberDropdown">
+                    <div class="dropdown-button" onclick="toggleDropdown()">Add Employees to Subtask ▼</div>
+                    <div class="checkbox-dropdown">
+                        <label th:each="profile : ${allprofiles}" th:if="${profile.authCode == 2}">
+                            <input type="checkbox" name="assignedProfiles"
+                                   th:value="${profile.username}"
+                                   th:checked="${#lists.contains(chosenSubtask.assignedProfiles.![username], profile.username)}" />
+                            <span th:text="${profile.name}"></span>
+                        </label>
+                    </div>
                 </div>
             </div>
 
-            <button type="submit">Save Subtask</button>
+            <div class="form-section-full">
+                <button type="submit" id="standard-button">Save Subtask</button>
+            </div>
         </form>
     </div>
-
 </main>
+
 <script src="/js/script.js"></script>
 </body>
 </html>
