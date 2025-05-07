@@ -13,17 +13,24 @@
 
 <header th:replace="~{fragments/header :: header}"></header>
 
-<main>
-    <h1 th:text="'Create New Skill'"></h1>
+<main class="employee-panel">
 
-    <h2 th:text="${message}"></h2>
+    <div class="employee-panel-top-row">
+        <div class="welcome-box">
+            <h1 th:text="'Create New Skill'"></h1>
+        </div>
+    </div>
 
-    <div>
-        <form th:action="@{/createnewskill}" th:method="post" th:object="${emptySkill}">
+    <div class="custom-message">
+        <h3 th:text="${message}"></h3>
+    </div>
+
+    <div class="edit-box-holder">
+        <form th:action="@{/createnewskill}" th:method="post" th:object="${emptySkill}" class="edit-box-form">
             <label for="name">Skill name</label>
             <input type="text" name="name" id="name" maxlength="30" required>
 
-            <button type="submit">Create Skill</button>
+            <button id="standard-button" type="submit">Create Skill</button>
 
 
         </form>

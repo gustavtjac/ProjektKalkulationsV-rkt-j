@@ -3,20 +3,30 @@
 <head>
   <meta charset="UTF-8">
   <link rel="stylesheet" th:href="@{/css/styles.css}" href="/css/styles.css">
+  <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet'>
+  <link rel="stylesheet" href="/css/headerStyle.css" th:href="@{/css/headerStyle.css}">
+  <script src="https://kit.fontawesome.com/1086dfba1e.js" crossorigin="anonymous"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Edit employees</title>
+  <title>Edit employee</title>
 </head>
 <body>
 
 <header th:replace="~{fragments/header :: header}"></header>
 
-<main>
-  <h1>Edit employee</h1>
+<main class="employee-panel">
+  <div class="employee-panel-top-row">
+    <div class="welcome-box">
+      <h2>Edit employee</h2>
+    </div>
+  </div>
 
+  <div class="custom-message">
+    <h3 th:text="${message}"></h3>
+  </div>
 
-  <div>
-    <h1 th:text="${message}"></h1>
-    <form th:method="post" th:action="@{/editemployee}" th:object="${profileDTO}">
+  <div class="edit-box-holder">
+    <form th:method="post" th:action="@{/editemployee}" th:object="${profileDTO}" class="two-row-form">
+
       <label for="name">Employee name</label>
       <input type="text" name="name" id="name" required th:value="${profileToBeEdited.getName()}">
 
@@ -29,55 +39,35 @@
       <label for="salary">Employee hourly salary</label>
       <input type="number" name="salary" id="salary" min="1" max="999999" step="0.01" required th:value="${profileToBeEdited.getSalary()}">
 
-
       <input type="hidden" name="oldusername" th:value="${profileToBeEdited.getUsername()}">
 
-      <br>
+      <div class="form-section-full">
+        <label for="authCode">Authorization level</label><br>
+        <select name="authCode" id="authCode" required>
+          <option value="0" th:selected="${profileToBeEdited.authCode == 0}">Admin</option>
+          <option value="1" th:selected="${profileToBeEdited.authCode == 1}">Project Leader</option>
+          <option value="2" th:selected="${profileToBeEdited.authCode == 2}">Employee</option>
+        </select>
+      </div>
 
-      <label>Auth level</label>
-      <br>
-      <label>
-        <input type="radio" name="authCode" value="0" required th:checked="${profileToBeEdited.authCode == 0}">
-        Admin
-      </label><br>
-
-      <label>
-        <input type="radio" name="authCode" value="1" th:checked="${profileToBeEdited.authCode == 1}">
-        Project Leader
-      </label><br>
-
-      <label>
-        <input type="radio" name="authCode" value="2" th:checked="${profileToBeEdited.authCode == 2}">
-        Employee
-      </label>
-      <br>
-      <div class="dropdown-container" id="memberDropdown">
+      <div class="form-section-full dropdown-container" id="memberDropdown">
         <div class="dropdown-button" onclick="toggleDropdown()">Add skills to employee ▼</div>
         <div class="checkbox-dropdown">
           <label th:each="skill : ${skills}">
             <input type="checkbox" name="skills"
                    th:value="${skill.getId()}" th:checked="${#lists.contains(profileToBeEdited.skills.![id], skill.id)}"/>
-            <span th:text="${skill.getName()}"></span>
+            <span class="small-text" th:text="${skill.getName()}"></span>
           </label>
         </div>
       </div>
 
-
-
-
-
-      <button type="submit">Create new employee</button>
+      <div class="form-section-full">
+        <button id="standard-button" type="submit">Save changes</button>
+      </div>
     </form>
-
   </div>
-
-
-
-
-
-
-
 </main>
+
 <script src="/js/script.js"></script>
 </body>
 </html>

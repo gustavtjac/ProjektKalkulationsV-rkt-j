@@ -2,31 +2,65 @@
 <html lang="en" xmlns:th="https://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
-  <link rel="stylesheet" th:href="@{/css/styles.css}" href="/css/styles.css">
+  <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet'>
+  <link rel="stylesheet" th:href="@{/css/styles.css}">
+  <link rel="stylesheet" th:href="@{/css/headerStyle.css}">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Manage employees</title>
+  <script src="https://kit.fontawesome.com/1086dfba1e.js" crossorigin="anonymous"></script>
+  <title>Alpha Solutions Manage Skills</title>
 </head>
+
+
 <body>
-
 <header th:replace="~{fragments/header :: header}"></header>
-
-<main>
-  <h1>Manage skills</h1>
+<main class="employee-panel">
 
 
-  <form th:action="@{/createnewskill}">
-    <button type="submit">Create new skill</button>
-  </form>
+  <div class="employee-panel-top-row">
+    <div class="welcome-box">
+      <h2>Manage skills</h2>
+    </div>
+
+    <form th:action="@{/createnewskill}">
+      <button id="standard-button" type="submit">Create new skill</button>
+    </form>
+
+  </div>
 
 
 
+
+<div class="custom-message">
   <h3 th:text="${message}"></h3>
-  <table>
-    <thead>List of skills</thead>
-    <tr th:each="skill : ${skilllist}">
+</div>
+
+
+  <table class="employee-table">
+    <thead>
+    <tr>
+      <th>Skill 🤹🏻 </th>
+      <th>Edit ✏️</th>
+      <th>Delete ❌</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="skill, stat : ${skilllist}"
+        th:class="'employee-table__row--' + (${stat.index % 2 == 0} ? 'even' : 'odd')">
       <td th:text="${skill.getName()}"></td>
-      <td><form th:action="@{/editskill}" th:method="get"><input type="hidden" th:value="${skill.getId()}" name="skillID"><button>Edit skill</button></form></td>
-      <td><form th:action="@{/deleteskill}" th:method="post"><input type="hidden" th:value="${skill.getId()}" name="skillID"><button>Delete skill</button></form></td>
+      <td>
+        <form th:action="@{/editskill}" th:method="get">
+          <input type="hidden" th:value="${skill.getId()}" name="skillID">
+          <button class="employee-table__button">✏️</button>
+        </form>
+      </td>
+      <td>
+        <form th:action="@{/deleteskill}" th:method="post">
+          <input type="hidden" th:value="${skill.getId()}" name="skillID">
+          <button class="employee-table__button">❌</button>
+        </form>
+      </td>
+    </tr>
+    </tbody>
   </table>
 
 

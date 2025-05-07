@@ -13,34 +13,34 @@
 
 <header th:replace="~{fragments/header :: header}"></header>
 
-<main class="admin-dashboard">
+<main class="employee-panel">
 
-    <div class="admin-dashboard-welcome-box">
+    <div class="employee-panel-top-row">
         <div class="welcome-box">
-            <h1>Manage employees</h1>
+            <h2>Manage employees</h2>
         </div>
 
 
 
         <form th:action="@{/createnewemployee}">
-            <button type="submit">Create new employee</button>
+            <button id="standard-button" type="submit">Create New User</button>
         </form>
 
     </div>
 
 
 
-
-
-    <h3 th:text="${message}"></h3>
+    <div class="custom-message">
+        <h3 th:text="${message}"></h3>
+    </div>
 
 
     <table class="employee-table">
         <thead class="employee-table__head">
         <tr>
-            <th>Employee name 🧑🏽</th>
-            <th>Edit Employee ✏️</th>
-            <th>Delete Employee ❌</th>
+            <th>Name 🧑🏽</th>
+            <th>Edit ✏️</th>
+            <th>Delete ❌</th>
         </tr>
         </thead>
         <tbody>
