@@ -2,7 +2,14 @@
 html, body {
     height: 100%;
     margin: 0;
+    padding: 0;
+    background-color: #1E1E1E;
 }
+* {
+    box-sizing: border-box;
+}
+
+
 body {
     font-family: Montserrat, sans-serif;
 }
@@ -22,6 +29,7 @@ main{
 }
 
 .dropdown-button {
+    color: black;
     width: 100%;
     padding: 8px;
     border: 1px solid #ccc;
@@ -31,6 +39,8 @@ main{
 }
 
 .checkbox-dropdown {
+
+    color: black;
     display: none;
     position: absolute;
     background-color: white;
@@ -39,6 +49,9 @@ main{
     width: 100%;
     max-height: 200px;
     overflow-y: auto;
+}
+.small-text{
+    font-size: 1rem;
 }
 
 .checkbox-dropdown label {
@@ -183,12 +196,18 @@ table {
     border-collapse: collapse;
 }
 .welcome-box{
+    font-size: 3.3vh;
     background-color: #09479D;
 justify-content: center;
+    border-radius: 12px;
+    text-align: center;
+    font-weight: bold;
+    padding: 15px;
+    margin: 0;
 
 }
 .employee-table {
-    width: 100%;
+    width: 60%;
     border-collapse: collapse;
     font-family: Arial, sans-serif;
 }
@@ -208,10 +227,18 @@ justify-content: center;
     color: white;
 }
 
+/* Reduce row height by minimizing padding and font size */
 .employee-table th,
 .employee-table td {
-    padding: 12px 16px;
+    padding: 4px 10px;     /* smaller vertical space */
+    font-size: 3vh;       /* optional: slightly smaller text */
     text-align: left;
+    line-height: 1.4;
+}
+
+/* Optional: Set a consistent row height */
+.employee-table tr {
+    height: 32px;
 }
 
 .employee-table__button {
@@ -224,4 +251,113 @@ justify-content: center;
 
 .employee-table__button:hover {
     opacity: 0.8;
+}
+.employee-panel{
+
+    padding: 25px;
+    display: flex;
+    flex-direction: column;
+    justify-content:start;
+}
+.employee-panel-top-row{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-evenly;
+    padding: 15px;
+    gap: 600px;
+}
+#standard-button {
+    background-color: #42B883;
+    color: black;
+    text-align: center;
+    padding: 15px;
+    border-radius: 12px;
+    font-family: Montserrat, sans-serif;
+    font-size: 4vh;
+    font-weight: bold;
+    border: none;
+    transition: all 0.3s ease; /* ⬅️ Smooth transition */
+    cursor: pointer;
+}
+
+#standard-button:hover {
+    background-color: #369f6d; /* Darker green on hover */
+    color: white;
+    transform: scale(1.05); /* Slightly enlarges */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); /* Adds soft shadow */
+}
+.edit-box-holder{
+    background-color: #2E79BA;
+    border-radius: 12px;
+    padding: 50px;
+width: 50vw;
+
+
+}
+.edit-box-form{
+    font-weight: bold;
+    font-size: 4vh;
+    display: flex;
+    flex-direction: column;
+    align-content:center;
+    justify-content: space-between;
+    text-align: center;
+    gap: 40px;
+}
+
+.edit-box-form input[type="text"] {
+    width: 100%;                /* Fill the form width */
+    padding: 12px 16px;         /* Bigger input area */
+    font-size: 18px;            /* Larger text */
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    font-family: Montserrat, sans-serif;
+    box-sizing: border-box;     /* Prevents overflow */
+    margin-bottom: 16px;        /* Space before the button */
+}
+.custom-message{
+    font-weight: bold;
+    font-size: 4vh;
+    padding: 30px;
+}
+.employee-panel {
+    overflow-x: hidden; /* prevents horizontal scrollbars */
+}
+
+.two-row-form {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    max-width: 800px;
+    margin: 0 auto;
+    font-family: Montserrat, sans-serif;
+}
+
+.two-row-form label {
+    font-weight: bold;
+    font-size: 1.8rem;
+}
+
+.two-row-form input[type="text"],
+.two-row-form input[type="number"] {
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.form-section-full {
+    grid-column: span 2;
+}
+.two-row-form select {
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    width: 100%;
+    box-sizing: border-box;
+    font-family: Montserrat, sans-serif;
 }
