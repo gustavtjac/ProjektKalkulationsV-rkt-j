@@ -62,9 +62,15 @@
         <tbody>
         <tr th:each="project : ${projects}">
             <td th:text="${project.getName()}"></td>
-            <td th:text="${project.getMaxTime() + ' Hours'}"></td>
-            <td th:text="${project.getMaxPrice()} + ' Kr.'"></td>
-            <td th:text="${project.getEndDate()}"></td>
+            <td th:classappend="${timeSpentMap[project.id] > project.maxTime} ? 'text-danger' : ''"
+                th:text="${timeSpentMap[project.id]} + ' / ' + ${project.maxTime} + ' Hours'">
+            </td>
+            <td th:classappend="${budgetSpentMap[project.id] > project.maxPrice} ? 'text-danger' : ''"
+                th:text="${budgetSpentMap[project.id]} + ' / ' + ${project.maxPrice} + ' DKK    '">
+            </td>
+            <td th:text="${#dates.format(project.getEndDate(), 'yyyy-MM-dd')}"
+                th:classappend="${deadlineColorMap[project.getId()]}">
+            </td>
             <td>
                 <form th:action="@{/dashboard/{id}(id=${project.getId()})}" th:method="get">
                     <button class="action-button">View</button>
@@ -110,9 +116,15 @@
         <tbody>
         <tr th:each="project : ${projects}">
             <td th:text="${project.getName()}"></td>
-            <td th:text="${project.getMaxTime()} + ' Hours'"></td>
-            <td th:text="${project.getMaxPrice()} + ' Kr.'"></td>
-            <td th:text="${project.getEndDate()}"></td>
+            <td th:classappend="${timeSpentMap[project.id] > project.maxTime} ? 'text-danger' : ''"
+                th:text="${timeSpentMap[project.id]} + ' / ' + ${project.maxTime} + ' Hours'">
+            </td>
+            <td th:classappend="${budgetSpentMap[project.id] > project.maxPrice} ? 'text-danger' : ''"
+                th:text="${budgetSpentMap[project.id]} + ' / ' + ${project.maxPrice} + ' DKK    '">
+            </td>
+            <td th:text="${#dates.format(project.getEndDate(), 'yyyy-MM-dd')}"
+                th:classappend="${deadlineColorMap[project.getId()]}">
+            </td>
             <td th:text="${project.getProjectOwner().getName()}"></td>
             <td>
                 <form th:action="@{/dashboard/{id}(id=${project.getId()})}" th:method="get">

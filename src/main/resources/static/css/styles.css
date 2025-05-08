@@ -465,3 +465,17 @@ width: 50vw;
 .action-button.delete:hover {
     background-color: #d23c3c;
 }
+
+ .text-danger {
+     color: red;
+ }
+
+.red-text {
+    color: red;
+    font-weight: bold;
+}
+
+.yellow-text {
+    color: goldenrod;
+    font-weight: bold;
+}
