@@ -144,11 +144,19 @@
         <tr th:each="subtask : ${subtasks}">
             <td th:text="${subtask.getName()}"></td>
             <td th:text="${subtask.getTime()} + ' Hours'"></td>
-            <td th:text="${subtask.getStatus()}"></td>
             <td>
-                <form th:action="@{/redirecttosubtask}" method="get">
+                <span th:switch="${subtask.getStatus()}">
+                    <span th:case="1">🕓 Not Started</span>
+                    <span th:case="2">✅ Ready</span>
+                    <span th:case="3">🚧 Ongoing</span>
+                    <span th:case="4">🏁 Finished</span>
+                    <span th:case="*">❓ Unknown</span>
+                </span>
+            </td>
+            <td>
+                <form th:action="@{/editsubtask}" method="get">
                     <input type="hidden" name="subtaskID" th:value="${subtask.getId()}">
-                    <button class="action-button">View Subtask</button>
+                    <button class="action-button">Update/View Subtask</button>
                 </form>
             </td>
         </tr>
