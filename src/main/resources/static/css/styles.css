@@ -370,7 +370,6 @@ width: 50vw;
     align-items: flex-start;
 }
 .hero-page-header {
-
     display: flex;
     justify-content: center;
     align-items: center;
@@ -466,6 +465,21 @@ width: 50vw;
 .action-button.delete:hover {
     background-color: #d23c3c;
 }
+
+ .text-danger {
+     color: red;
+ }
+
+.red-text {
+    color: red;
+    font-weight: bold;
+}
+
+.yellow-text {
+    color: goldenrod;
+    font-weight: bold;
+}
+
 
 .hero-page-profile {
     flex-direction: column;

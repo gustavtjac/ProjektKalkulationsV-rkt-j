@@ -27,7 +27,9 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.net.http.HttpResponse;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 public class PMController {
@@ -91,6 +93,27 @@ public class PMController {
             if (loggedInProfile.getAuthCode() == 2) {
 
             }
+
+            Map<String, Double> timeSpentMap = new HashMap<>();
+            for (Project project : projectService.getAllProjectsFromProfile(loggedInProfile)) {
+                double timeSpent = subtaskService.getTimeSpentOnSubtaskForProject(project.getId());
+                timeSpentMap.put(project.getId(), timeSpent);
+            }
+
+            Map<String, Double> budgetSpentMap = new HashMap<>();
+            for (Project project : projectService.getAllProjectsFromProfile(loggedInProfile)) {
+                double budgetSpent = subtaskService.getTimeMoneySpentOnSubtasksForProject(project.getId());
+                budgetSpentMap.put(project.getId(), budgetSpent);
+            }
+
+            Map<String, String> deadlineColorMap = new HashMap<>();
+            for (Project p : projectService.getAllProjectsFromProfile(loggedInProfile)) {
+                deadlineColorMap.put(p.getId(), projectService.getDeadlineClass(p.getEndDate()));
+            }
+            model.addAttribute("deadlineColorMap", deadlineColorMap);
+
+            model.addAttribute("timeSpentMap", timeSpentMap);
+            model.addAttribute("budgetSpentMap", budgetSpentMap);
             model.addAttribute("projects", projectService.getAllProjectsFromProfile(loggedInProfile));
             model.addAttribute("profile", loggedInProfile);
             model.addAttribute("subtasks", subtaskService.getAllSubtaskFromProfile(loggedInProfile));
@@ -188,7 +211,25 @@ public class PMController {
                 return "redirect:/";
             }
 
+
             Project project = projectService.findById(projectid);
+
+            Map<String, Double> timeSpentMap = new HashMap<>();
+            for (Task task : project.getTasks()) {
+                double timeSpent = subtaskService.getTimeSpentOnSubtaskForTask(task.getId());
+                timeSpentMap.put(task.getId(), timeSpent);
+            }
+
+
+            Map<String, Double> budgetSpentMap = new HashMap<>();
+            for (Task task : project.getTasks()) {
+                double budgetSpent = subtaskService.getTimeMoneySpentOnSubtasksForTask(task.getId());
+                budgetSpentMap.put(task.getId(),budgetSpent);
+            }
+
+
+            model.addAttribute("budgetSpentMap",budgetSpentMap);
+            model.addAttribute("timeSpentMap",timeSpentMap);
             model.addAttribute("project", project);
             model.addAttribute("profile", loggedInProfile);
 
