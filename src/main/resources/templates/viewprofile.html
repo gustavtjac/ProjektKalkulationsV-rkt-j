@@ -13,29 +13,37 @@
 
 <div th:replace="~{fragments/header :: header}"></div>
 
-<main>
+<main class="hero-page-profile">
+  <div class="hero-page-header">
+    <h1 th:text="${profile.getName() + 's profile'}"></h1>
+  </div>
 
-  <h1 th:text="${profile.getName() + 's profile'}"></h1>
+<div class="profile-form">
+  <!-- VENSTRE side -->
+  <div class="profile-wrapper">
+    <div class="profile-info">
+      <label>Name</label>
+      <h2 class="value" th:text="${profile.getName()}">"Name"</h2>
+    </div>
 
+    <div class="info-block">
+      <label>Authorization level</label>
+      <h2 class="value">
+        <span th:if="${profile.authCode == 0}">Admin</span>
+        <span th:if="${profile.authCode == 1}">Project Manager</span>
+        <span th:if="${profile.authCode == 2}">Employee</span>
+      </h2>
+    </div>
+  </div>
 
-  <label>System Authorization level</label>
-  <span th:if="${profile.authCode == 0}">Admin</span>
-  <span th:if="${profile.authCode == 1}">Project Manager</span>
-  <span th:if="${profile.authCode == 2}">Employee</span>
-
-
-  <br>
-  <table th:if="${profile.getSkills().size()>0}">
-    <thead>Skills
-    <tr th:each="skill : ${profile.getSkills()}">
-      <td th:text="${skill.getName()}"></td>
-    </thead>
-
-  </table>
-
-
-
-
+  <!-- HØJRE side -->
+  <div class="profile-skills" th:if="${profile.getSkills().size()>0}">
+    <label>My Skills:</label>
+    <ul>
+      <li th:each="skill : ${profile.getSkills()}" th:text="${skill.getName()}"></li>
+    </ul>
+  </div>
+</div>
 </main>
 
 </body>
