@@ -3,32 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet'>
-    <link rel="stylesheet" href="/css/headerStyle.css" th:href="@{/css/headerStyle.css}">
+    <link rel="stylesheet"   th:href="@{/css/headerStyle.css}">
     <script src="https://kit.fontawesome.com/1086dfba1e.js" crossorigin="anonymous"></script>
     <title>Projektkalkulationsværktøj</title>
 </head>
 <body>
 
 <nav th:fragment="header">
-    <h1 class="logo"><a href="/dashboard">Alpha Solutions</a></h1>
+
+    <h1 class="logo">
+        <a th:href="@{/dashboard}">
+            <img id="login_img" src="/images/logohvid.svg" alt="Alpha solutions Logo">
+        </a>
+    </h1>
     <input type="checkbox" id="check">
     <label for="check" class="checkbtn">
         <i class="fa-solid fa-bars"></i>
     </label>
+
     <ul>
-        <li th:if="${session.profile != null}">
-            <a th:href="@{/user/{username}(username=${session.profile.username})}"
-               class="profile-avatar">
+        <!-- Desktop-visning: cirkel med forbogstav -->
+        <li class="avatar-desktop" th:if="${session.profile != null}">
+            <a class="profile-avatar" th:href="@{/user/{username}(username=${session.profile.username})}">
                 <span th:text="${#strings.substring(session.profile.name, 0, 1)}"></span>
             </a>
         </li>
-    </ul>
-    <ul>
+        <!-- Mobil-visning: "View profile" tekst -->
+        <li class="avatar-mobile" th:if="${session.profile != null}">
+            <a class="profile-avatar" th:href="@{/user/{username}(username=${session.profile.username})}">
+                View profile
+            </a>
+        </li>
         <li th:if="${session.profile != null}">
-            <a th:href="@{/logout}">Log out</a>
+            <a th:href="@{/logout}">Sign Out</a>
         </li>
 
     </ul>
+
 </nav>
 
 </body>
