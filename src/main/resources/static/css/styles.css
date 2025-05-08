@@ -479,3 +479,89 @@ width: 50vw;
     color: goldenrod;
     font-weight: bold;
 }
+
+
+.hero-page-profile {
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+}
+.profile-form {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: flex-start; /* Vigtig: justerer topkant */
+    background-color: #081F37;
+    width: 70%;
+    height: auto;
+    border-radius: 20px;
+    padding: 40px 0;
+}
+
+.profile-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 70px;
+    margin-top: 0;
+
+}
+
+.profile-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+
+}
+
+.profile-info h2 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #09479D;
+    width: 300px;
+    height: 40px;
+    border-radius: 10px;
+}
+.profile-info label {
+    font-size: 3vh;
+}
+
+.info-block {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+
+}
+
+.info-block h2 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #09479D;
+    width: 300px;
+    height: 40px;
+    border-radius: 10px;
+}
+.info-block label {
+    font-size: 3vh;
+}
+
+.profile-skills {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+
+    width: 200px;
+    margin-top: 0;
+}
+
+.profile-skills label {
+    font-size: 3vh;
+}
+
+.profile-skills ul li:nth-child(even) {
+    background-color: #2E79BA;
+}
+
+.profile-skills ul li:nth-child(odd) {
+    background-color: #1E549F;
+}
