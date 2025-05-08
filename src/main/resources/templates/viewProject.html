@@ -43,8 +43,12 @@
         <tbody>
         <tr th:each="task : ${project.getTasks()}">
             <td th:text="${task.getName()}"></td>
-            <td th:text="${task.getMaxTime()} + ' Hours'"></td>
-            <td th:text="${task.getMaxPrice()} + ' Kr.'"></td>
+            <td th:classappend="${timeSpentMap[task.id] > task.maxTime} ? 'text-danger' : ''"
+                th:text="${timeSpentMap[task.id]} + ' / ' + ${task.maxTime} + ' Hours'">
+            </td>
+            <td th:classappend="${budgetSpentMap[task.id] > task.maxPrice} ? 'text-danger' : ''"
+                th:text="${budgetSpentMap[task.id]} + ' / ' + ${task.maxPrice} + ' DKK    '">
+            </td>
             <td>
                 <form th:action="@{/dashboard/{projectid}/{taskid}(projectid=${project.getId()}, taskid=${task.getId()})}" th:method="get">
                     <button class="action-button">View Subtasks</button>
@@ -87,8 +91,12 @@
         <tbody>
         <tr th:each="task : ${project.getTasks()}">
             <td th:text="${task.getName()}"></td>
-            <td th:text="${task.getMaxTime()} + ' Hours'"></td>
-            <td th:text="${task.getMaxPrice()} + ' Kr.'"></td>
+            <td th:classappend="${timeSpentMap[task.id] > task.maxTime} ? 'text-danger' : ''"
+                th:text="${timeSpentMap[task.id]} + ' / ' + ${task.maxTime} + ' Hours'">
+            </td>
+            <td th:classappend="${budgetSpentMap[task.id] > task.maxPrice} ? 'text-danger' : ''"
+                th:text="${budgetSpentMap[task.id]} + ' / ' + ${task.maxPrice} + ' DKK    '">
+            </td>
             <td>
                 <form th:action="@{/dashboard/{projectid}/{taskid}(projectid=${project.getId()}, taskid=${task.getId()})}" th:method="get">
                     <button class="action-button">View Subtasks</button>

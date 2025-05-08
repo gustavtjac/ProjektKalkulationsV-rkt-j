@@ -10,7 +10,11 @@ import gruppe6.kea.projektkalkulationeksamensprojekt.Repositories.ProjectReposit
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 @Service
 public class ProjectService {
@@ -23,7 +27,11 @@ public class ProjectService {
     }
 
     public List<Project> getAllProjectsFromProfile(Profile profile){
-        return projectRepository.getAllProjectsFromProfile(profile);
+
+        return projectRepository.getAllProjectsFromProfile(profile)
+                .stream()
+                .sorted(Comparator.comparing(Project::getEndDate))  // This will sort by date ascending
+                .collect(Collectors.toList());
     }
 
     public Project findById(String id){
@@ -56,6 +64,20 @@ public class ProjectService {
         }
         return false;
     }
+    public String getDeadlineClass(Date endDate) {
+        Date today = new Date();
+        long diffInMillies = endDate.getTime() - today.getTime();
+        long daysDiff = TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS);
+
+        if (endDate.before(today)) {
+            return "red-text";
+        } else if (daysDiff < 7) {
+            return "yellow-text";
+        } else {
+            return "";
+        }
+    }
+
 
     public void deleteProject(String projectID){
         projectRepository.deleteProject(projectID);
@@ -67,6 +89,10 @@ public class ProjectService {
 
 
     public ProjectDTO createNewProject(ProjectDTO projectDTO) {
+
+        if (projectDTO.getProjectMembers()==null){
+            projectDTO.setProjectMembers(new ArrayList<>());
+        }
         return projectRepository.createNewProject(projectDTO);
     }
 
