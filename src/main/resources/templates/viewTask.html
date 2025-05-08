@@ -57,13 +57,9 @@
           </span>
       </td>
       <td>
-        <form th:method="get" th:action="@{/dashboard/{projectid}/{taskid}/{subtaskid}(projectid=${project.getId()}, taskid=${task.getId()}, subtaskid=${subtask.getId()})}">
-          <button class="action-button">View</button>
-        </form>
-      </td>
-      <td>
-        <form th:method="get" th:action="@{/editsubtask}">
-          <input type="hidden" name="subtaskID" th:value="${subtask.getId()}">
+        <form th:method="get" th:action="@{/editsubtask}" name="assignedProfiles"
+              th:if="${profile.getAuthCode() == 1 || #lists.contains(subtask.assignedProfiles.![username], profile.username)}">
+        <input type="hidden" name="subtaskID" th:value="${subtask.getId()}">
           <button class="action-button">Edit/View Subtask</button>
         </form>
       </td>
@@ -108,7 +104,8 @@
           </span>
       </td>
       <td>
-        <form th:action="@{/editsubtask}" method="get">
+        <form th:method="get" th:action="@{/editsubtask}" name="assignedProfiles"
+              th:if="${profile.getAuthCode() == 1 || #lists.contains(subtask.assignedProfiles.![username], profile.username)}">
           <input type="hidden" name="subtaskID" th:value="${subtask.getId()}">
           <button class="action-button">Edit/View Subtask</button>
         </form>

@@ -665,14 +665,14 @@ return "redirect:/editskill";
         }else {
             try{
 
-                System.out.println("Knyttede users");
+                /*System.out.println("Knyttede users");
                 for (String username : subtaskDTO.getAssignedProfiles()){
                     System.out.println(username);
-                }
+                }*/
                 subtaskService.saveSubtask(subtaskDTO);
-                System.out.println(subtaskDTO.getTaskId());
+                //System.out.println(subtaskDTO.getTaskId());
                 redirectAttributes.addAttribute("message", "Subtask has been updated");
-                System.out.println("Post try problem");
+                //System.out.println("Post try problem");
 
                 return "redirect:/dashboard/" + projectService.findById(taskService.findByID(subtaskDTO.getTaskId()).getProjectID()).getId() + "/" + taskService.findByID(subtaskDTO.getTaskId()).getId() ;
 
