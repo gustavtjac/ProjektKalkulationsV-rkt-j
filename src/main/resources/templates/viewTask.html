@@ -64,7 +64,7 @@
       <td>
         <form th:method="get" th:action="@{/editsubtask}">
           <input type="hidden" name="subtaskID" th:value="${subtask.getId()}">
-          <button class="action-button">Edit</button>
+          <button class="action-button">Edit/View Subtask</button>
         </form>
       </td>
       <td>
@@ -108,8 +108,9 @@
           </span>
       </td>
       <td>
-        <form th:method="get" th:action="@{/}">
-          <button class="action-button">Update Status</button>
+        <form th:action="@{/editsubtask}" method="get">
+          <input type="hidden" name="subtaskID" th:value="${subtask.getId()}">
+          <button class="action-button">Edit/View Subtask</button>
         </form>
       </td>
     </tr>

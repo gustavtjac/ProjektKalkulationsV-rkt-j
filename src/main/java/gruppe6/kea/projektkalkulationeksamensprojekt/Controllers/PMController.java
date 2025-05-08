@@ -642,7 +642,7 @@ return "redirect:/editskill";
     @GetMapping("/editsubtask")
     public String showEditSubtask(HttpSession session, Model model, @RequestParam(required = false) String subtaskID, @RequestParam(required = false) String message){
         Profile loggedInProfile = ((Profile) session.getAttribute("profile"));
-        if (loggedInProfile == null || loggedInProfile.getAuthCode() != 1) {
+        if (loggedInProfile == null) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User is not allowed to edit employees");
         }else {
 
@@ -660,10 +660,15 @@ return "redirect:/editskill";
     @PostMapping("/editsubtask")
     public String editSubtask(@ModelAttribute SubtaskDTO subtaskDTO, HttpSession session, RedirectAttributes redirectAttributes){
         Profile loggedInProfile = ((Profile) session.getAttribute("profile"));
-        if (loggedInProfile == null || loggedInProfile.getAuthCode() != 1) {
+        if (loggedInProfile == null) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User is not allowed to edit employees");
         }else {
             try{
+
+                System.out.println("Knyttede users");
+                for (String username : subtaskDTO.getAssignedProfiles()){
+                    System.out.println(username);
+                }
                 subtaskService.saveSubtask(subtaskDTO);
                 System.out.println(subtaskDTO.getTaskId());
                 redirectAttributes.addAttribute("message", "Subtask has been updated");
