@@ -54,7 +54,6 @@ public class SubtaskRepository implements CrudMethods<Subtask,String>{
             jdbcTemplate.update(sql,subtaskDTO.getId(),subtaskDTO.getTaskId(),subtaskDTO.getName(),subtaskDTO.getDescription(),subtaskDTO.getTime(),subtaskDTO.getStatus());
 
         } catch (DataAccessException e) {
-            System.out.println("failer her 1");
             throw new RuntimeException("could not create subtask");
         }
 
@@ -64,7 +63,6 @@ public class SubtaskRepository implements CrudMethods<Subtask,String>{
                 jdbcTemplate.update(insertProfiles,subtaskDTO.getId(),username);
             }
         } catch (DataAccessException e) {
-            System.out.println("failer her 2");
             throw new RuntimeException("could not insert users");
         }
 
@@ -81,8 +79,6 @@ public class SubtaskRepository implements CrudMethods<Subtask,String>{
     public Subtask findByID(String subtaskID) {
         String sql = "select * from Subtask where subtask_ID = ?";
         try {
-            System.out.println("Findbyid problemer");
-            System.out.println(subtaskID);
             return jdbcTemplate.queryForObject(sql,subtaskRowmapper,subtaskID);
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Subtask not found!");
