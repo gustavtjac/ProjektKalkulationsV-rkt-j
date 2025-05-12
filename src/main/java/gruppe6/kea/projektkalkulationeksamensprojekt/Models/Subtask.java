@@ -11,6 +11,7 @@ import java.util.List;
 public class Subtask {
     private String id;
     private String taskId;
+    private Task task;
     private String name;
     private String description;
     private double time;

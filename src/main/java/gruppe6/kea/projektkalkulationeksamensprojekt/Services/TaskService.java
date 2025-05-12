@@ -6,25 +6,45 @@ import gruppe6.kea.projektkalkulationeksamensprojekt.Repositories.TaskRepository
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class TaskService {
 
     private final TaskRepository taskRepository;
+    private final ProjectService projectService;
 
-    public TaskService(TaskRepository taskRepository) {
+    public TaskService(TaskRepository taskRepository, ProjectService projectService) {
         this.taskRepository = taskRepository;
+        this.projectService = projectService;
     }
 
     public Task createNewTask(Task task){
-        return taskRepository.createNewTask(task);
+       Task newTask = taskRepository.createNewTask(task);
+       newTask.setProject(projectService.findById(newTask.getProjectID()));
+       return newTask;
     }
 
     public Task findByID(String taskID){
-        return taskRepository.findByID(taskID);
+        Task task = taskRepository.findByID(taskID);
+        task.setProject(projectService.findById(task.getProjectID()));
+        return task;
     }
 
     public Task saveTask(TaskDTO taskDTO){
-        return taskRepository.save(taskDTO);
+        Task task =  taskRepository.save(taskDTO);
+        task.setProject(projectService.findById(task.getProjectID()));
+        return task;
+    }
+
+
+    public List<Task> getTaskFromProjectID(String projectID){
+       List<Task> taskList = taskRepository.getTaskFromProjectID(projectID);
+
+       for (Task task : taskList){
+           task.setProject(projectService.findById(task.getProjectID()));
+       }
+       return taskList;
     }
 
 }

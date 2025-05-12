@@ -19,11 +19,9 @@ import java.util.stream.Collectors;
 @Service
 public class ProjectService {
     private final ProjectRepository projectRepository;
-    private final ProfileRepository profileRepository;
 
-    public ProjectService(ProjectRepository projectRepository, ProfileRepository profileRepository) {
+    public ProjectService(ProjectRepository projectRepository) {
         this.projectRepository = projectRepository;
-        this.profileRepository = profileRepository;
     }
 
     public List<Project> getAllProjectsFromProfile(Profile profile){
