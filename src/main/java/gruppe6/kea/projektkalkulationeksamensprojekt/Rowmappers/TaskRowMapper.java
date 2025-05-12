@@ -30,7 +30,6 @@ public class TaskRowMapper implements RowMapper<Task> {
         task.setMaxTime(rs.getDouble("TASK_MAX_TIME"));
         task.setName(rs.getString("TASK_NAME"));
         task.setProjectID(rs.getString("TASK_PROJECT_ID"));
-
         List<Subtask> subtaskList = subtaskRepository.getSubtasksFromTaskID(task.getId());
         if (subtaskList==null){
             task.setSubtasks(new ArrayList<>());

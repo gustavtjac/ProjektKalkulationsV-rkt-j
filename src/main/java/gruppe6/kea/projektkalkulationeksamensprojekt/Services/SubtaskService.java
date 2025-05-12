@@ -17,22 +17,24 @@ import java.util.List;
 public class SubtaskService {
 
     private final SubtaskRepository subtaskRepository;
-    private final TaskRepository taskRepository;
-    private final ProfileRepository profileRepository;
+    private final TaskService taskService;
+    private final ProfileService profileService;
 
-    public SubtaskService(SubtaskRepository subtaskRepository, TaskRepository taskRepository, ProfileRepository profileRepository) {
+    public SubtaskService(SubtaskRepository subtaskRepository, TaskService taskService, ProfileService profileService) {
         this.subtaskRepository = subtaskRepository;
-        this.taskRepository = taskRepository;
-        this.profileRepository = profileRepository;
+        this.taskService = taskService;
+        this.profileService = profileService;
     }
 
     public Subtask findByID(String id) {
-        return subtaskRepository.findByID(id);
+               Subtask subtask = subtaskRepository.findByID(id);
+               subtask.setTask(taskService.findByID(subtask.getTaskId()));
+        return subtask;
     }
 
 
     public List<Subtask> findAllSubtaskByProjectID(String projectid){
-        List<Task> taskList = taskRepository.getTaskFromProjectID(projectid);
+        List<Task> taskList = taskService.getTaskFromProjectID(projectid);
         List<Subtask> subtaskList = new ArrayList<>();
 
 
@@ -84,7 +86,7 @@ public class SubtaskService {
 
         for (Subtask subtask : subtaskList) {
             double timeSpent = subtask.getTime();
-            List<Profile> employeesOnSubtask = profileRepository.getAllprofilesAssginedToSubtask(subtask.getId());
+            List<Profile> employeesOnSubtask = profileService.getAllprofilesAssginedToSubtask(subtask.getId());
 
             if (employeesOnSubtask.isEmpty()) {
                 continue;
@@ -130,19 +132,33 @@ return salarySpentOnSubtask;
     }
 
     public List<Subtask> getAllSubtaskFromProfile(Profile profile) {
-        return subtaskRepository.findAllSubtaskFromProfile(profile);
+               List<Subtask> subtaskList = subtaskRepository.findAllSubtaskFromProfile(profile);
+               for (Subtask subtask : subtaskList){
+                   subtask.setTask(taskService.findByID(subtask.getTaskId()));
+               }
+               return subtaskList;
     }
 
     public List<Subtask> findAllSubtaskByTaskID(String id) {
-        return subtaskRepository.findAllSubtaskByTaskID(id);
+        List<Subtask> subtaskList = subtaskRepository.findAllSubtaskByTaskID(id);
+        for (Subtask subtask : subtaskList){
+            subtask.setTask(taskService.findByID(subtask.getTaskId()));
+        }
+        return subtaskList;
+
     }
 
     public Subtask createNewSubtask(SubtaskDTO subtaskDTO){
-        return subtaskRepository.createNewSubtask(subtaskDTO);
+        Subtask subtask = subtaskRepository.createNewSubtask(subtaskDTO);
+        subtask.setTask(taskService.findByID(subtask.getTaskId()));
+        return subtask;
+
     }
 
     public Subtask findById(String id){
-        return subtaskRepository.findByID(id);
+        Subtask subtask = subtaskRepository.findByID(id);
+        subtask.setTask(taskService.findByID(subtask.getTaskId()));
+        return subtask;
     }
 
     public Subtask deleteSubtask(String id){

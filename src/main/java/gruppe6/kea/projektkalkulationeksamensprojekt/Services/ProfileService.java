@@ -69,6 +69,10 @@ public Profile saveDTO(ProfileDTO dto, String oldUsername){
         return profileRepository.getAllMembersOfProjectFromProjectID(projectID);
     }
 
+    public List<Profile> getAllprofilesAssginedToSubtask(String subtaskID){
+        return profileRepository.getAllprofilesAssginedToSubtask(subtaskID);
+    }
+
 
 
 }

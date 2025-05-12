@@ -134,6 +134,7 @@
     <table class="table-layout">
         <thead>
         <tr>
+            <th>Project Name</th>
             <th>Subtask Name</th>
             <th>Allocated Time</th>
             <th>Status</th>
@@ -142,6 +143,7 @@
         </thead>
         <tbody>
         <tr th:each="subtask : ${subtasks}">
+            <td th:text="${subtask.getTask().getProject().getName()}"></td>
             <td th:text="${subtask.getName()}"></td>
             <td th:text="${subtask.getTime()} + ' Hours'"></td>
             <td>

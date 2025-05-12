@@ -9,6 +9,7 @@ import java.util.List;
 public class Task {
     private String id;
     private String projectID;
+    private Project project;
     private String name;
     private String description;
     private double maxTime;
