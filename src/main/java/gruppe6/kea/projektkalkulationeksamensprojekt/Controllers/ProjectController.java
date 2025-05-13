@@ -170,7 +170,7 @@ public class ProjectController {
     @PostMapping("/createnewproject")
     public String createNewProject(@ModelAttribute ProjectDTO projectDTO, RedirectAttributes redirectAttributes) {
 
-        ProjectDTO newProject = projectService.createNewProject(projectDTO);
+        Project newProject = projectService.createNewProject(projectDTO);
         if (newProject == null) {
             redirectAttributes.addAttribute("error", "Something Went Wrong Try Again");
             return "redirect:/showcreatenewproject";

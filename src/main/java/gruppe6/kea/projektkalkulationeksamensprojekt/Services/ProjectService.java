@@ -86,7 +86,7 @@ public class ProjectService {
     }
 
 
-    public ProjectDTO createNewProject(ProjectDTO projectDTO) {
+    public Project createNewProject(ProjectDTO projectDTO) {
 
         if (projectDTO.getProjectMembers()==null){
             projectDTO.setProjectMembers(new ArrayList<>());

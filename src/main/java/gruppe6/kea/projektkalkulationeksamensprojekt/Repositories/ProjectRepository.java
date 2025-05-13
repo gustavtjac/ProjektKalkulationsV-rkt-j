@@ -47,7 +47,7 @@ public class ProjectRepository implements CrudMethods<Project,String> {
         }
     }
 
-    public ProjectDTO createNewProject(ProjectDTO projectDTO) {
+    public Project createNewProject(ProjectDTO projectDTO) {
         projectDTO.setId(UUID.randomUUID().toString());
         String sql = "INSERT into Project (PROJECT_ID,PROJECT_OWNER_PROFILE_USERNAME, PROJECT_NAME, PROJECT_DESC, PROJECT_MAX_TIME, PROJECT_MAX_PRICE, PROJECT_ENDDATE) values (?,?,?,?,?,?,?)";
                 int rowsAffected = jdbcTemplate.update(sql,projectDTO.getId(),projectDTO.getProjectOwner(), projectDTO.getName(), projectDTO.getDescription(), projectDTO.getMaxTime(), projectDTO.getMaxPrice(), projectDTO.getEndDate());
@@ -62,7 +62,7 @@ public class ProjectRepository implements CrudMethods<Project,String> {
         return null;
     }
     else {
-        return projectDTO;
+        return findByID(projectDTO.getId());
     }
     }
 
@@ -74,8 +74,9 @@ public class ProjectRepository implements CrudMethods<Project,String> {
 
     @Override
     public Project findByID(String id) {
-        String sql = "select * from Project where Project_ID = ?";
+        String sql = "select * from Project where PROJECT_ID = ?";
         try {
+            System.out.println(id);
             return jdbcTemplate.queryForObject(sql,projectRowMapper,id);
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Project not found", e);
@@ -91,8 +92,8 @@ public class ProjectRepository implements CrudMethods<Project,String> {
     public Project save(ProjectDTO object) {
 
         String sql = "UPDATE Project SET PROJECT_NAME = ?, PROJECT_DESC = ?, PROJECT_MAX_TIME = ?, PROJECT_MAX_PRICE = ?, PROJECT_ENDDATE = ?, PROJECT_OWNER_PROFILE_USERNAME = ? WHERE PROJECT_ID = ?";
-        String deleteOldMemberSql = "delete from profile_project where project_ID = ?";
-        String insertNewMemberSql = "insert into profile_project (PROJECT_ID,PROFILE_USERNAME) values (?,?)";
+        String deleteOldMemberSql = "delete from Profile_Project where project_ID = ?";
+        String insertNewMemberSql = "insert into Profile_Project (PROJECT_ID,PROFILE_USERNAME) values (?,?)";
 
         try {
             jdbcTemplate.update(sql, object.getName(), object.getDescription(), object.getMaxTime(), object.getMaxPrice(), object.getEndDate(),object.getProjectOwner(), object.getId());

@@ -50,8 +50,8 @@ private final ProfileRowMapper profileRowMapper;
     public List<Profile> getAllMembersOfProjectFromProjectID(String projectID){
         String sql = """
         SELECT s.*
-        FROM profile_project ps
-        JOIN profile s ON ps.PROFILE_USERNAME = s.PROFILE_USERNAME
+        FROM Profile_Project ps
+        JOIN Profile s ON ps.PROFILE_USERNAME = s.PROFILE_USERNAME
         WHERE ps.PROJECT_ID = ?
         """;
         return jdbcTemplate.query(sql,profileRowMapper, projectID);
