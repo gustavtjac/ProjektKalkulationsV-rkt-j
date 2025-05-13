@@ -15,10 +15,14 @@ import java.util.List;
 @Service
 public class ProfileService {
 
-    @Autowired
-    ProfileRepository profileRepository;
-    @Autowired
-    private SkillRepository skillRepository;
+
+    private final ProfileRepository profileRepository;
+    private final SkillRepository skillRepository;
+
+    public ProfileService(ProfileRepository profileRepository, SkillRepository skillRepository) {
+        this.profileRepository = profileRepository;
+        this.skillRepository = skillRepository;
+    }
 
     public Profile AuthenticateLogin(String username, String password) {
         return profileRepository.AuthenticateLogin(username, password);

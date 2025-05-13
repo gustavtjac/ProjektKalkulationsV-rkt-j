@@ -101,7 +101,6 @@ public class ProjectRepository implements CrudMethods<Project, String> {
 
             return findByID(object.getId());
         } catch (DataAccessException e) {
-            e.printStackTrace();
             throw new RuntimeException("Could not save changes to project");
         }
     }

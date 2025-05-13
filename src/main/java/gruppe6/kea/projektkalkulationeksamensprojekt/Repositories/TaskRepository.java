@@ -15,12 +15,10 @@ import java.util.UUID;
 public class TaskRepository implements CrudMethods<Task, String> {
     private final JdbcTemplate jdbcTemplate;
     private final TaskRowMapper taskRowMapper;
-    private final SubtaskRepository subtaskRepository;
 
-    public TaskRepository(JdbcTemplate jdbcTemplate, TaskRowMapper taskRowMapper, SubtaskRepository subtaskRepository) {
+    public TaskRepository(JdbcTemplate jdbcTemplate, TaskRowMapper taskRowMapper) {
         this.jdbcTemplate = jdbcTemplate;
         this.taskRowMapper = taskRowMapper;
-        this.subtaskRepository = subtaskRepository;
     }
 
     public Task createNewTask(Task task) {
