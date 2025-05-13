@@ -119,7 +119,7 @@ public class TaskController {
         if (loggedInProfile == null || !projectService.checkIfProfileOwnsProject(foundTask.getProjectID(), loggedInProfile.getUsername())) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Not allowed");
         } else {
-            projectService.deleteTask(taskID);
+            taskService.deleteTask(taskID);
             return "redirect:/dashboard/" + foundTask.getProjectID();
         }
 

@@ -59,6 +59,11 @@ else {
         }
     }
 
+    public void deleteTask(String taskID){
+        String deleteSQL = "DELETE FROM Task WHERE task_ID = ?";
+        jdbcTemplate.update(deleteSQL, taskID);
+    }
+
     @Override
     public Task save(Task object) {
         return null;

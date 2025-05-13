@@ -32,7 +32,7 @@ public class ProjectRepository implements CrudMethods<Project,String> {
             return new ArrayList<>();
         }
         else if(profile.getAuthCode()==1){
-            String getOwnersProjects = "select * from project where PROJECT_OWNER_PROFILE_USERNAME = ?";
+            String getOwnersProjects = "select * from Project where PROJECT_OWNER_PROFILE_USERNAME = ?";
             return jdbcTemplate.query(getOwnersProjects,projectRowMapper,profile.getUsername());
 
 
@@ -92,7 +92,7 @@ public class ProjectRepository implements CrudMethods<Project,String> {
     public Project save(ProjectDTO object) {
 
         String sql = "UPDATE Project SET PROJECT_NAME = ?, PROJECT_DESC = ?, PROJECT_MAX_TIME = ?, PROJECT_MAX_PRICE = ?, PROJECT_ENDDATE = ?, PROJECT_OWNER_PROFILE_USERNAME = ? WHERE PROJECT_ID = ?";
-        String deleteOldMemberSql = "delete from Profile_Project where project_ID = ?";
+        String deleteOldMemberSql = "delete from Profile_Project where PROJECT_ID = ?";
         String insertNewMemberSql = "insert into Profile_Project (PROJECT_ID,PROFILE_USERNAME) values (?,?)";
 
         try {
@@ -104,6 +104,7 @@ public class ProjectRepository implements CrudMethods<Project,String> {
 
             return findByID(object.getId());
         } catch (DataAccessException e) {
+            e.printStackTrace();
             throw new RuntimeException("Could not save changes to project");
         }
     }
@@ -111,13 +112,8 @@ public class ProjectRepository implements CrudMethods<Project,String> {
 
 
     public void deleteProject(String projectID){
-        String deleteSQL = "DELETE FROM project WHERE project_ID = ?";
+        String deleteSQL = "DELETE FROM Project WHERE PROJECT_ID = ?";
         jdbcTemplate.update(deleteSQL, projectID);
-    }
-
-    public void deleteTask(String taskID){
-        String deleteSQL = "DELETE FROM task WHERE task_ID = ?";
-        jdbcTemplate.update(deleteSQL, taskID);
     }
 
 
