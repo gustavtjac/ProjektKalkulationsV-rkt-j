@@ -3,7 +3,6 @@ package gruppe6.kea.projektkalkulationeksamensprojekt.Controllers;
 import gruppe6.kea.projektkalkulationeksamensprojekt.DTO.ProjectDTO;
 import gruppe6.kea.projektkalkulationeksamensprojekt.Models.Profile;
 import gruppe6.kea.projektkalkulationeksamensprojekt.Models.Project;
-import gruppe6.kea.projektkalkulationeksamensprojekt.Models.Subtask;
 import gruppe6.kea.projektkalkulationeksamensprojekt.Services.ProfileService;
 import gruppe6.kea.projektkalkulationeksamensprojekt.Services.ProjectService;
 import gruppe6.kea.projektkalkulationeksamensprojekt.Services.SubtaskService;
@@ -23,7 +22,6 @@ class ProjectControllerTest {
 
     private ProfileService profileService;
     private ProjectService projectService;
-    private SubtaskService subtaskService;
     private ProjectController projectController;
     private HttpSession session;
     private Model model;
@@ -33,7 +31,7 @@ class ProjectControllerTest {
     void setUp() {
         profileService = mock(ProfileService.class);
         projectService = mock(ProjectService.class);
-        subtaskService = mock(SubtaskService.class);
+        SubtaskService subtaskService = mock(SubtaskService.class);
         session = mock(HttpSession.class);
         model = mock(Model.class);
         redirectAttributes = mock(RedirectAttributes.class);

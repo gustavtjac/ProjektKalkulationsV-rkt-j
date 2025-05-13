@@ -54,7 +54,6 @@ public class SubtaskRepository implements CrudMethods<Subtask, String> {
                 jdbcTemplate.update(insertProfiles, subtaskDTO.getId(), username);
             }
         } catch (DataAccessException e) {
-            e.printStackTrace();
             throw new RuntimeException("could not insert users");
         }
 

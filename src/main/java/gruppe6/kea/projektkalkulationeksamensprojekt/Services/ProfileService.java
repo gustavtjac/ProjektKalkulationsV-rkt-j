@@ -6,7 +6,6 @@ import gruppe6.kea.projektkalkulationeksamensprojekt.Models.Profile;
 import gruppe6.kea.projektkalkulationeksamensprojekt.Models.Skill;
 import gruppe6.kea.projektkalkulationeksamensprojekt.Repositories.ProfileRepository;
 import gruppe6.kea.projektkalkulationeksamensprojekt.Repositories.SkillRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
