@@ -36,13 +36,10 @@ public class ProjectController {
 
     // Denne metode viser forskellige dashbaord ift. hvilken profile er logget ind
     @GetMapping("/dashboard")
-    public String showDashBoard(HttpSession session, Model model, @ModelAttribute Subtask subtask) {
+    public String showDashBoard(HttpSession session, Model model) {
         Profile loggedInProfile = ((Profile) session.getAttribute("profile"));
         if (loggedInProfile == null) {
             return "redirect:/";
-        }
-        if (loggedInProfile.getAuthCode() == 2) {
-
         }
 
         Map<String, Double> timeSpentMap = new HashMap<>();

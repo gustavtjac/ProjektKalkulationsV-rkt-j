@@ -1,4 +1,17 @@
--- Profile table
+-- Sletter gamle tabeller
+DROP TABLE IF EXISTS Subtask_Profile;
+DROP TABLE IF EXISTS Profile_Project;
+DROP TABLE IF EXISTS Profile_Skill;
+DROP TABLE IF EXISTS Subtask;
+DROP TABLE IF EXISTS Task;
+DROP TABLE IF EXISTS Project;
+DROP TABLE IF EXISTS Skill;
+DROP TABLE IF EXISTS Profile;
+
+
+
+
+-- Laver profile tabel
 CREATE TABLE Profile (
                          PROFILE_USERNAME VARCHAR(25) PRIMARY KEY,
                          PROFILE_NAME VARCHAR(30),
@@ -7,7 +20,7 @@ CREATE TABLE Profile (
                          PROFILE_SALARY DOUBLE NOT NULL
 );
 
--- Project table
+-- Laver Project tabel
 CREATE TABLE Project (
                          PROJECT_ID CHAR(36) PRIMARY KEY,
                          PROJECT_OWNER_PROFILE_USERNAME VARCHAR(25) NOT NULL,
@@ -18,8 +31,7 @@ CREATE TABLE Project (
                          PROJECT_ENDDATE DATE NOT NULL,
                          FOREIGN KEY (PROJECT_OWNER_PROFILE_USERNAME) REFERENCES Profile(PROFILE_USERNAME) ON DELETE CASCADE
 );
-
--- Task table
+-- Laver Task tabel
 CREATE TABLE Task (
                       TASK_ID CHAR(36) PRIMARY KEY,
                       TASK_PROJECT_ID CHAR(36) NOT NULL,
@@ -30,7 +42,7 @@ CREATE TABLE Task (
                       FOREIGN KEY (TASK_PROJECT_ID) REFERENCES Project(PROJECT_ID) ON DELETE CASCADE
 );
 
--- Subtask table
+-- Laver Subtask tabel
 CREATE TABLE Subtask (
                          SUBTASK_ID CHAR(36) PRIMARY KEY,
                          SUBTASK_TASK_ID CHAR(36) NOT NULL,
@@ -41,13 +53,13 @@ CREATE TABLE Subtask (
                          FOREIGN KEY (SUBTASK_TASK_ID) REFERENCES Task(TASK_ID) ON DELETE CASCADE
 );
 
--- Skill table
+-- Laver Skill tabel
 CREATE TABLE Skill (
                        SKILL_ID CHAR(36) PRIMARY KEY,
                        SKILL_NAME VARCHAR(30) UNIQUE NOT NULL
 );
 
--- Profile_Skill table
+-- Laver Profile_Skill tabel
 CREATE TABLE Profile_Skill (
                                PROFILE_USERNAME VARCHAR(25) NOT NULL,
                                SKILL_ID CHAR(36) NOT NULL,
@@ -56,7 +68,7 @@ CREATE TABLE Profile_Skill (
                                FOREIGN KEY (SKILL_ID) REFERENCES Skill(SKILL_ID) ON DELETE CASCADE
 );
 
--- Profile_Project table
+-- Laver Profile_Project tabel
 CREATE TABLE Profile_Project (
                                  PROJECT_ID CHAR(36) NOT NULL,
                                  PROFILE_USERNAME VARCHAR(25) NOT NULL,
@@ -65,7 +77,7 @@ CREATE TABLE Profile_Project (
                                  FOREIGN KEY (PROJECT_ID) REFERENCES Project(PROJECT_ID) ON DELETE CASCADE
 );
 
--- Subtask_Profile table
+-- Laver Subtask_Profile tabel
 CREATE TABLE Subtask_Profile (
                                  SUBTASK_ID CHAR(36) NOT NULL,
                                  PROFILE_USERNAME VARCHAR(25) NOT NULL,
@@ -73,6 +85,8 @@ CREATE TABLE Subtask_Profile (
                                  FOREIGN KEY (PROFILE_USERNAME) REFERENCES Profile(PROFILE_USERNAME) ON DELETE CASCADE,
                                  FOREIGN KEY (SUBTASK_ID) REFERENCES Subtask(SUBTASK_ID) ON DELETE CASCADE
 );
+
+-- indsætter noget testdata :)
 INSERT INTO Profile (
     PROFILE_USERNAME,
     PROFILE_NAME,

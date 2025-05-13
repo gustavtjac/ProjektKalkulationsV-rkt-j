@@ -37,7 +37,9 @@ public class TaskService {
         return task;
     }
 
-
+    public void deleteTask(String taskID){
+        taskRepository.deleteTask(taskID);
+    }
     public List<Task> getTaskFromProjectID(String projectID){
        List<Task> taskList = taskRepository.getTaskFromProjectID(projectID);
 
