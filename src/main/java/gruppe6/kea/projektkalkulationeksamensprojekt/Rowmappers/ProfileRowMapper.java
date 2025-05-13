@@ -30,10 +30,9 @@ public class ProfileRowMapper implements RowMapper<Profile> {
         profile.setPassword(rs.getString("PROFILE_PASSWORD"));
         profile.setSalary(rs.getDouble("PROFILE_SALARY"));
         List<Skill> skillList = skillRepository.getAllAssignedSkillsFromUsername(profile.getUsername());
-        if (skillList.isEmpty()){
+        if (skillList.isEmpty()) {
             profile.setSkills(new ArrayList<>());
-        }
-        else {
+        } else {
             profile.setSkills(skillList);
         }
 

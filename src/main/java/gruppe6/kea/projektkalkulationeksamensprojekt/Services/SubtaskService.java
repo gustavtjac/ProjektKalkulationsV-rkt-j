@@ -1,13 +1,10 @@
 package gruppe6.kea.projektkalkulationeksamensprojekt.Services;
 
-import gruppe6.kea.projektkalkulationeksamensprojekt.DTO.ProfileDTO;
 import gruppe6.kea.projektkalkulationeksamensprojekt.DTO.SubtaskDTO;
 import gruppe6.kea.projektkalkulationeksamensprojekt.Models.Profile;
 import gruppe6.kea.projektkalkulationeksamensprojekt.Models.Subtask;
 import gruppe6.kea.projektkalkulationeksamensprojekt.Models.Task;
-import gruppe6.kea.projektkalkulationeksamensprojekt.Repositories.ProfileRepository;
 import gruppe6.kea.projektkalkulationeksamensprojekt.Repositories.SubtaskRepository;
-import gruppe6.kea.projektkalkulationeksamensprojekt.Repositories.TaskRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -27,18 +24,18 @@ public class SubtaskService {
     }
 
     public Subtask findByID(String id) {
-               Subtask subtask = subtaskRepository.findByID(id);
-               subtask.setTask(taskService.findByID(subtask.getTaskId()));
+        Subtask subtask = subtaskRepository.findByID(id);
+        subtask.setTask(taskService.findByID(subtask.getTaskId()));
         return subtask;
     }
 
 
-    public List<Subtask> findAllSubtaskByProjectID(String projectid){
+    public List<Subtask> findAllSubtaskByProjectID(String projectid) {
         List<Task> taskList = taskService.getTaskFromProjectID(projectid);
         List<Subtask> subtaskList = new ArrayList<>();
 
 
-        for (Task task : taskList){
+        for (Task task : taskList) {
             List<Subtask> tempSubTasakList = findAllSubtaskByTaskID(task.getId());
             subtaskList.addAll(tempSubTasakList);
         }
@@ -46,38 +43,35 @@ public class SubtaskService {
     }
 
 
+    public double getTimeSpentOnSubtaskForProject(String projectID) {
+        List<Subtask> subtaskList = findAllSubtaskByProjectID(projectID);
+        double timeSpent = 0;
+        for (Subtask subtask : subtaskList) {
 
-        public double getTimeSpentOnSubtaskForProject (String projectID){
-           List<Subtask> subtaskList = findAllSubtaskByProjectID(projectID);
-            double  timeSpent = 0;
-            for (Subtask subtask : subtaskList){
-
-                if (subtask.getStatus()<=2){
-                    continue;
-                }
-                timeSpent += subtask.getTime();
+            if (subtask.getStatus() <= 2) {
+                continue;
             }
-
-            return timeSpent;
+            timeSpent += subtask.getTime();
         }
-        public double getTimeSpentOnSubtaskForTask(String taskID){
-            double  timeSpent = 0;
+
+        return timeSpent;
+    }
+
+    public double getTimeSpentOnSubtaskForTask(String taskID) {
+        double timeSpent = 0;
         List<Subtask> subtaskList = findAllSubtaskByTaskID(taskID);
 
-            for (Subtask subtask : subtaskList){
+        for (Subtask subtask : subtaskList) {
 
-                if (subtask.getStatus()<=2){
-                    continue;
-                }
-                timeSpent += subtask.getTime();
+            if (subtask.getStatus() <= 2) {
+                continue;
             }
-
-            return timeSpent;
-
+            timeSpent += subtask.getTime();
         }
 
+        return timeSpent;
 
-
+    }
 
 
     public double getTimeMoneySpentOnSubtasksForProject(String projectID) {
@@ -110,65 +104,64 @@ public class SubtaskService {
     public double getTimeMoneySpentOnSubtasksForTask(String taskID) {
         double salarySpentOnSubtask = 0;
         List<Subtask> subtaskList = subtaskRepository.findAllSubtaskByTaskID(taskID);
-        for (Subtask subtask : subtaskList){
-           List<Profile> assignedEmployees = subtask.getAssignedProfiles();
-           double avgSalary =  0;
-            if (subtask.getStatus()<=2){
+        for (Subtask subtask : subtaskList) {
+            List<Profile> assignedEmployees = subtask.getAssignedProfiles();
+            double avgSalary = 0;
+            if (subtask.getStatus() <= 2) {
                 continue;
             }
 
-           if (assignedEmployees.isEmpty()){
-               continue;
-           }
+            if (assignedEmployees.isEmpty()) {
+                continue;
+            }
 
-           for (Profile employee : assignedEmployees){
-               avgSalary+= employee.getSalary();
-           }
-           avgSalary = avgSalary/assignedEmployees.size();
-           salarySpentOnSubtask += avgSalary * subtask.getTime();
+            for (Profile employee : assignedEmployees) {
+                avgSalary += employee.getSalary();
+            }
+            avgSalary = avgSalary / assignedEmployees.size();
+            salarySpentOnSubtask += avgSalary * subtask.getTime();
         }
 
-return salarySpentOnSubtask;
+        return salarySpentOnSubtask;
     }
 
     public List<Subtask> getAllSubtaskFromProfile(Profile profile) {
-               List<Subtask> subtaskList = subtaskRepository.findAllSubtaskFromProfile(profile);
-               for (Subtask subtask : subtaskList){
-                   subtask.setTask(taskService.findByID(subtask.getTaskId()));
-               }
-               return subtaskList;
+        List<Subtask> subtaskList = subtaskRepository.findAllSubtaskFromProfile(profile);
+        for (Subtask subtask : subtaskList) {
+            subtask.setTask(taskService.findByID(subtask.getTaskId()));
+        }
+        return subtaskList;
     }
 
     public List<Subtask> findAllSubtaskByTaskID(String id) {
         List<Subtask> subtaskList = subtaskRepository.findAllSubtaskByTaskID(id);
-        for (Subtask subtask : subtaskList){
+        for (Subtask subtask : subtaskList) {
             subtask.setTask(taskService.findByID(subtask.getTaskId()));
         }
         return subtaskList;
 
     }
 
-    public Subtask createNewSubtask(SubtaskDTO subtaskDTO){
+    public Subtask createNewSubtask(SubtaskDTO subtaskDTO) {
         Subtask subtask = subtaskRepository.createNewSubtask(subtaskDTO);
         subtask.setTask(taskService.findByID(subtask.getTaskId()));
         return subtask;
 
     }
 
-    public Subtask findById(String id){
+    public Subtask findById(String id) {
         Subtask subtask = subtaskRepository.findByID(id);
         subtask.setTask(taskService.findByID(subtask.getTaskId()));
         return subtask;
     }
 
-    public Subtask deleteSubtask(String id){
+    public Subtask deleteSubtask(String id) {
         return subtaskRepository.deleteSubtask(id);
     }
 
-    public Subtask saveSubtask(SubtaskDTO subtaskDTO){
+    public Subtask saveSubtask(SubtaskDTO subtaskDTO) {
         return subtaskRepository.saveSubtask(subtaskDTO);
     }
-
 
 
 }

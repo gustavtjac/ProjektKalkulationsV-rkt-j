@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.List;
+
 @Getter
 @Setter
 public class Task {
@@ -16,13 +17,13 @@ public class Task {
     private double maxPrice;
     private List<Subtask> subtasks;
 
-    public Task(){
+    public Task() {
 
     }
 
 
     @Override
-    public String toString(){
+    public String toString() {
         return "Task {id=" + id +
                 "name=" + name +
                 "description=" + description +

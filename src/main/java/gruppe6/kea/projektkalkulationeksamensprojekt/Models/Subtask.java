@@ -18,10 +18,9 @@ public class Subtask {
     private int status;
     private List<Profile> assignedProfiles;
 
-    public Subtask(){
+    public Subtask() {
 
     }
-
 
 
     @Override

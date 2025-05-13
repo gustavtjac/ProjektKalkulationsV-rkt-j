@@ -2,7 +2,6 @@ package gruppe6.kea.projektkalkulationeksamensprojekt.Services;
 
 import gruppe6.kea.projektkalkulationeksamensprojekt.Models.Skill;
 import gruppe6.kea.projektkalkulationeksamensprojekt.Repositories.SkillRepository;
-import lombok.Setter;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,26 +16,26 @@ public class SkillService {
         this.skillRepository = skillRepository;
     }
 
-public Skill createNewSkill(Skill skill){
+    public Skill createNewSkill(Skill skill) {
         return skillRepository.createNewSkill(skill);
-}
+    }
 
-    public List<Skill> findAll(){
+    public List<Skill> findAll() {
         return skillRepository.findAll();
     }
 
-    public Skill deleteFromId(String id){
+    public Skill deleteFromId(String id) {
         return skillRepository.deleteFromId(id);
     }
 
 
- public Skill findByID(String id){
-      return skillRepository.findByID(id);
- }
+    public Skill findByID(String id) {
+        return skillRepository.findByID(id);
+    }
 
 
- public Skill save(Skill skill){
+    public Skill save(Skill skill) {
         return skillRepository.save(skill);
- }
+    }
 
 }

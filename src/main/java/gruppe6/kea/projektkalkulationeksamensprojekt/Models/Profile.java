@@ -16,10 +16,9 @@ public class Profile {
     private int authCode;
     private List<Skill> skills;
 
-    public Profile(){
+    public Profile() {
 
     }
-
 
 
     @Override

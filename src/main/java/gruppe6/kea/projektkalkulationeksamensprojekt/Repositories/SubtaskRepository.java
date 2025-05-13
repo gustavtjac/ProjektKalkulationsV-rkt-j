@@ -1,10 +1,8 @@
 package gruppe6.kea.projektkalkulationeksamensprojekt.Repositories;
 
-import gruppe6.kea.projektkalkulationeksamensprojekt.DTO.ProfileDTO;
 import gruppe6.kea.projektkalkulationeksamensprojekt.DTO.SubtaskDTO;
 import gruppe6.kea.projektkalkulationeksamensprojekt.Models.Profile;
 import gruppe6.kea.projektkalkulationeksamensprojekt.Models.Subtask;
-import gruppe6.kea.projektkalkulationeksamensprojekt.Models.Task;
 import gruppe6.kea.projektkalkulationeksamensprojekt.Rowmappers.SubtaskRowmapper;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
@@ -12,13 +10,12 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 
 @Repository
-public class SubtaskRepository implements CrudMethods<Subtask,String>{
+public class SubtaskRepository implements CrudMethods<Subtask, String> {
 
     private final JdbcTemplate jdbcTemplate;
     private final SubtaskRowmapper subtaskRowmapper;
@@ -29,15 +26,13 @@ public class SubtaskRepository implements CrudMethods<Subtask,String>{
     }
 
 
-
-
     public List<Subtask> findAllSubtaskByTaskID(String id) {
         String sql = "SELECT * FROM Subtask WHERE SUBTASK_TASK_ID = ?";
-        return jdbcTemplate.query(sql, subtaskRowmapper,id);
+        return jdbcTemplate.query(sql, subtaskRowmapper, id);
 
     }
 
-    public Subtask createNewSubtask(SubtaskDTO subtaskDTO){
+    public Subtask createNewSubtask(SubtaskDTO subtaskDTO) {
         subtaskDTO.setId(UUID.randomUUID().toString());
         subtaskDTO.setStatus(1);
 
@@ -46,8 +41,8 @@ public class SubtaskRepository implements CrudMethods<Subtask,String>{
 
         String insertProfiles = "insert into SUBTASK_PROFILE (SUBTASK_ID,PROFILE_USERNAME) values (?,?)";
 
-        try{
-            jdbcTemplate.update(sql,subtaskDTO.getId(),subtaskDTO.getTaskId(),subtaskDTO.getName(),subtaskDTO.getDescription(),subtaskDTO.getTime(),subtaskDTO.getStatus());
+        try {
+            jdbcTemplate.update(sql, subtaskDTO.getId(), subtaskDTO.getTaskId(), subtaskDTO.getName(), subtaskDTO.getDescription(), subtaskDTO.getTime(), subtaskDTO.getStatus());
 
         } catch (DataAccessException e) {
             throw new RuntimeException("could not create subtask");
@@ -55,15 +50,15 @@ public class SubtaskRepository implements CrudMethods<Subtask,String>{
 
         try {
             System.out.println(subtaskDTO.getAssignedProfiles());
-            for (String username : subtaskDTO.getAssignedProfiles()){
-                jdbcTemplate.update(insertProfiles,subtaskDTO.getId(),username);
+            for (String username : subtaskDTO.getAssignedProfiles()) {
+                jdbcTemplate.update(insertProfiles, subtaskDTO.getId(), username);
             }
         } catch (DataAccessException e) {
             throw new RuntimeException("could not insert users");
         }
 
         return findByID(subtaskDTO.getId());
- }
+    }
 
 
     @Override
@@ -75,7 +70,7 @@ public class SubtaskRepository implements CrudMethods<Subtask,String>{
     public Subtask findByID(String subtaskID) {
         String sql = "select * from Subtask where subtask_ID = ?";
         try {
-            return jdbcTemplate.queryForObject(sql,subtaskRowmapper,subtaskID);
+            return jdbcTemplate.queryForObject(sql, subtaskRowmapper, subtaskID);
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Subtask not found!");
         }
@@ -83,12 +78,12 @@ public class SubtaskRepository implements CrudMethods<Subtask,String>{
     }
 
 
-    public Subtask deleteSubtask(String id){
+    public Subtask deleteSubtask(String id) {
         Subtask deletedSubtask = findByID(id);
         String sql = "Delete from subtask where subtask_ID = ?";
 
         try {
-            jdbcTemplate.update(sql,id);
+            jdbcTemplate.update(sql, id);
         } catch (DataAccessException e) {
             throw new RuntimeException("Could not delete subtask");
         }
@@ -96,7 +91,7 @@ public class SubtaskRepository implements CrudMethods<Subtask,String>{
         return deletedSubtask;
     }
 
-    public Subtask saveSubtask(SubtaskDTO subtaskDTO){
+    public Subtask saveSubtask(SubtaskDTO subtaskDTO) {
 
         String sqlDeleteOldAssignedProfiles = "DELETE FROM subtask_profile WHERE subtask_id = ?";
         String sqlAddNewAssignedProfiles = "INSERT INTO subtask_profile (subtask_id, profile_username) VALUES (?,?)";
@@ -110,7 +105,7 @@ public class SubtaskRepository implements CrudMethods<Subtask,String>{
             for (String username : subtaskDTO.getAssignedProfiles()) {
                 jdbcTemplate.update(sqlAddNewAssignedProfiles, subtaskDTO.getId(), username);
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Subtask not found!");
 
         }
@@ -126,13 +121,13 @@ public class SubtaskRepository implements CrudMethods<Subtask,String>{
 
 
     public List<Subtask> findAllSubtaskFromProfile(Profile profile) {
-        String sql= """
+        String sql = """
                 SELECT s.*
                 FROM Subtask_Profile sp
                 JOIN Subtask s ON sp.SUBTASK_ID = s.SUBTASK_ID
                 WHERE sp.PROFILE_USERNAME = ?
                 """;
 
-        return jdbcTemplate.query(sql, subtaskRowmapper,profile.getUsername());
+        return jdbcTemplate.query(sql, subtaskRowmapper, profile.getUsername());
     }
 }

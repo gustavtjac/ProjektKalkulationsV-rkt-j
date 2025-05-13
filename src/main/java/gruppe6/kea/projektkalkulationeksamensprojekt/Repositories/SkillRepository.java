@@ -51,12 +51,11 @@ public class SkillRepository implements CrudMethods<Skill, String> {
     public Skill save(Skill object) {
         String sql = "update skill set skill_name =? where skill_id = ?";
         try {
-            jdbcTemplate.update(sql,object.getName(),object.getId());
+            jdbcTemplate.update(sql, object.getName(), object.getId());
             return object;
         } catch (DataAccessException e) {
             throw new RuntimeException(e);
         }
-
 
 
     }
