@@ -29,7 +29,7 @@ public class ProfileRepository implements CrudMethods<Profile, String> {
     //denne metoder indsamler alle de rækker hvor username og password er = med input
     public Profile AuthenticateLogin(String username, String password) {
 
-        String sqlString = "Select * from PROFILE where PROFILE_USERNAME = ? and PROFILE_PASSWORD = ?";
+        String sqlString = "Select * from Profile where PROFILE_USERNAME = ? and PROFILE_PASSWORD = ?";
         List<Profile> matchedProfile = jdbcTemplate.query(sqlString, profileRowMapper, username, password);
         if (matchedProfile.isEmpty()) {
             return null;
@@ -64,8 +64,8 @@ public class ProfileRepository implements CrudMethods<Profile, String> {
 
 
     public Profile createNewProfile(ProfileDTO profileDTO) {
-        String newProfile = "insert into Profile (Profile_USERNAME,PROFILE_NAME,PROFILE_PASSWORD,PROFILE_AUTH_CODE,PROFILE_SALARY) VALUES (?,?,?,?,?)";
-        String insertSkills = "insert INTO profile_skill (profile_username,skill_id) values (?,?)";
+        String newProfile = "insert into Profile (PROFILE_USERNAME,PROFILE_NAME,PROFILE_PASSWORD,PROFILE_AUTH_CODE,PROFILE_SALARY) VALUES (?,?,?,?,?)";
+        String insertSkills = "INSERT INTO Profile_Skill (PROFILE_USERNAME,SKILL_ID) VALUES (?,?)";
 
 
         int profileRowsAffected = jdbcTemplate.update(newProfile, profileDTO.getUsername(), profileDTO.getName(), profileDTO.getPassword(), profileDTO.getAuthCode(), profileDTO.getSalary());
@@ -90,7 +90,7 @@ public class ProfileRepository implements CrudMethods<Profile, String> {
 
     @Override
     public Profile findByID(String s) {
-        String sql = "select * from profile where profile_username = ?";
+        String sql = "select * from Profile where PROFILE_USERNAME = ?";
 
         try {
             return jdbcTemplate.queryForObject(sql, profileRowMapper, s);
@@ -135,7 +135,7 @@ public class ProfileRepository implements CrudMethods<Profile, String> {
 
         Profile profile = findByID(id);
 
-        String sql = "delete from profile where profile_username = ?";
+        String sql = "delete from Profile where PROFILE_USERNAME = ?";
         int rowsAffected = jdbcTemplate.update(sql, id);
 
         if (rowsAffected == 0) {

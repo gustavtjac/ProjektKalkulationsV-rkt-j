@@ -96,7 +96,7 @@ INSERT INTO Profile (
 ) VALUES (
              'admin',
              'Admin User',
-             'password123',  -- Replace with a hashed password in production
+             'password123',
              0,
              60000.00
          );
@@ -153,4 +153,8 @@ INSERT INTO Subtask (
              5.0,
              1
          );
-
+INSERT INTO Skill (SKILL_ID, SKILL_NAME) VALUES
+                                             ('1', 'Java Programming'),
+                                             ('2', 'Spring Boot'),
+                                             ('3', 'SQL'),
+                                             ('4', 'Project Management');
