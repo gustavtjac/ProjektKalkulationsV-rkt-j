@@ -37,9 +37,9 @@ public class SubtaskRepository implements CrudMethods<Subtask, String> {
         subtaskDTO.setStatus(1);
 
 
-        String sql = "insert into subtask (SUBTASK_ID, SUBTASK_TASK_ID,SUBTASK_NAME,SUBTASK_DESC,SUBTASK_TIME,SUBTASK_STATUS) values(?,?,?,?,?,?)";
+        String sql = "INSERT INTO Subtask (SUBTASK_ID, SUBTASK_TASK_ID,SUBTASK_NAME,SUBTASK_DESC,SUBTASK_TIME,SUBTASK_STATUS) VALUES (?,?,?,?,?,?)";
 
-        String insertProfiles = "insert into SUBTASK_PROFILE (SUBTASK_ID,PROFILE_USERNAME) values (?,?)";
+        String insertProfiles = "INSERT INTO SUBTASK_PROFILE (SUBTASK_ID,PROFILE_USERNAME) VALUES (?,?)";
 
         try {
             jdbcTemplate.update(sql, subtaskDTO.getId(), subtaskDTO.getTaskId(), subtaskDTO.getName(), subtaskDTO.getDescription(), subtaskDTO.getTime(), subtaskDTO.getStatus());
@@ -54,6 +54,7 @@ public class SubtaskRepository implements CrudMethods<Subtask, String> {
                 jdbcTemplate.update(insertProfiles, subtaskDTO.getId(), username);
             }
         } catch (DataAccessException e) {
+            e.printStackTrace();
             throw new RuntimeException("could not insert users");
         }
 
@@ -68,7 +69,7 @@ public class SubtaskRepository implements CrudMethods<Subtask, String> {
 
     @Override
     public Subtask findByID(String subtaskID) {
-        String sql = "select * from Subtask where subtask_ID = ?";
+        String sql = "SELECT * FROM Subtask WHERE SUBTASK_ID = ?";
         try {
             return jdbcTemplate.queryForObject(sql, subtaskRowmapper, subtaskID);
         } catch (Exception e) {
@@ -80,7 +81,7 @@ public class SubtaskRepository implements CrudMethods<Subtask, String> {
 
     public Subtask deleteSubtask(String id) {
         Subtask deletedSubtask = findByID(id);
-        String sql = "Delete from subtask where subtask_ID = ?";
+        String sql = "DELETE FROM Subtask WHERE SUBTASK_ID = ?";
 
         try {
             jdbcTemplate.update(sql, id);
@@ -93,9 +94,9 @@ public class SubtaskRepository implements CrudMethods<Subtask, String> {
 
     public Subtask saveSubtask(SubtaskDTO subtaskDTO) {
 
-        String sqlDeleteOldAssignedProfiles = "DELETE FROM subtask_profile WHERE subtask_id = ?";
-        String sqlAddNewAssignedProfiles = "INSERT INTO subtask_profile (subtask_id, profile_username) VALUES (?,?)";
-        String sql = "UPDATE subtask SET subtask_name = ?, subtask_desc = ?, subtask_time = ?, subtask_status = ? WHERE subtask_id = ?";
+        String sqlDeleteOldAssignedProfiles = "DELETE FROM Subtask_Profile WHERE SUBTASK_ID = ?";
+        String sqlAddNewAssignedProfiles = "INSERT INTO Subtask_Profile (SUBTASK_ID, PROFILE_USERNAME) VALUES (?,?)";
+        String sql = "UPDATE subtask SET SUBTASK_NAME = ?, SUBTASK_DESC = ?, SUBTASK_TIME = ?, SUBTASK_STATUS = ? WHERE SUBTASK_ID = ?";
 
 
         try {

@@ -101,3 +101,56 @@ INSERT INTO Profile (
              60000.00
          );
 
+-- 2. Insert a project
+INSERT INTO Project (
+    PROJECT_ID,
+    PROJECT_OWNER_PROFILE_USERNAME,
+    PROJECT_NAME,
+    PROJECT_DESC,
+    PROJECT_MAX_TIME,
+    PROJECT_MAX_PRICE,
+    PROJECT_ENDDATE
+) VALUES (
+             'project-123',
+             'admin',
+             'Test Project',
+             'This is a test project.',
+             100.0,
+             100000.0,
+             '2025-12-31'
+         );
+
+-- 3. Insert a task
+INSERT INTO Task (
+    TASK_ID,
+    TASK_PROJECT_ID,
+    TASK_NAME,
+    TASK_DESC,
+    TASK_MAX_TIME,
+    TASK_MAX_PRICE
+) VALUES (
+             'task-123',
+             'project-123',
+             'Test Task',
+             'This is a test task.',
+             50.0,
+             50000.0
+         );
+
+-- 4. Insert a subtask
+INSERT INTO Subtask (
+    SUBTASK_ID,
+    SUBTASK_TASK_ID,
+    SUBTASK_NAME,
+    SUBTASK_DESC,
+    SUBTASK_TIME,
+    SUBTASK_STATUS
+) VALUES (
+             'test-id-123',
+             'task-123',
+             'Test Subtask',
+             'This is a test subtask.',
+             5.0,
+             1
+         );
+
