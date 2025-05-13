@@ -39,7 +39,7 @@ public class SubtaskRepository implements CrudMethods<Subtask, String> {
 
         String sql = "INSERT INTO Subtask (SUBTASK_ID, SUBTASK_TASK_ID,SUBTASK_NAME,SUBTASK_DESC,SUBTASK_TIME,SUBTASK_STATUS) VALUES (?,?,?,?,?,?)";
 
-        String insertProfiles = "INSERT INTO SUBTASK_PROFILE (SUBTASK_ID,PROFILE_USERNAME) VALUES (?,?)";
+        String insertProfiles = "INSERT INTO Subtask_Profile (SUBTASK_ID,PROFILE_USERNAME) VALUES (?,?)";
 
         try {
             jdbcTemplate.update(sql, subtaskDTO.getId(), subtaskDTO.getTaskId(), subtaskDTO.getName(), subtaskDTO.getDescription(), subtaskDTO.getTime(), subtaskDTO.getStatus());
