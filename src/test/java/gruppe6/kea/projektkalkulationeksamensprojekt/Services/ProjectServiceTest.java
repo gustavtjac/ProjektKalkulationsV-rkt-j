@@ -30,7 +30,7 @@ class ProjectServiceTest {
         Project dummyProject = new Project();
         dummyProject.setId("123");
 
-        //når vi kalder metoden findbyid med "123" i paramaterene vil den istedet retunere dummyProject
+        //når vi kalder metoden findbyid med "123" i paramaterene vil den i stedet retunere dummyProject
         when(projectRepository.findByID("123")).thenReturn(dummyProject);
 
         // ACT

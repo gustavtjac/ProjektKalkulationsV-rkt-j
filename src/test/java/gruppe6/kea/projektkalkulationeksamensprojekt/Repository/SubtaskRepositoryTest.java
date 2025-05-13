@@ -7,6 +7,7 @@ import gruppe6.kea.projektkalkulationeksamensprojekt.Repositories.SubtaskReposit
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,6 +27,8 @@ public class SubtaskRepositoryTest {
 
     @Autowired
     private SubtaskRepository subtaskRepository;
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
 
     // "Arrange" I h2init findes der Profile, Project, Task og Subtask som jeg bruger til mine test
 
@@ -62,16 +65,15 @@ public class SubtaskRepositoryTest {
 
         // Assert
         assertNotNull(newSubtask); // Tjek at subtask blev returneret
+        assertNotNull(newSubtask.getId()); // Tjek at subtask for tildelt et UUID
         assertEquals(dto.getName(), newSubtask.getName());
         assertEquals(dto.getDescription(), newSubtask.getDescription());
         assertEquals(dto.getTime(), newSubtask.getTime());
         assertEquals(1, newSubtask.getStatus());
-
-        assertNotNull(newSubtask.getId());
     }
 
     @Test
-    public void FindByIdTest() {
+    public void findById() {
         // Arrange Se linje 29
 
         // Act
@@ -82,6 +84,29 @@ public class SubtaskRepositoryTest {
         assertEquals("Test Subtask", subtask.getName());
         assertEquals(5, subtask.getTime());
         assertEquals(1, subtask.getStatus());
+    }
+
+    @Test
+    public void deleteSubtask() {
+        // Arrange Se linje 29
+
+        // Act
+        Subtask deleted = subtaskRepository.deleteSubtask("test-id-123");
+
+        // Assert
+        assertNotNull(deleted);
+        assertEquals("test-id-123", deleted.getId());
+        assertEquals("Test Subtask", deleted.getName());
+
+        // Tjek om den er slættet
+        // Tæller hvor mange rækker der har SUBTASK_ID = 'test-id-123'
+        Integer count = jdbcTemplate.queryForObject(
+                "SELECT COUNT(*) FROM Subtask WHERE SUBTASK_ID = ?",
+                Integer.class,
+                "test-id-123"
+        );
+        // Tjekker at rækken er tom
+        assertEquals(0, count);
     }
 
 }
