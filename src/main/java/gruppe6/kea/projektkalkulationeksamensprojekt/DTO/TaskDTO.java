@@ -1,6 +1,5 @@
 package gruppe6.kea.projektkalkulationeksamensprojekt.DTO;
 
-import gruppe6.kea.projektkalkulationeksamensprojekt.Models.Subtask;
 import lombok.Getter;
 import lombok.Setter;
 

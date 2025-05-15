@@ -23,7 +23,12 @@
 <main class="hero-page" th:if="${profile.getAuthCode()==1}">
 
     <div class="hero-page-header">
-        <h1 th:text="'Manage ' + ${project.getName()} + ' Tasks here'"></h1>
+        <form th:action="@{/dashboard}">
+            <button class="return-button">
+                <img src="/images/ArrowBack.svg" alt="Return">
+            </button>
+        </form>
+        <h1 th:text="'Project: ' + ${project.getName()} + '´s Tasks'"></h1>
     </div>
 
     <table class="table-layout">
@@ -76,7 +81,12 @@
 <main class="hero-page" th:if="${profile.getAuthCode()==2}">
 
     <div class="hero-page-header">
-        <h1 th:text="'Tasks in ' + ${project.getName()}"></h1>
+        <form th:action="@{/dashboard}">
+            <button class="return-button">
+                <img src="/images/ArrowBack.svg" alt="Return">
+            </button>
+        </form>
+        <h1 th:text="'Project: ' + ${project.getName()} + '´s Tasks'"></h1>
     </div>
 
     <table class="table-layout">

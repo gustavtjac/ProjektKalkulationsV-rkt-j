@@ -18,7 +18,7 @@ public class SubtaskDTO {
     private int status;
     private List<String> assignedProfiles = new ArrayList<>();
 
-    public SubtaskDTO(){
+    public SubtaskDTO() {
 
     }
 

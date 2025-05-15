@@ -2,13 +2,12 @@ package gruppe6.kea.projektkalkulationeksamensprojekt.Rowmappers;
 
 import gruppe6.kea.projektkalkulationeksamensprojekt.Models.Subtask;
 import gruppe6.kea.projektkalkulationeksamensprojekt.Repositories.ProfileRepository;
-import gruppe6.kea.projektkalkulationeksamensprojekt.Services.ProfileService;
-import gruppe6.kea.projektkalkulationeksamensprojekt.Services.SubtaskService;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+
 @Component
 public class SubtaskRowmapper implements RowMapper<Subtask> {
 

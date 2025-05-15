@@ -1,8 +1,5 @@
 package gruppe6.kea.projektkalkulationeksamensprojekt.DTO;
 
-import gruppe6.kea.projektkalkulationeksamensprojekt.Models.Profile;
-import gruppe6.kea.projektkalkulationeksamensprojekt.Models.Project;
-import gruppe6.kea.projektkalkulationeksamensprojekt.Models.Task;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;

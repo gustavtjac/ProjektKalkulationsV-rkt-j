@@ -7,40 +7,38 @@ import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.server.ResponseStatusException;
+
 import java.util.List;
 import java.util.UUID;
 
 @Repository
-public class TaskRepository implements CrudMethods<Task,String>{
+public class TaskRepository implements CrudMethods<Task, String> {
     private final JdbcTemplate jdbcTemplate;
     private final TaskRowMapper taskRowMapper;
-    private final SubtaskRepository subtaskRepository;
 
-    public TaskRepository(JdbcTemplate jdbcTemplate, TaskRowMapper taskRowMapper, SubtaskRepository subtaskRepository) {
+    public TaskRepository(JdbcTemplate jdbcTemplate, TaskRowMapper taskRowMapper) {
         this.jdbcTemplate = jdbcTemplate;
         this.taskRowMapper = taskRowMapper;
-        this.subtaskRepository = subtaskRepository;
     }
 
-public Task createNewTask(Task task){
-String taskid = UUID.randomUUID().toString();
-task.setId(taskid);
+    public Task createNewTask(Task task) {
+        String taskid = UUID.randomUUID().toString();
+        task.setId(taskid);
         String sql = "Insert into Task (TASK_ID,TASK_PROJECT_ID,TASK_NAME,TASK_DESC,TASK_MAX_TIME,TASK_MAX_PRICE) VALUES (?,?,?,?,?,?)";
-int rowAffectred = jdbcTemplate.update(sql,task.getId(),task.getProjectID(),task.getName(),task.getDescription(),task.getMaxTime(),task.getMaxPrice());
+        int rowAffectred = jdbcTemplate.update(sql, task.getId(), task.getProjectID(), task.getName(), task.getDescription(), task.getMaxTime(), task.getMaxPrice());
 
-if (rowAffectred==0){
-    return null;
-}
-else {
-    return task;
-}
+        if (rowAffectred == 0) {
+            return null;
+        } else {
+            return task;
+        }
 
 
-}
+    }
 
-    public List<Task> getTaskFromProjectID(String projectID){
+    public List<Task> getTaskFromProjectID(String projectID) {
         String sql = "select * from Task where TASK_PROJECT_ID = ?";
-        return jdbcTemplate.query(sql,taskRowMapper,projectID);
+        return jdbcTemplate.query(sql, taskRowMapper, projectID);
     }
 
     @Override
@@ -52,11 +50,16 @@ else {
     @Override
     public Task findByID(String taskID) {
         String SQL = "SELECT * FROM Task WHERE TASK_ID = ?";
-        try{
-            return jdbcTemplate.queryForObject(SQL, taskRowMapper , taskID);
+        try {
+            return jdbcTemplate.queryForObject(SQL, taskRowMapper, taskID);
         } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Task not found for task id: " + taskID, e );
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Task not found for task id: " + taskID, e);
         }
+    }
+
+    public void deleteTask(String taskID) {
+        String deleteSQL = "DELETE FROM Task WHERE task_ID = ?";
+        jdbcTemplate.update(deleteSQL, taskID);
     }
 
     @Override
@@ -66,7 +69,7 @@ else {
 
     public Task save(TaskDTO object) {
         String sqlTask = "UPDATE Task SET TASK_NAME = ?, TASK_DESC = ?, TASK_MAX_TIME = ?, TASK_MAX_PRICE = ? WHERE TASK_ID = ?";
-        jdbcTemplate.update(sqlTask,object.getName(),object.getDescription(), object.getMaxTime(), object.getMaxPrice(), object.getId());
+        jdbcTemplate.update(sqlTask, object.getName(), object.getDescription(), object.getMaxTime(), object.getMaxPrice(), object.getId());
         return findByID(object.getId());
     }
 }

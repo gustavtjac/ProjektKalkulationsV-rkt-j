@@ -22,8 +22,8 @@ public class SkillRepository implements CrudMethods<Skill, String> {
     public List<Skill> getAllAssignedSkillsFromUsername(String username) {
         String sql = """
                 SELECT s.*
-                FROM profile_skill ps
-                JOIN skill s ON ps.SKILL_ID = s.SKILL_ID
+                FROM Profile_Skill ps
+                JOIN Skill s ON ps.SKILL_ID = s.SKILL_ID
                 WHERE ps.PROFILE_USERNAME = ?
                 """;
         return jdbcTemplate.query(sql, new SkillRowmapper(), username);
@@ -51,12 +51,11 @@ public class SkillRepository implements CrudMethods<Skill, String> {
     public Skill save(Skill object) {
         String sql = "update skill set skill_name =? where skill_id = ?";
         try {
-            jdbcTemplate.update(sql,object.getName(),object.getId());
+            jdbcTemplate.update(sql, object.getName(), object.getId());
             return object;
         } catch (DataAccessException e) {
             throw new RuntimeException(e);
         }
-
 
 
     }
