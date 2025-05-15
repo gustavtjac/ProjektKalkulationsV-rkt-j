@@ -19,12 +19,12 @@
 
     <div class="loginBox">
         <div class="loginBox_header">
-            <h3>Error</h3>
+            <h3 th:text="${code}"></h3>
             <img id="login_img" src="/images/logohvid.svg" alt="Alpha solutions Logo">
         </div>
 
         <div class="loginBox_form">
-          <h3>Unfortunately, an error has occurred :(</h3>
+          <h3 th:text="${message}"></h3>
 
         </div>
 
