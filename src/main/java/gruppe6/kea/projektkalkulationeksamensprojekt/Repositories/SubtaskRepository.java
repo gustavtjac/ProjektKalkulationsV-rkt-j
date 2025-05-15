@@ -8,6 +8,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
@@ -91,12 +92,12 @@ public class SubtaskRepository implements CrudMethods<Subtask, String> {
         return deletedSubtask;
     }
 
-    public Subtask saveSubtask(SubtaskDTO subtaskDTO) {
 
-        String sqlDeleteOldAssignedProfiles = "DELETE FROM Subtask_Profile WHERE SUBTASK_ID = ?";
-        String sqlAddNewAssignedProfiles = "INSERT INTO Subtask_Profile (SUBTASK_ID, PROFILE_USERNAME) VALUES (?,?)";
-        String sql = "UPDATE subtask SET SUBTASK_NAME = ?, SUBTASK_DESC = ?, SUBTASK_TIME = ?, SUBTASK_STATUS = ? WHERE SUBTASK_ID = ?";
-
+    @Transactional //Automatisk commit og rollback
+    public Subtask saveSubtask(SubtaskDTO subtaskDTO){
+        String sqlDeleteOldAssignedProfiles = "DELETE FROM subtask_profile WHERE subtask_id = ?";
+        String sqlAddNewAssignedProfiles = "INSERT INTO subtask_profile (subtask_id, profile_username) VALUES (?,?)";
+        String sql = "UPDATE subtask SET subtask_name = ?, subtask_desc = ?, subtask_time = ?, subtask_status = ? WHERE subtask_id = ?";
 
         try {
             jdbcTemplate.update(sqlDeleteOldAssignedProfiles, subtaskDTO.getId());
@@ -107,9 +108,7 @@ public class SubtaskRepository implements CrudMethods<Subtask, String> {
             }
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Subtask not found!");
-
         }
-
         return findByID(subtaskDTO.getId());
     }
 
