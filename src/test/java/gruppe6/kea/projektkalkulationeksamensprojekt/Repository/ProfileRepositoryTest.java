@@ -21,8 +21,6 @@ import static org.junit.jupiter.api.Assertions.*;
         scripts = {"classpath:h2init.sql"}
 )
 @SpringBootTest
-@Transactional
-@Rollback(true)
 public class ProfileRepositoryTest {
 
     @Autowired
