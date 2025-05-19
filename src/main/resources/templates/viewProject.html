@@ -28,7 +28,11 @@
                 <img src="/images/ArrowBack.svg" alt="Return">
             </button>
         </form>
-        <h1 th:text="'Project: ' + ${project.getName()} + '´s Tasks'"></h1>
+        <h1 th:text="'Project: ' + ${project.getName()}"></h1>
+    </div>
+
+    <div class="description">
+        <h2 th:text="'Description: ' + ${project.getDescription()}"></h2>
     </div>
 
     <table class="table-layout">
@@ -86,7 +90,11 @@
                 <img src="/images/ArrowBack.svg" alt="Return">
             </button>
         </form>
-        <h1 th:text="'Project: ' + ${project.getName()} + '´s Tasks'"></h1>
+        <h1 th:text="'Project: ' + ${project.getName()}"></h1>
+    </div>
+
+    <div class="description">
+        <h2 th:text="'Description: ' + ${project.getDescription()}"></h2>
     </div>
 
     <table class="table-layout">

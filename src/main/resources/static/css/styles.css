@@ -380,6 +380,22 @@ width: 50vw;
     margin: 20px 100px;
 }
 
+.description {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    background-color: #22252A;
+    border-radius: 20px;
+    height: 100px;
+    width: 500px;
+    margin: 20px 100px;
+}
+
+.description h2{
+    margin: 20px;
+}
+
 .table-layout {
     width: 80%;
     margin: 40px auto;
