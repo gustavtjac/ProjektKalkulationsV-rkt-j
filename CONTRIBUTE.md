@@ -14,8 +14,8 @@ Thanks for your interest in contributing! Here’s how you can help:
 1. **Fork the repo**
 2. **Clone your fork**
    ```bash
-   git clone https://github.com/your-username/project-name.git
-   cd project-name
+   git clone [https://github.com/your-username/project-name.git
+   cd project-name](https://github.com/gustavtjac/ProjektKalkulationsV-rkt-j.git)
 Install dependencies (see README.md for details)
 
 Create a new branch
