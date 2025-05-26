@@ -17,6 +17,17 @@ Målet er at give **Alpha Solutions** et smart, hurtigt og brugervenligt værkt�
 
 ---
 
+## 🚀 Kom i gang (Get Started)
+
+For at køre projektet lokalt skal du:
+
+1. 🧩 Udfylde de nødvendige miljøvariabler i IntelliJ  
+2. 🗃️ Køre `schema.sql` og `data.sql` i din MySQL-database for at oprette tabeller og indsætte testdata
+
+Så er du klar til at køre applikationen! 🎯
+
+---
+
 ## 👨‍💻 Teamet bag (Gruppe 6)
 
 | Navn        | Rolle           |
