@@ -21,7 +21,6 @@ CREATE TABLE Project (
                          PROJECT_ENDDATE DATE not null,
                          FOREIGN KEY (PROJECT_OWNER_PROFILE_USERNAME) REFERENCES Profile(PROFILE_USERNAME) ON DELETE CASCADE ON UPDATE CASCADE
 );
-
 -- Opretter Task tabel
 CREATE TABLE Task (
                       TASK_ID CHAR(36) PRIMARY KEY DEFAULT (UUID()),
@@ -49,6 +48,8 @@ CREATE TABLE Skill (
                        SKILL_ID CHAR(36) PRIMARY KEY DEFAULT (UUID()),
                        SKILL_NAME VARCHAR(30) UNIQUE NOT NULL
 );
+
+
 
 -- Opretter  Profile_Skill tabel
 CREATE TABLE Profile_Skill (

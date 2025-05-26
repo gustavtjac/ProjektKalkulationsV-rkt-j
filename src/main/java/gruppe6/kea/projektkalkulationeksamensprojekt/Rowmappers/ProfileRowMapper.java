@@ -16,7 +16,6 @@ public class ProfileRowMapper implements RowMapper<Profile> {
 
     private final SkillRepository skillRepository;
 
-    // Inject the SkillRepository using constructor injection
     public ProfileRowMapper(SkillRepository skillRepository) {
         this.skillRepository = skillRepository;
     }
